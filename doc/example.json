@@ -1,0 +1,19 @@
+{
+  "isFull": false,
+  "list": [
+    {
+      "title": "这里填写示例标题",
+      "description": "这里填写示例说明",
+      "code": "./base.js",
+      "scope": [
+        {
+          "name": "_FormInfo",
+          "packageName": "@kne/current-lib_form-info"
+        },
+        {
+          "packageName": "@kne/current-lib_form-info/dist/index.css"
+        }
+      ]
+    }
+  ]
+}
