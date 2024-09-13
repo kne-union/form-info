@@ -1,6 +1,6 @@
 {
   "name": "@kne/form-info",
-  "version": "0.1.0",
+  "version": "0.1.0-alpha.0",
   "description": "构建一个更加美观的form表单组件",
   "syntax": {
     "esmodules": true
