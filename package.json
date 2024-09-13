@@ -1,6 +1,6 @@
 {
   "name": "@kne/form-info",
-  "version": "0.1.0-alpha.0",
+  "version": "0.1.0-alpha.1",
   "description": "构建一个更加美观的form表单组件",
   "syntax": {
     "esmodules": true
@@ -86,7 +86,7 @@
   "dependencies": {
     "@kne/flex-box": "^0.1.1",
     "@kne/info-page": "^0.1.0-alpha.0",
-    "@kne/react-form-antd": "^3.1.6",
-    "@kne/react-form-plus": "^0.1.0-alpha.1"
+    "@kne/react-form-antd": "^4.0.0",
+    "@kne/react-form-plus": "^0.1.0-alpha.2"
   }
 }
