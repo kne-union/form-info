@@ -17,6 +17,13 @@
     }
 
     .react-form__field-label {
+      color: var(--font-color-grey);
+      font-size: 14px;
+      line-height: 20px;
+      height: 20px;
+      margin-bottom: 8px;
+      font-weight: normal !important;
+
       &.is-req:before {
         color: var(--color-warning);
         position: static;
@@ -25,13 +32,6 @@
         margin-right: 6px;
         font-weight: bold;
       }
-
-      color: var(--font-color-grey);
-      font-size: 14px;
-      line-height: 20px;
-      height: 20px;
-      margin-bottom: 8px;
-      font-weight: normal !important;
     }
 
     .react-form__field-error {
@@ -96,9 +96,7 @@
       background: var(--primary-color-06);
     }
 
-    > .list-item-part:global(
-        .ant-card > .ant-card-head .ant-card-head-title .part-title
-      ) {
+    > .list-item-part:global(.ant-card > .ant-card-head .ant-card-head-title .part-title) {
       color: var(--primary-color);
     }
 
@@ -134,26 +132,31 @@
   }
 
   .list-item-part {
-    &:global {
-      &.ant-card {
-        .ant-card-head {
-          background: #f8f8f8;
-          border-bottom: 1px solid var(--font-color-grey-4);
-          line-height: 36px;
-          height: 36px;
-          padding: 0 16px;
-        }
+    &:global(.ant-card) {
+      :global(.ant-card-head) {
+        background: #f8f8f8;
+        border-bottom: 1px solid var(--font-color-grey-4);
+        line-height: 36px;
+        height: 36px;
+        padding: 0 16px;
 
-        .ant-card-head-title .part-title {
-          background: transparent;
-          font-weight: normal;
-          font-size: 14px;
-          color: var(--font-color);
+        .extra-btn {
+          min-width: auto !important;
+          border: none !important;
+          padding: 0 !important;
+          background: transparent !important;
         }
+      }
 
-        .ant-card-body {
-          padding: 16px;
-        }
+      :global(.ant-card-head-title) :global(.part-title) {
+        background: transparent;
+        font-weight: normal;
+        font-size: 14px;
+        color: var(--font-color);
+      }
+
+      :global(.ant-card-body) {
+        padding: 16px;
       }
     }
   }
@@ -175,7 +178,6 @@
   border: 1px solid var(--font-color-grey-4);
 }
 
-
 .multi-field {
 }
 
@@ -184,7 +186,7 @@
   flex-wrap: nowrap;
   gap: 8px;
 
-  &:not(.first-item) {
+  &:not(:first-child) {
     :global {
       .react-form__field-label {
         display: none;
@@ -251,7 +253,7 @@
 
   .is-req:before {
     color: var(--color-warning);
-    content: "*";
+    content: '*';
     position: static;
     display: inline-block;
     transform: translateX(0);
@@ -269,4 +271,25 @@
 .table-options {
   flex-basis: 100px;
   text-align: right;
+}
+
+.steps {
+  justify-content: center;
+  width: auto;
+
+  :global(.ant-steps-item) {
+    max-width: 450px;
+  }
+
+  :global(.ant-steps-item-content) {
+    text-wrap: nowrap;
+  }
+}
+
+.steps-form-inner {
+  width: 100%;
+}
+
+.steps-modal .steps {
+  padding: 0 100px;
 }
