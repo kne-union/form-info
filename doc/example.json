@@ -1,14 +1,72 @@
 {
-  "isFull": false,
+  "isFull": true,
   "list": [
     {
-      "title": "这里填写示例标题",
+      "title": "Form",
       "description": "这里填写示例说明",
       "code": "./base.js",
       "scope": [
         {
           "name": "_FormInfo",
           "packageName": "@kne/current-lib_form-info"
+        },
+        {
+          "name": "antd",
+          "packageName": "antd"
+        },
+        {
+          "packageName": "@kne/current-lib_form-info/dist/index.css"
+        }
+      ]
+    },
+    {
+      "title": "FormModal",
+      "description": "这里填写示例说明",
+      "code": "./form-modal.js",
+      "scope": [
+        {
+          "name": "_FormInfo",
+          "packageName": "@kne/current-lib_form-info"
+        },
+        {
+          "name": "antd",
+          "packageName": "antd"
+        },
+        {
+          "packageName": "@kne/current-lib_form-info/dist/index.css"
+        }
+      ]
+    },
+    {
+      "title": "FormSteps",
+      "description": "这里填写示例说明",
+      "code": "./form-step.js",
+      "scope": [
+        {
+          "name": "_FormInfo",
+          "packageName": "@kne/current-lib_form-info"
+        },
+        {
+          "name": "antd",
+          "packageName": "antd"
+        },
+        {
+          "packageName": "@kne/current-lib_form-info/dist/index.css"
+        }
+      ]
+    },
+    {
+      "title": "FormStepsModal",
+      "description": "这里填写示例说明",
+      "code": "./form-step-modal.js",
+      "scope": [
+        {
+          "name": "_FormInfo",
+          "packageName": "@kne/current-lib_form-info"
+        },
+        {
+          "name": "antd",
+          "packageName": "antd"
         },
         {
           "packageName": "@kne/current-lib_form-info/dist/index.css"

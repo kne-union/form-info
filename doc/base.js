@@ -1,4 +1,5 @@
-const {default: FormInfo, List, TableList, MultiField, Form, Input, TextArea} = _FormInfo;
+const {default: FormInfo, List, TableList, MultiField, Form, Input, TextArea, SubmitButton, ResetButton} = _FormInfo;
+const {Flex} = antd;
 
 const BaseExample = () => {
     return <Form>
@@ -21,6 +22,10 @@ const BaseExample = () => {
                    list={[<Input name="field_1" label="字段1" rule="REQ"/>,
                        <Input name="field_2" label="字段2" rule="REQ"/>,
                        <Input name="description" label="描述" block/>]}/>
+        <Flex justify="center">
+            <SubmitButton>提交</SubmitButton>
+            <ResetButton>重置</ResetButton>
+        </Flex>
     </Form>;
 };
 
