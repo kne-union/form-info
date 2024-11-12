@@ -46,7 +46,7 @@ const BaseExample = () => {
                    list={[<Input name="field_1" label="字段1" rule="REQ"/>,
                        <Input name="field_2" label="字段2" rule="REQ"/>,
                        <Input name="description" label="描述" block/>]}/>
-        <Flex justify="center">
+        <Flex justify="center" gap={8}>
             <SubmitButton>提交</SubmitButton>
             <ResetButton>重置</ResetButton>
         </Flex>
