@@ -1,0 +1,443 @@
+{
+  "description": "构建一个更加美观的form表单组件包",
+  "modules": {
+    "FormInfo": {
+      "description": "表单信息展示组件，支持多列布局和灵活的字段排列",
+      "type": "ReactNode",
+      "props": {
+        "className": {
+          "description": "组件的CSS类名",
+          "type": "string"
+        },
+        "column": {
+          "description": "列数配置，支持数字或对象形式",
+          "type": "number|object"
+        },
+        "list": {
+          "description": "表单字段列表",
+          "type": "ReactNode[]"
+        },
+        "gap": {
+          "description": "字段之间的间距",
+          "type": "number"
+        },
+        "title": {
+          "description": "表单标题",
+          "type": "string|ReactNode"
+        },
+        "subtitle": {
+          "description": "表单副标题",
+          "type": "string|ReactNode"
+        },
+        "extra": {
+          "description": "额外的操作区域",
+          "type": "ReactNode"
+        }
+      }
+    },
+    "FormModal": {
+      "description": "模态框表单组件，在弹窗中展示和提交表单",
+      "type": "ReactNode",
+      "props": {
+        "open": {
+          "description": "是否打开模态框",
+          "type": "boolean"
+        },
+        "title": {
+          "description": "模态框标题",
+          "type": "ReactNode"
+        },
+        "onCancel": {
+          "description": "取消回调函数",
+          "type": "function"
+        },
+        "formProps": {
+          "description": "表单属性配置",
+          "type": "object"
+        },
+        "autoClose": {
+          "description": "提交后是否自动关闭模态框",
+          "type": "boolean"
+        },
+        "okType": {
+          "description": "确认按钮类型",
+          "type": "string"
+        },
+        "okButtonProps": {
+          "description": "确认按钮属性",
+          "type": "object"
+        },
+        "okText": {
+          "description": "确认按钮文本",
+          "type": "string|ReactNode"
+        },
+        "onOk": {
+          "description": "确认按钮点击回调",
+          "type": "function"
+        },
+        "cancelButtonProps": {
+          "description": "取消按钮属性",
+          "type": "object"
+        },
+        "cancelText": {
+          "description": "取消按钮文本",
+          "type": "string|ReactNode"
+        },
+        "footer": {
+          "description": "底部内容，支持函数或节点",
+          "type": "ReactNode|function"
+        },
+        "renderModal": {
+          "description": "自定义模态框渲染函数",
+          "type": "function"
+        },
+        "modalRender": {
+          "description": "模态框内容渲染函数",
+          "type": "function"
+        },
+        "width": {
+          "description": "模态框宽度",
+          "type": "string|number"
+        },
+        "centered": {
+          "description": "是否垂直居中显示",
+          "type": "boolean"
+        },
+        "closable": {
+          "description": "是否显示关闭按钮",
+          "type": "boolean"
+        },
+        "maskClosable": {
+          "description": "点击蒙层是否关闭模态框",
+          "type": "boolean"
+        },
+        "destroyOnClose": {
+          "description": "关闭时是否销毁子元素",
+          "type": "boolean"
+        },
+        "className": {
+          "description": "组件的CSS类名",
+          "type": "string"
+        }
+      }
+    },
+    "FormSteps": {
+      "description": "分步表单组件，支持多步骤表单填写",
+      "type": "ReactNode",
+      "props": {
+        "items": {
+          "description": "步骤配置数组，包含每个步骤的表单配置",
+          "type": "object[]"
+        },
+        "current": {
+          "description": "当前步骤索引（受控）",
+          "type": "number"
+        },
+        "defaultCurrent": {
+          "description": "默认当前步骤索引（非受控）",
+          "type": "number"
+        },
+        "autoStep": {
+          "description": "是否自动切换到下一步",
+          "type": "boolean"
+        },
+        "direction": {
+          "description": "步骤条方向",
+          "type": "string"
+        },
+        "orientation": {
+          "description": "步骤条朝向",
+          "type": "string"
+        },
+        "onChange": {
+          "description": "步骤切换回调函数",
+          "type": "function"
+        },
+        "onComplete": {
+          "description": "完成所有步骤的回调函数",
+          "type": "function"
+        },
+        "stepsClassName": {
+          "description": "步骤条的CSS类名",
+          "type": "string"
+        },
+        "className": {
+          "description": "组件的CSS类名",
+          "type": "string"
+        },
+        "children": {
+          "description": "自定义内容渲染函数或节点",
+          "type": "ReactNode|function"
+        }
+      }
+    },
+    "FormStepsModal": {
+      "description": "分步模态框表单组件，在模态框中展示分步表单",
+      "type": "ReactNode",
+      "props": {
+        "items": {
+          "description": "步骤配置数组",
+          "type": "object[]"
+        },
+        "modalProps": {
+          "description": "模态框属性配置",
+          "type": "object"
+        },
+        "completeText": {
+          "description": "完成按钮文本",
+          "type": "string|ReactNode"
+        },
+        "nextText": {
+          "description": "下一步按钮文本",
+          "type": "string|ReactNode"
+        },
+        "autoStep": {
+          "description": "是否自动切换步骤",
+          "type": "boolean"
+        },
+        "onComplete": {
+          "description": "完成所有步骤的回调函数",
+          "type": "function"
+        },
+        "className": {
+          "description": "组件的CSS类名",
+          "type": "string"
+        }
+      }
+    },
+    "List": {
+      "description": "列表表单组件，支持动态添加和删除表单项",
+      "type": "ReactNode",
+      "props": {
+        "className": {
+          "description": "组件的CSS类名",
+          "type": "string"
+        },
+        "itemClassName": {
+          "description": "列表项的CSS类名",
+          "type": "string"
+        },
+        "removeIcon": {
+          "description": "删除按钮图标",
+          "type": "ReactNode"
+        },
+        "removeText": {
+          "description": "删除按钮文本",
+          "type": "string|ReactNode"
+        },
+        "addText": {
+          "description": "添加按钮文本",
+          "type": "string|ReactNode"
+        },
+        "addIcon": {
+          "description": "添加按钮图标",
+          "type": "ReactNode"
+        },
+        "important": {
+          "description": "是否为重要模式",
+          "type": "boolean"
+        },
+        "title": {
+          "description": "列表标题",
+          "type": "string|ReactNode"
+        },
+        "name": {
+          "description": "表单字段名称",
+          "type": "string"
+        },
+        "list": {
+          "description": "初始列表数据",
+          "type": "ReactNode[]"
+        },
+        "empty": {
+          "description": "空状态展示内容",
+          "type": "ReactNode"
+        },
+        "itemTitle": {
+          "description": "列表项标题生成函数",
+          "type": "function"
+        },
+        "block": {
+          "description": "是否为块级布局",
+          "type": "boolean"
+        }
+      }
+    },
+    "SubList": {
+      "description": "子列表表单组件，与List功能相同",
+      "type": "ReactNode",
+      "props": {
+        "className": {
+          "description": "组件的CSS类名",
+          "type": "string"
+        },
+        "itemClassName": {
+          "description": "列表项的CSS类名",
+          "type": "string"
+        },
+        "removeIcon": {
+          "description": "删除按钮图标",
+          "type": "ReactNode"
+        },
+        "removeText": {
+          "description": "删除按钮文本",
+          "type": "string|ReactNode"
+        },
+        "addText": {
+          "description": "添加按钮文本",
+          "type": "string|ReactNode"
+        },
+        "addIcon": {
+          "description": "添加按钮图标",
+          "type": "ReactNode"
+        },
+        "important": {
+          "description": "是否为重要模式",
+          "type": "boolean"
+        },
+        "title": {
+          "description": "列表标题",
+          "type": "string|ReactNode"
+        },
+        "name": {
+          "description": "表单字段名称",
+          "type": "string"
+        },
+        "list": {
+          "description": "初始列表数据",
+          "type": "ReactNode[]"
+        },
+        "empty": {
+          "description": "空状态展示内容",
+          "type": "ReactNode"
+        },
+        "itemTitle": {
+          "description": "列表项标题生成函数",
+          "type": "function"
+        },
+        "block": {
+          "description": "是否为块级布局",
+          "type": "boolean"
+        }
+      }
+    },
+    "TableList": {
+      "description": "表格列表表单组件，以表格形式展示动态表单项",
+      "type": "ReactNode",
+      "props": {
+        "className": {
+          "description": "组件的CSS类名",
+          "type": "string"
+        },
+        "addIcon": {
+          "description": "添加按钮图标",
+          "type": "ReactNode"
+        },
+        "addText": {
+          "description": "添加按钮文本",
+          "type": "string|ReactNode"
+        },
+        "removeIcon": {
+          "description": "删除按钮图标",
+          "type": "ReactNode"
+        },
+        "removeText": {
+          "description": "删除按钮文本",
+          "type": "string|ReactNode"
+        },
+        "title": {
+          "description": "表格标题",
+          "type": "string|ReactNode"
+        },
+        "name": {
+          "description": "表单字段名称",
+          "type": "string"
+        },
+        "list": {
+          "description": "初始列表数据",
+          "type": "ReactNode[]"
+        },
+        "empty": {
+          "description": "空状态展示内容",
+          "type": "ReactNode"
+        },
+        "itemTitle": {
+          "description": "列表项标题生成函数",
+          "type": "function"
+        }
+      }
+    },
+    "MultiField": {
+      "description": "多字段组件，支持动态添加和删除相同类型的字段组",
+      "type": "ReactNode",
+      "props": {
+        "className": {
+          "description": "组件的CSS类名",
+          "type": "string"
+        },
+        "addText": {
+          "description": "添加按钮文本，支持函数或字符串",
+          "type": "string|function"
+        },
+        "addIcon": {
+          "description": "添加按钮图标",
+          "type": "ReactNode"
+        },
+        "removeIcon": {
+          "description": "删除按钮图标",
+          "type": "ReactNode"
+        },
+        "removeText": {
+          "description": "删除按钮文本，支持函数或字符串",
+          "type": "string|function|null"
+        },
+        "empty": {
+          "description": "空状态展示内容",
+          "type": "ReactNode"
+        },
+        "name": {
+          "description": "表单字段名称",
+          "type": "string"
+        },
+        "label": {
+          "description": "字段标签",
+          "type": "string"
+        },
+        "field": {
+          "description": "字段组件",
+          "type": "ReactNode"
+        },
+        "block": {
+          "description": "是否为块级布局",
+          "type": "boolean"
+        },
+        "rule": {
+          "description": "验证规则",
+          "type": "string"
+        }
+      }
+    },
+    "Form": {
+      "description": "基础表单组件，提供表单容器和基础功能",
+      "type": "ReactNode",
+      "props": {
+        "className": {
+          "description": "组件的CSS类名",
+          "type": "string"
+        },
+        "type": {
+          "description": "表单类型",
+          "type": "string"
+        },
+        "children": {
+          "description": "表单子元素",
+          "type": "ReactNode"
+        },
+        "onSubmit": {
+          "description": "表单提交回调函数",
+          "type": "function"
+        }
+      }
+    }
+  }
+}
