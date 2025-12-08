@@ -2,8 +2,8 @@
   "isFull": true,
   "list": [
     {
-      "title": "Form",
-      "description": "这里填写示例说明",
+      "title": "基础表单示例",
+      "description": "展示FormInfo、List、TableList、MultiField等基础组件的组合使用，包含普通字段、隐藏字段、多字段、列表、表格列表等多种表单元素的完整示例",
       "code": "./base.js",
       "scope": [
         {
@@ -20,8 +20,8 @@
       ]
     },
     {
-      "title": "FormModal",
-      "description": "这里填写示例说明",
+      "title": "模态框表单示例",
+      "description": "演示FormModal组件的使用，展示如何在弹窗中展示表单，支持表单数据初始化和提交后的自动关闭功能",
       "code": "./form-modal.js",
       "scope": [
         {
@@ -38,8 +38,8 @@
       ]
     },
     {
-      "title": "FormSteps",
-      "description": "这里填写示例说明",
+      "title": "步骤表单示例",
+      "description": "展示FormSteps组件的水平布局和垂直布局两种使用方式，演示多步骤表单的流程控制和步骤管理",
       "code": "./form-step.js",
       "scope": [
         {
@@ -56,8 +56,8 @@
       ]
     },
     {
-      "title": "FormStepsModal",
-      "description": "这里填写示例说明",
+      "title": "模态框步骤表单示例",
+      "description": "演示FormStepsModal组件的使用，结合模态框和步骤表单功能，展示在弹窗中实现复杂多步骤表单流程的完整解决方案",
       "code": "./form-step-modal.js",
       "scope": [
         {

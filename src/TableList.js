@@ -2,33 +2,24 @@ import React from 'react';
 import InfoPage from '@kne/info-page';
 import { Empty, Row, Col, Button } from 'antd';
 import { TableList as TableListBase } from '@kne/react-form-plus';
+import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
+import { useIntl } from '@kne/react-intl';
+import withLocale from './withLocale';
 import classnames from 'classnames';
 import style from './style.module.scss';
-import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
-import { useContext } from '@kne/global-context';
 
-const TableList = p => {
-  const { locale: contextLocale } = useContext();
-  const locale = Object.assign(
-    {},
-    {
-      添加: '添加',
-      删除: '删除'
-    },
-    contextLocale,
-    p.locale
-  );
+const TableList = withLocale(p => {
+  const { formatMessage } = useIntl();
   const { className, addIcon, addText, removeIcon, removeText, title, ...others } = Object.assign(
     {},
     {
-      empty: <Empty description={false} />,
+      empty: <Empty description={false} className={style['table-list-empty']} />,
       addIcon: <PlusOutlined />,
-      addText: locale['添加'],
+      addText: formatMessage({ id: 'addText' }),
       removeIcon: <DeleteOutlined />,
-      removeText: locale['删除']
+      removeText: formatMessage({ id: 'deleteText' })
     },
-    p,
-    { locale }
+    p
   );
   return (
     <TableListBase
@@ -105,6 +96,6 @@ const TableList = p => {
       }}
     </TableListBase>
   );
-};
+});
 
 export default TableList;

@@ -30,7 +30,7 @@ const FormSteps = p => {
     data: Object.assign({}, stepProps.items[currentStep]?.formProps?.data, stepCacheRef.current[currentStep]?.formData)
   });
   const inner = (
-    <Flex className={className} vertical={stepProps.direction !== 'vertical'} gap={24}>
+    <Flex className={className} vertical={stepProps.direction !== 'vertical' || stepProps.orientation !== 'vertical'} gap={24}>
       <Steps {...omit(stepProps, ['current', 'defaultCurrent', 'onChange'])} className={classnames(stepsClassName, style['steps'])} items={stepProps.items.map(item => omit(item, ['formProps']))} current={currentStep} />
       <div className={style['steps-form-inner']}>{stepProps.items[currentStep]?.children}</div>
     </Flex>
