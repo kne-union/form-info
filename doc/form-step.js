@@ -23,7 +23,7 @@ const BaseExample = () => {
             </>
         }]}/>
         <Divider/>
-        <FormSteps direction="vertical" items={[{
+        <FormSteps orientation="vertical" items={[{
             title: '表单1',
             formProps: {},
             children: <FormInfo title="基本信息" list={[<Input name="name" label="姓名" rule="REQ"/>,

@@ -3,31 +3,23 @@ import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Empty } from 'antd';
 import { MultiField as MultiFieldBase } from '@kne/react-form-plus';
 import classnames from 'classnames';
-import { useContext } from '@kne/global-context';
+import withLocale from './withLocale';
+import { useIntl } from '@kne/react-intl';
 import style from './style.module.scss';
 
-const MultiField = p => {
-  const { locale: contextLocale } = useContext();
-  const locale = Object.assign(
-    {},
-    {
-      添加: '添加'
-    },
-    contextLocale,
-    p.locale
-  );
+const MultiField = withLocale(p => {
+  const { formatMessage } = useIntl();
 
   const { className, addText, addIcon, removeIcon, removeText, ...others } = Object.assign(
     {},
     {
-      addText: locale['添加'],
+      addText: formatMessage({ id: 'addText' }),
       addIcon: <PlusOutlined />,
       removeIcon: <DeleteOutlined />,
       removeText: null,
       empty: <Empty description={false} />
     },
-    p,
-    { locale }
+    p
   );
   return (
     <MultiFieldBase
@@ -58,6 +50,6 @@ const MultiField = p => {
       )}
     </MultiFieldBase>
   );
-};
+});
 
 export default MultiField;

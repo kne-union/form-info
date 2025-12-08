@@ -2,8 +2,9 @@ import React, { isValidElement } from 'react';
 import { Modal, Flex } from 'antd';
 import { SubmitButton, CancelButton } from '@kne/react-form-antd';
 import Form from './Form';
-import { useContext } from '@kne/global-context';
 import omit from 'lodash/omit';
+import withLocale from './withLocale';
+import { useIntl } from '@kne/react-intl';
 
 export const ModalFooter = props => {
   const { children, cancelText, cancelButtonProps, okButtonProps, okType, onOk, okText, ...others } = props;
@@ -64,29 +65,19 @@ export const ModalForm = props => {
     : formChildren;
 };
 
-const FormModal = p => {
-  const { locale: contextLocale } = useContext();
-  const locale = Object.assign(
-    {},
-    {
-      提交: '提交',
-      取消: '取消'
-    },
-    contextLocale,
-    p.locale
-  );
+const FormModal = withLocale(p => {
+  const { formatMessage } = useIntl();
   const { formProps, okType, okButtonProps, okText, onOk, cancelButtonProps, cancelText, footer, renderModal, modalRender, autoClose, ...others } = Object.assign(
     {},
     {
       formProps: {},
       autoClose: true,
       okType: 'primary',
-      okText: locale['提交'],
-      cancelText: locale['取消'],
+      okText: formatMessage({ id: 'submit' }),
+      cancelText: formatMessage({ id: 'cancel' }),
       renderModal: props => <Modal {...props} />
     },
-    p,
-    { locale }
+    p
   );
 
   return renderModal(
@@ -118,6 +109,6 @@ const FormModal = p => {
       }
     })
   );
-};
+});
 
 export default FormModal;

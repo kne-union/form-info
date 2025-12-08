@@ -65,7 +65,7 @@
 
 .extra-btn {
   &:global(.ant-btn) {
-    border-radius: 2px;
+    border-radius: var(--radius-default, 2px);
     border: 1px solid var(--font-color-grey-2);
     padding: 6px 12px;
   }
@@ -292,4 +292,8 @@
 
 .steps-modal .steps {
   padding: 0 100px;
+}
+
+.table-list-empty {
+  padding: 16px;
 }

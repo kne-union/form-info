@@ -4,6 +4,8 @@ import FormSteps from './FormSteps';
 import merge from 'lodash/merge';
 import classnames from 'classnames';
 import style from './style.module.scss';
+import withLocale from './withLocale';
+import { useIntl } from '@kne/react-intl';
 
 const childrenContext = createContext({});
 const { Provider } = childrenContext;
@@ -23,15 +25,8 @@ const StepFormFooter = p => {
   return <ModalFooter {...props} okText={isLastStep ? completeText : nextText} />;
 };
 
-const FormStepsModal = p => {
-  const locale = Object.assign(
-    {},
-    {
-      完成: '完成',
-      下一步: '下一步'
-    },
-    p.locale
-  );
+const FormStepsModal = withLocale(p => {
+  const { formatMessage } = useIntl();
   const { modalProps, completeText, nextText, className, ...others } = merge(
     {},
     {
@@ -39,11 +34,10 @@ const FormStepsModal = p => {
       modalProps: {
         autoClose: true
       },
-      completeText: locale['完成'],
-      nextText: locale['下一步']
+      completeText: formatMessage({ id: 'complete' }),
+      nextText: formatMessage({ id: 'next' })
     },
-    p,
-    { locale }
+    p
   );
   return (
     <FormModal
@@ -85,6 +79,6 @@ const FormStepsModal = p => {
       <StepChildren />
     </FormModal>
   );
-};
+});
 
 export default FormStepsModal;

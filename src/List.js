@@ -5,31 +5,22 @@ import FormInfo from './FormInfo';
 import InfoPage from '@kne/info-page';
 import { SubList } from '@kne/react-form-plus';
 import classnames from 'classnames';
+import withLocale from './withLocale';
+import { useIntl } from '@kne/react-intl';
 import style from './style.module.scss';
-import { useContext } from '@kne/global-context';
 
-const List = p => {
-  const { locale: contextLocale } = useContext();
-  const locale = Object.assign(
-    {},
-    {
-      添加: '添加',
-      删除: '删除'
-    },
-    contextLocale,
-    p.locale
-  );
+const List = withLocale(p => {
+  const { formatMessage } = useIntl();
   const { className, itemClassName, removeIcon, removeText, addText, addIcon, important, title, ...others } = Object.assign(
     {},
     {
-      addText: locale['添加'],
+      addText: formatMessage({ id: 'addText' }),
       addIcon: <PlusOutlined />,
-      removeText: locale['删除'],
+      removeText: formatMessage({ id: 'deleteText' }),
       removeIcon: <DeleteOutlined />,
       empty: <Empty description={false} />
     },
-    p,
-    { locale }
+    p
   );
   return (
     <SubList
@@ -79,6 +70,6 @@ const List = p => {
       }}
     </SubList>
   );
-};
+});
 
 export default List;
