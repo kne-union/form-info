@@ -60,14 +60,14 @@ const BaseExample = () => {
         <List title="列表" name="list-1" itemTitle={({index}) => `项目${index + 1}`}
               list={[<Input name="field_1" label="字段1" rule="REQ"/>, <Input name="field_2" label="字段2" rule="REQ"/>,
                   <TextArea name="description" label="描述" block/>]}/>
-        <List title="复杂列表" name="list-2" itemTitle={({index}) => `项目${index + 1}`} important
+        <List title="复杂列表" name="list-2" itemTitle={({index}) => `项目${index + 1}`} important maxLength={2}
               list={[<Input name="field_1" label="字段1" rule="REQ"/>, <Input name="field_2" label="字段2" rule="REQ"/>,
                   <TextArea name="description" label="描述" block/>,
                   <List title="子级列表" itemTitle={({index}) => `子级项目${index + 1}`}
                         list={[<Input name="field_1" label="字段1" rule="REQ"/>,
                             <Input name="field_2" label="字段2" rule="REQ"/>,
                             <TextArea name="description" label="描述" block/>]} block/>]}/>
-        <TableList title="表格列表" name="list-3" itemTitle={({index}) => `项目${index + 1}`}
+        <TableList title="表格列表" name="list-3" itemTitle={({index}) => `项目${index + 1}`} maxLength={2}
                    list={[<Input name="field_1" label="字段1" rule="REQ"/>,
                        <Input name="field_2" label="字段2" rule="REQ"/>,
                        <Input name="description" label="描述" block/>]}/>

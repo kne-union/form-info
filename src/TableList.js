@@ -83,11 +83,13 @@ const TableList = withLocale(p => {
             title={title}
             className={classnames(className, style['table-list'])}
             extra={
-              allowAdd && (
-                <Button className={style['extra-btn']} icon={addIcon} onClick={onAdd}>
-                  {addText}
-                </Button>
-              )
+              <div className={style['extra-container']}>
+                {allowAdd && (
+                  <Button className={style['extra-btn']} icon={addIcon} onClick={onAdd}>
+                    {addText}
+                  </Button>
+                )}
+              </div>
             }
           >
             <div className={style['table-list-inner']}>{children}</div>
