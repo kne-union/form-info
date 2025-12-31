@@ -1,4 +1,20 @@
 .form-outer {
+  :global(.multi-field-delete-label) {
+    display: none;
+  }
+
+  &:global(.react-form--inner) {
+    :global(.react-form__field-label.is-req:before) {
+      position: static;
+      transform: translateX(0);
+      margin-right: 6px;
+    }
+
+    :global(.multi-field-delete-label) {
+      display: block;
+    }
+  }
+
   :global {
     .react-form__field {
       color: var(--font-color);
@@ -12,10 +28,6 @@
       }
     }
 
-    .react-form__field-label.is-req {
-      margin-left: 0;
-    }
-
     .react-form__field-label {
       color: var(--font-color-grey);
       font-size: 14px;
@@ -26,10 +38,10 @@
 
       &.is-req:before {
         color: var(--color-warning);
-        position: static;
+        //position: static;
         display: inline-block;
-        transform: translateX(0);
-        margin-right: 6px;
+        //transform: translateX(0);
+        //margin-right: 6px;
         font-weight: bold;
       }
     }
@@ -296,4 +308,8 @@
 
 .table-list-empty {
   padding: 16px;
+}
+
+.extra-container {
+  min-height: 32px;
 }

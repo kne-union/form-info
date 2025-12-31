@@ -57,11 +57,13 @@ const List = withLocale(p => {
             className={itemClassName}
             title={title}
             extra={
-              allowAdd && (
-                <Button className={style['extra-btn']} icon={addIcon} onClick={onAdd}>
-                  {addText}
-                </Button>
-              )
+              <div className={style['extra-container']}>
+                {allowAdd && (
+                  <Button className={style['extra-btn']} icon={addIcon} onClick={onAdd}>
+                    {addText}
+                  </Button>
+                )}
+              </div>
             }
           >
             {children}
