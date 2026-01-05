@@ -29,10 +29,28 @@ const FormSteps = p => {
   const currentFormProps = Object.assign({}, stepProps.items[currentStep]?.formProps, {
     data: Object.assign({}, stepProps.items[currentStep]?.formProps?.data, stepCacheRef.current[currentStep]?.formData)
   });
+
+  const stepItems = stepProps.items.map(item => {
+    const currentItem = omit(item, ['formProps']);
+    if (typeof currentItem.children === 'function') {
+      return Object.assign({}, currentItem, {
+        children: currentItem.children({
+          isLastStep,
+          currentStep,
+          onStepChange,
+          getStepCache: () => {
+            return stepCacheRef.current;
+          }
+        })
+      });
+    }
+    return currentItem;
+  });
+
   const inner = (
     <Flex className={className} vertical={stepProps.direction !== 'vertical' || stepProps.orientation !== 'vertical'} gap={24}>
-      <Steps {...omit(stepProps, ['current', 'defaultCurrent', 'onChange'])} className={classnames(stepsClassName, style['steps'])} items={stepProps.items.map(item => omit(item, ['formProps']))} current={currentStep} />
-      <div className={style['steps-form-inner']}>{stepProps.items[currentStep]?.children}</div>
+      <Steps {...omit(stepProps, ['current', 'defaultCurrent', 'onChange'])} className={classnames(stepsClassName, style['steps'])} items={stepItems} current={currentStep} />
+      <div className={style['steps-form-inner']}>{stepItems[currentStep]?.children}</div>
     </Flex>
   );
   return (
@@ -49,6 +67,9 @@ const FormSteps = p => {
               currentStep,
               onStepChange,
               stepCache: stepCacheRef.current,
+              getStepCache: () => {
+                return stepCacheRef.current;
+              },
               isLastStep
             },
             ...args
