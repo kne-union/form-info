@@ -92,7 +92,7 @@
   "dependencies": {
     "@ant-design/icons": "^5.5.1",
     "@kne/flex-box": "^0.1.1",
-    "@kne/info-page": "^0.1.11",
+    "@kne/info-page": "^0.2.9",
     "@kne/react-form-antd": "^4.0.1",
     "@kne/react-form-plus": "^0.1.5",
     "@kne/react-intl": "^0.1.9",

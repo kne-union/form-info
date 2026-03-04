@@ -99,7 +99,7 @@ const BaseExample = () => {
                 loading: loading
             }}
         >
-            <FormInfo 
+            <FormInfo bordered
                 title="基本信息" 
                 column={2}
                 list={[
@@ -116,7 +116,7 @@ const BaseExample = () => {
             
             <Divider />
             
-            <List 
+            <List
                 title="工作经历" 
                 name="workExperience"
                 itemTitle={({index, data}) => data?.companyName || `工作经历 ${index + 1}`}
