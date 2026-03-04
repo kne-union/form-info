@@ -81,7 +81,7 @@ const FormSteps = p => {
             return res;
           }
           if (autoStep && res !== false) {
-            onComplete(stepCacheRef.current);
+            await onComplete(stepCacheRef.current);
             return res;
           }
 
