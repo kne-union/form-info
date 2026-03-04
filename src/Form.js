@@ -2,6 +2,7 @@ import React, { forwardRef } from 'react';
 import InfoPage from '@kne/info-page';
 import { FormAntd as ReactForm } from '@kne/react-form-antd';
 import classnames from 'classnames';
+import '@kne/info-page/dist/index.css';
 import style from './style.module.scss';
 
 const Form = forwardRef((props, ref) => {

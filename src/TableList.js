@@ -6,6 +6,7 @@ import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { useIntl } from '@kne/react-intl';
 import withLocale from './withLocale';
 import classnames from 'classnames';
+import '@kne/info-page/dist/index.css';
 import style from './style.module.scss';
 
 const TableList = withLocale(p => {

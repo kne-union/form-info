@@ -7,6 +7,7 @@ import { SubList } from '@kne/react-form-plus';
 import classnames from 'classnames';
 import withLocale from './withLocale';
 import { useIntl } from '@kne/react-intl';
+import '@kne/info-page/dist/index.css';
 import style from './style.module.scss';
 
 const List = withLocale(p => {
