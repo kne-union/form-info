@@ -12,7 +12,7 @@ import style from './style.module.scss';
 
 const List = withLocale(p => {
   const { formatMessage } = useIntl();
-  const { className, itemClassName, removeIcon, removeText, addText, addIcon, important, title, ...others } = Object.assign(
+  const { className, itemClassName, removeIcon, removeText, addText, addIcon, important, title, bordered, ...others } = Object.assign(
     {},
     {
       addText: formatMessage({ id: 'addText' }),
@@ -37,6 +37,7 @@ const List = withLocale(p => {
           >
             <FormInfo
               {...props}
+              bordered={bordered}
               className={style['list-item-part']}
               gap={16}
               extra={
@@ -57,6 +58,7 @@ const List = withLocale(p => {
           <InfoPage.Part
             className={itemClassName}
             title={title}
+            bordered={bordered}
             extra={
               <div className={style['extra-container']}>
                 {allowAdd && (

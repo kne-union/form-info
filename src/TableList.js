@@ -11,7 +11,7 @@ import style from './style.module.scss';
 
 const TableList = withLocale(p => {
   const { formatMessage } = useIntl();
-  const { className, addIcon, addText, removeIcon, removeText, title, ...others } = Object.assign(
+  const { className, addIcon, addText, removeIcon, removeText, title, bordered, ...others } = Object.assign(
     {},
     {
       empty: <Empty description={false} className={style['table-list-empty']} />,
@@ -83,6 +83,7 @@ const TableList = withLocale(p => {
           <InfoPage.Part
             title={title}
             className={classnames(className, style['table-list'])}
+            bordered={bordered}
             extra={
               <div className={style['extra-container']}>
                 {allowAdd && (

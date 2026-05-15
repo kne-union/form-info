@@ -811,6 +811,93 @@ render(<BaseExample />);
 
 ```
 
+- 边框模式示例
+- 演示FormInfo、List、TableList组件的bordered属性，控制卡片是否显示边框，通过开关切换对比有边框与无边框效果
+- _FormInfo(@kne/current-lib_form-info),antd(antd),(@kne/current-lib_form-info/dist/index.css)
+
+```jsx
+const {default: FormInfo, List, TableList, Form, Input, TextArea} = _FormInfo;
+const {Flex, Switch, Space, Divider} = antd;
+const {useState} = React;
+
+const BorderedExample = () => {
+    const [bordered, setBordered] = useState(true);
+
+    return <Form data={{
+        employeeId: 'EMP20240001',
+        name: '张三',
+        department: '技术研发部'
+    }}>
+        <Flex vertical gap={16}>
+            <Space>
+                <span>边框模式：</span>
+                <Switch checked={bordered} onChange={setBordered} />
+            </Space>
+
+            <FormInfo
+                title="员工基本信息"
+                subtitle="bordered 控制卡片是否显示边框"
+                bordered={bordered}
+                column={2}
+                gap={20}
+                list={[
+                    <Input name="employeeId" label="工号" rule="REQ" disabled />,
+                    <Input name="name" label="姓名" rule="REQ" placeholder="请输入员工姓名" />,
+                    <Input name="department" label="所属部门" rule="REQ" placeholder="例如：技术研发部" />,
+                    <Input name="position" label="职位" rule="REQ" placeholder="例如：高级前端工程师" />
+                ]}
+            />
+
+            <Divider />
+
+            <List
+                title="工作经历（important）"
+                name="workExperience"
+                bordered={bordered}
+                itemTitle={({index, data}) => data?.companyName || `工作经历 ${index + 1}`}
+                important
+                addText="添加工作经历"
+                list={[
+                    <Input name="companyName" label="公司名称" rule="REQ" placeholder="例如：阿里巴巴集团" />,
+                    <Input name="jobTitle" label="职位名称" rule="REQ" placeholder="例如：高级开发工程师" />,
+                    <TextArea name="workDescription" label="工作描述" placeholder="请描述主要工作内容和成就" block />
+                ]}
+            />
+
+            <List
+                title="教育经历（非important）"
+                name="educationHistory"
+                bordered={bordered}
+                itemTitle={({index, data}) => data?.schoolName || `教育经历 ${index + 1}`}
+                addText="添加教育经历"
+                list={[
+                    <Input name="schoolName" label="学校名称" rule="REQ" placeholder="例如：北京大学" />,
+                    <Input name="major" label="专业" rule="REQ" placeholder="例如：计算机科学与技术" />,
+                    <Input name="degree" label="学历" rule="REQ" placeholder="例如：本科" />
+                ]}
+            />
+
+            <Divider />
+
+            <TableList
+                title="家庭成员信息"
+                name="familyMembers"
+                bordered={bordered}
+                addText="添加家庭成员"
+                list={[
+                    <Input name="memberName" label="姓名" rule="REQ" placeholder="家庭成员姓名" />,
+                    <Input name="relationship" label="关系" rule="REQ" placeholder="例如：配偶、子女" />,
+                    <Input name="memberPhone" label="联系电话" rule="TEL" placeholder="联系电话" />
+                ]}
+            />
+        </Flex>
+    </Form>;
+};
+
+render(<BorderedExample />);
+
+```
+
 
 ### API
 
@@ -818,144 +905,147 @@ render(<BaseExample />);
 
 基础的表单信息展示组件，用于创建结构化的表单布局。
 
-| 属性名 | 说明 | 类型 | 默认值 |
-|-----|----|----|-----|
-| column | 列数，支持数字或Flexbox配置 | number \| object | 2 |
-| list | 表单项列表 | ReactNode[] | [] |
-| gap | 字段间距 | number | 24 |
-| className | 自定义样式类名 | string | - |
-| title | 标题 | string \| ReactNode | - |
-| subtitle | 副标题 | string \| ReactNode | - |
+|| 属性名 | 说明 | 类型 | 默认值 |
+||-----|----|----|-----|
+|| column | 列数，支持数字或Flexbox配置 | number \| object | 2 |
+|| list | 表单项列表 | ReactNode[] | [] |
+|| gap | 字段间距 | number | 24 |
+|| className | 自定义样式类名 | string | - |
+|| title | 标题 | string \| ReactNode | - |
+|| subtitle | 副标题 | string \| ReactNode | - |
+|| bordered | 是否显示边框 | boolean | - |
 
 ### FormModal
 
 模态框表单组件，在弹窗中展示表单内容。
 
-| 属性名 | 说明 | 类型 | 默认值 |
-|-----|----|----|-----|
-| open | 是否显示模态框 | boolean | false |
-| onCancel | 关闭回调 | function | - |
-| formProps | 表单属性 | object | {} |
-| autoClose | 提交后自动关闭 | boolean | true |
-| okType | 确认按钮类型 | string | primary |
-| okText | 确认按钮文本 | string \| ReactNode | 提交 |
-| cancelText | 取消按钮文本 | string \| ReactNode | 取消 |
-| okButtonProps | 确认按钮属性 | object | - |
-| cancelButtonProps | 取消按钮属性 | object | - |
-| footer | 底部内容 | ReactNode \| function | - |
-| renderModal | 自定义模态框渲染 | function | - |
-| modalRender | 自定义内容渲染 | function | - |
+|| 属性名 | 说明 | 类型 | 默认值 |
+||-----|----|----|-----|
+|| open | 是否显示模态框 | boolean | false |
+|| onCancel | 关闭回调 | function | - |
+|| formProps | 表单属性 | object | {} |
+|| autoClose | 提交后自动关闭 | boolean | true |
+|| okType | 确认按钮类型 | string | primary |
+|| okText | 确认按钮文本 | string \| ReactNode | 提交 |
+|| cancelText | 取消按钮文本 | string \| ReactNode | 取消 |
+|| okButtonProps | 确认按钮属性 | object | - |
+|| cancelButtonProps | 取消按钮属性 | object | - |
+|| footer | 底部内容 | ReactNode \| function | - |
+|| renderModal | 自定义模态框渲染 | function | - |
+|| modalRender | 自定义内容渲染 | function | - |
 
 ### FormSteps
 
 步骤表单组件，支持多步骤表单流程。
 
-| 属性名 | 说明 | 类型 | 默认值 |
-|-----|----|----|-----|
-| items | 步骤配置项 | array | [] |
-| current | 当前步骤 | number | - |
-| defaultCurrent | 默认当前步骤 | number | 0 |
-| autoStep | 自动切换下一步 | boolean | true |
-| direction | 步骤条方向 | string | horizontal |
-| orientation | 步骤条方向 | string | horizontal |
-| onChange | 步骤切换回调 | function | - |
-| onComplete | 完成回调 | function | - |
-| stepsClassName | 步骤条样式类名 | string | - |
+|| 属性名 | 说明 | 类型 | 默认值 |
+||-----|----|----|-----|
+|| items | 步骤配置项 | array | [] |
+|| current | 当前步骤 | number | - |
+|| defaultCurrent | 默认当前步骤 | number | 0 |
+|| autoStep | 自动切换下一步 | boolean | true |
+|| direction | 步骤条方向 | string | horizontal |
+|| orientation | 步骤条方向 | string | horizontal |
+|| onChange | 步骤切换回调 | function | - |
+|| onComplete | 完成回调 | function | - |
+|| stepsClassName | 步骤条样式类名 | string | - |
 
 每个步骤项配置：
 
-| 属性名 | 说明 | 类型 | 默认值 |
-|-----|----|----|-----|
-| title | 步骤标题 | string \| ReactNode | - |
-| formProps | 表单属性 | object | - |
-| children | 步骤内容 | ReactNode \| function | - |
+|| 属性名 | 说明 | 类型 | 默认值 |
+||-----|----|----|-----|
+|| title | 步骤标题 | string \| ReactNode | - |
+|| formProps | 表单属性 | object | - |
+|| children | 步骤内容 | ReactNode \| function | - |
 
 ### FormStepsModal
 
 模态框步骤表单组件，结合了模态框和步骤表单功能。
 
-| 属性名 | 说明 | 类型 | 默认值 |
-|-----|----|----|-----|
-| items | 步骤配置项 | array | [] |
-| modalProps | 模态框属性 | object | {autoClose: true} |
-| completeText | 完成按钮文本 | string \| ReactNode | 完成 |
-| nextText | 下一步按钮文本 | string \| ReactNode | 下一步 |
-| autoStep | 自动切换下一步 | boolean | true |
-| onComplete | 完成回调 | function | - |
-| className | 样式类名 | string | - |
+|| 属性名 | 说明 | 类型 | 默认值 |
+||-----|----|----|-----|
+|| items | 步骤配置项 | array | [] |
+|| modalProps | 模态框属性 | object | {autoClose: true} |
+|| completeText | 完成按钮文本 | string \| ReactNode | 完成 |
+|| nextText | 下一步按钮文本 | string \| ReactNode | 下一步 |
+|| autoStep | 自动切换下一步 | boolean | true |
+|| onComplete | 完成回调 | function | - |
+|| className | 样式类名 | string | - |
 
 ### List
 
 列表表单组件，支持动态添加/删除列表项。
 
-| 属性名 | 说明 | 类型 | 默认值 |
-|-----|----|----|-----|
-| name | 字段名 | string | - |
-| title | 列表标题 | string \| ReactNode | - |
-| list | 表单项列表 | ReactNode[] | - |
-| important | 是否重要样式 | boolean | false |
-| addText | 添加按钮文本 | string \| ReactNode | 添加 |
-| removeText | 删除按钮文本 | string \| ReactNode | 删除 |
-| addIcon | 添加按钮图标 | ReactNode | PlusOutlined |
-| removeIcon | 删除按钮图标 | ReactNode | DeleteOutlined |
-| empty | 空状态内容 | ReactNode | Empty |
-| itemClassName | 列表项样式类名 | string | - |
-| className | 样式类名 | string | - |
+|| 属性名 | 说明 | 类型 | 默认值 |
+||-----|----|----|-----|
+|| name | 字段名 | string | - |
+|| title | 列表标题 | string \| ReactNode | - |
+|| list | 表单项列表 | ReactNode[] | - |
+|| important | 是否重要样式 | boolean | false |
+|| bordered | 是否显示边框 | boolean | - |
+|| addText | 添加按钮文本 | string \| ReactNode | 添加 |
+|| removeText | 删除按钮文本 | string \| ReactNode | 删除 |
+|| addIcon | 添加按钮图标 | ReactNode | PlusOutlined |
+|| removeIcon | 删除按钮图标 | ReactNode | DeleteOutlined |
+|| empty | 空状态内容 | ReactNode | Empty |
+|| itemClassName | 列表项样式类名 | string | - |
+|| className | 样式类名 | string | - |
 
 ### TableList
 
 表格列表表单组件，以表格形式展示列表数据。
 
-| 属性名 | 说明 | 类型 | 默认值 |
-|-----|----|----|-----|
-| name | 字段名 | string | - |
-| title | 表格标题 | string \| ReactNode | - |
-| list | 表单项列表 | ReactNode[] | - |
-| addText | 添加按钮文本 | string \| ReactNode | 添加 |
-| removeText | 删除按钮文本 | string \| ReactNode | 删除 |
-| addIcon | 添加按钮图标 | ReactNode | PlusOutlined |
-| removeIcon | 删除按钮图标 | ReactNode | DeleteOutlined |
-| empty | 空状态内容 | ReactNode | Empty |
-| className | 样式类名 | string | - |
+|| 属性名 | 说明 | 类型 | 默认值 |
+||-----|----|----|-----|
+|| name | 字段名 | string | - |
+|| title | 表格标题 | string \| ReactNode | - |
+|| list | 表单项列表 | ReactNode[] | - |
+|| bordered | 是否显示边框 | boolean | - |
+|| addText | 添加按钮文本 | string \| ReactNode | 添加 |
+|| removeText | 删除按钮文本 | string \| ReactNode | 删除 |
+|| addIcon | 添加按钮图标 | ReactNode | PlusOutlined |
+|| removeIcon | 删除按钮图标 | ReactNode | DeleteOutlined |
+|| empty | 空状态内容 | ReactNode | Empty |
+|| className | 样式类名 | string | - |
 
 ### MultiField
 
 多字段组件，支持动态添加/删除同类型字段。
 
-| 属性名 | 说明 | 类型 | 默认值 |
-|-----|----|----|-----|
-| name | 字段名 | string | - |
-| label | 字段标签 | string | - |
-| field | 字段组件 | React.ComponentType | - |
-| block | 是否块级显示 | boolean | false |
-| addText | 添加按钮文本 | string \| function | 添加 |
-| removeText | 删除按钮文本 | string \| function | - |
-| addIcon | 添加按钮图标 | ReactNode | PlusOutlined |
-| removeIcon | 删除按钮图标 | ReactNode | DeleteOutlined |
-| empty | 空状态内容 | ReactNode | Empty |
-| className | 样式类名 | string | - |
+|| 属性名 | 说明 | 类型 | 默认值 |
+||-----|----|----|-----|
+|| name | 字段名 | string | - |
+|| label | 字段标签 | string | - |
+|| field | 字段组件 | React.ComponentType | - |
+|| block | 是否块级显示 | boolean | false |
+|| addText | 添加按钮文本 | string \| function | 添加 |
+|| removeText | 删除按钮文本 | string \| function | - |
+|| addIcon | 添加按钮图标 | ReactNode | PlusOutlined |
+|| removeIcon | 删除按钮图标 | ReactNode | DeleteOutlined |
+|| empty | 空状态内容 | ReactNode | Empty |
+|| className | 样式类名 | string | - |
 
 ### Form
 
 基础表单容器组件。
 
-| 属性名 | 说明 | 类型 | 默认值 |
-|-----|----|----|-----|
-| type | 表单类型 | string | inner |
-| className | 自定义样式类名 | string | - |
-| children | 子组件 | ReactNode | - |
+|| 属性名 | 说明 | 类型 | 默认值 |
+||-----|----|----|-----|
+|| type | 表单类型 | string | inner |
+|| className | 自定义样式类名 | string | - |
+|| children | 子组件 | ReactNode | - |
 
 ### 国际化配置
 
 组件内置以下国际化文本：
 
-| 键名 | 中文 | 英文 |
-|-----|----|----|
-| submit | 提交 | Submit |
-| cancel | 取消 | Cancel |
-| complete | 完成 | Complete |
-| next | 下一步 | Next |
-| addText | 添加 | Add |
-| deleteText | 删除 | Delete |
+|| 键名 | 中文 | 英文 |
+||-----|----|----|
+|| submit | 提交 | Submit |
+|| cancel | 取消 | Cancel |
+|| complete | 完成 | Complete |
+|| next | 下一步 | Next |
+|| addText | 添加 | Add |
+|| deleteText | 删除 | Delete |
 
 可通过 withLocale HOC 或 useIntl hook 自定义国际化文本。
