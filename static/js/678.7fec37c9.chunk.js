@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunk_kne_components_form_info=self.webpackChunk_kne_components_form_info||[]).push([[678],{78678(n,e,t){t.d(e,{A:()=>c});var r=t(94922);const c=function(n){let e=arguments.length>1&&void 0!==arguments[1]&&arguments[1];const t=(0,r.useRef)(n);return e||(t.current=n),(0,r.useCallback)(function(){return t.current&&t.current(...arguments)},[])}}}]);
-//# sourceMappingURL=678.7fec37c9.chunk.js.map

@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunk_form_info_0_1_9=self.webpackChunk_form_info_0_1_9||[]).push([[8924],{8151(o,f,n){n.r(f),n.d(f,{default:()=>e,manifest:()=>r});const e={FormInfo:n(58872).A},r={name:"form-info",version:"0.1.9","open-version":!0,"public-url":"/form-info",modules:[{name:"form-info",baseDir:"/home/runner/work/form-info/form-info",description:"\u6784\u5efa\u4e00\u4e2a\u66f4\u52a0\u7f8e\u89c2\u7684form\u8868\u5355\u7ec4\u4ef6",packageName:"@kne/form-info"}]}}}]);
+//# sourceMappingURL=__federation_expose_components.8219ab90.chunk.js.map
