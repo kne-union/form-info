@@ -143,6 +143,7 @@
   }
 
   .list-item-part {
+    padding: 0;
     &:global(.ant-card) {
       :global(.ant-card-head) {
         background: #f8f8f8;

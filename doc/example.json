@@ -72,6 +72,24 @@
           "packageName": "@kne/current-lib_form-info/dist/index.css"
         }
       ]
+    },
+    {
+      "title": "边框模式示例",
+      "description": "演示FormInfo、List、TableList组件的bordered属性，控制卡片是否显示边框，通过开关切换对比有边框与无边框效果",
+      "code": "./bordered.js",
+      "scope": [
+        {
+          "name": "_FormInfo",
+          "packageName": "@kne/current-lib_form-info"
+        },
+        {
+          "name": "antd",
+          "packageName": "antd"
+        },
+        {
+          "packageName": "@kne/current-lib_form-info/dist/index.css"
+        }
+      ]
     }
   ]
 }
