@@ -104,6 +104,8 @@ export interface TableListProps {
   list?: ReactNode[];
   empty?: ReactNode;
   itemTitle?: ({ index }: { index: number }) => string;
+  /** 移动端适配，同 @kne/table-view：true 默认卡片、function 自定义、string 走 preset */
+  renderMobile?: boolean | string | ((props: any) => ReactNode);
 }
 
 export interface MultiFieldProps {

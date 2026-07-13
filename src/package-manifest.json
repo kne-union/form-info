@@ -364,6 +364,11 @@
         "itemTitle": {
           "description": "列表项标题生成函数",
           "type": "function"
+        },
+        "renderMobile": {
+          "description": "移动端适配，同 @kne/table-view：true 默认卡片列表、function 自定义、string 走 preset；桌面端仍为表格布局",
+          "type": "boolean|string|function",
+          "default": true
         }
       }
     },

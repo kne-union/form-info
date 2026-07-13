@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import { Steps, Flex } from 'antd';
+import { useIsMobile } from '@kne/responsive-utils';
 import Form from './Form';
 import useControlValue from '@kne/use-control-value';
 import omit from 'lodash/omit';
@@ -17,6 +18,7 @@ const FormSteps = p => {
     },
     p
   );
+  const isMobile = useIsMobile();
   const [currentStep, onStepChange] = useControlValue(stepProps, {
     value: 'current',
     defaultValue: 'defaultCurrent'
@@ -47,9 +49,22 @@ const FormSteps = p => {
     return currentItem;
   });
 
+  // 移动端强制垂直布局，不允许水平 Steps
+  const stepsDirection = isMobile ? 'vertical' : stepProps.direction || stepProps.orientation;
+  const isVerticalSteps = stepsDirection === 'vertical';
+
   const inner = (
-    <Flex className={className} vertical={stepProps.direction !== 'vertical' || stepProps.orientation !== 'vertical'} gap={24}>
-      <Steps {...omit(stepProps, ['current', 'defaultCurrent', 'onChange'])} className={classnames(stepsClassName, style['steps'])} items={stepItems} current={currentStep} />
+    <Flex className={className} vertical={!isVerticalSteps || isMobile} gap={24}>
+      <Steps
+        {...omit(stepProps, ['current', 'defaultCurrent', 'onChange', 'direction', 'orientation'])}
+        direction={stepsDirection}
+        orientation={stepsDirection}
+        className={classnames(stepsClassName, style['steps'], {
+          [style['steps-vertical']]: isVerticalSteps
+        })}
+        items={stepItems}
+        current={currentStep}
+      />
       <div className={style['steps-form-inner']}>{stepItems[currentStep]?.children}</div>
     </Flex>
   );
