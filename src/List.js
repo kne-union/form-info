@@ -4,6 +4,7 @@ import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import FormInfo from './FormInfo';
 import InfoPage from '@kne/info-page';
 import { SubList } from '@kne/react-form-plus';
+import { useIsMobile } from '@kne/responsive-utils';
 import classnames from 'classnames';
 import withLocale from './withLocale';
 import { useIntl } from '@kne/react-intl';
@@ -12,6 +13,7 @@ import style from './style.module.scss';
 
 const List = withLocale(p => {
   const { formatMessage } = useIntl();
+  const isMobile = useIsMobile();
   const { className, itemClassName, removeIcon, removeText, addText, addIcon, important, title, bordered, ...others } = Object.assign(
     {},
     {
@@ -23,10 +25,10 @@ const List = withLocale(p => {
     },
     p
   );
+  const showBorder = isMobile ? false : bordered;
   return (
     <SubList
       {...others}
-      className={classnames(className, style['list-part'])}
       listRender={({ id, allowRemove, onRemove, index, groupArgs, ...props }) => {
         return (
           <div
@@ -37,7 +39,7 @@ const List = withLocale(p => {
           >
             <FormInfo
               {...props}
-              bordered={bordered}
+              bordered={showBorder}
               className={style['list-item-part']}
               gap={16}
               extra={
@@ -56,9 +58,9 @@ const List = withLocale(p => {
       {(children, { allowAdd, onAdd }) => {
         return (
           <InfoPage.Part
-            className={itemClassName}
+            className={classnames(className, itemClassName, style['list-part'])}
             title={title}
-            bordered={bordered}
+            bordered={showBorder}
             extra={
               <div className={style['extra-container']}>
                 {allowAdd && (

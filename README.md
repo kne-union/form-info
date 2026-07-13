@@ -1,18 +1,14 @@
-
 # form-info
-
 
 ### 描述
 
 构建一个更加美观的form表单组件
-
 
 ### 安装
 
 ```shell
 npm i --save @kne/form-info
 ```
-
 
 ### 概述
 
@@ -39,6 +35,20 @@ npm i --save @kne/form-info
 该组件库特别适合企业级应用、管理系统、数据录入平台等需要大量表单交互的场景，能够显著提升开发效率和用户体验。
 
 ### 示例(全屏)
+
+#### 示例样式
+
+```scss
+@use '~@kne/responsive-utils/scss' as resp;
+
+// 手机预览下给示例内容留白，便于观察层级与间距
+@include resp.mobile-container {
+  .example-driver-runner {
+    padding: 12px 16px 24px;
+    box-sizing: border-box;
+  }
+}
+```
 
 #### 示例代码
 
@@ -104,7 +114,7 @@ const BaseExample = () => {
         <List 
             title="工作经历" 
             name="workExperience"
-            itemTitle={({index, data}) => data?.companyName || `工作经历 ${index + 1}`}
+            itemTitle={({index, data}) => data?.companyName || &#96;工作经历 ${index + 1}&#96;}
             important
             maxLength={5}
             addText="添加工作经历"
@@ -116,7 +126,7 @@ const BaseExample = () => {
                 <List 
                     title="项目经历" 
                     name="projects"
-                    itemTitle={({index, data}) => data?.projectName || `项目 ${index + 1}`}
+                    itemTitle={({index, data}) => data?.projectName || &#96;项目 ${index + 1}&#96;}
                     list={[
                         <Input name="projectName" label="项目名称" rule="REQ" placeholder="例如：双十一活动系统" />,
                         <Input name="projectRole" label="担任角色" rule="REQ" placeholder="例如：技术负责人" />,
@@ -132,7 +142,7 @@ const BaseExample = () => {
         <TableList 
             title="家庭成员信息" 
             name="familyMembers"
-            itemTitle={({index}) => `家庭成员 ${index + 1}`}
+            itemTitle={({index}) => &#96;家庭成员 ${index + 1}&#96;}
             maxLength={10}
             addText="添加家庭成员"
             list={[
@@ -292,7 +302,7 @@ const BaseExample = () => {
             <List
                 title="工作经历" 
                 name="workExperience"
-                itemTitle={({index, data}) => data?.companyName || `工作经历 ${index + 1}`}
+                itemTitle={({index, data}) => data?.companyName || &#96;工作经历 ${index + 1}&#96;}
                 important
                 maxLength={5}
                 addText="添加工作经历"
@@ -365,7 +375,7 @@ const BaseExample = () => {
 
     // 步骤变更回调
     const handleStepChange = (current, formData) => {
-        console.log(`切换到第 ${current + 1} 步，表单数据:`, formData);
+        console.log(&#96;切换到第 ${current + 1} 步，表单数据:&#96;, formData);
         setCurrentStep(current);
     };
 
@@ -497,7 +507,7 @@ const BaseExample = () => {
                                 <List 
                                     title="紧急联系人列表" 
                                     name="emergencyContacts"
-                                    itemTitle={({index, data}) => data?.name || `联系人 ${index + 1}`}
+                                    itemTitle={({index, data}) => data?.name || &#96;联系人 ${index + 1}&#96;}
                                     important
                                     maxLength={3}
                                     addText="添加联系人"
@@ -623,7 +633,7 @@ const BaseExample = () => {
 
     // 第三步：项目详情
     background: '现有客服系统效率低下，需要引入AI技术提升服务质量',
-    objectives: `1. 响应时间缩短50%\n2. 客户满意度提升30%\n3. 人力成本降低40%`,
+    objectives: &#96;1. 响应时间缩短50%\n2. 客户满意度提升30%\n3. 人力成本降低40%&#96;,
     deliverables: '智能客服系统一套，包含前端界面、后台管理、AI对话引擎'
   };
 
@@ -644,7 +654,7 @@ const BaseExample = () => {
 
   // 步骤变更回调
   const handleStepChange = (current, data) => {
-    console.log(`切换到第 ${current + 1} 步，当前数据:`, data);
+    console.log(&#96;切换到第 ${current + 1} 步，当前数据:&#96;, data);
     setCurrentStep(current);
   };
 
@@ -728,7 +738,7 @@ const BaseExample = () => {
                 <List 
                   title="项目团队成员" 
                   name="teamMembers"
-                  itemTitle={({index, data}) => data?.name || `成员 ${index + 1}`}
+                  itemTitle={({index, data}) => data?.name || &#96;成员 ${index + 1}&#96;}
                   important
                   maxLength={10}
                   addText="添加团队成员"
@@ -784,7 +794,7 @@ const BaseExample = () => {
                 <List 
                   title="里程碑计划" 
                   name="milestones"
-                  itemTitle={({index, data}) => data?.milestoneName || `里程碑 ${index + 1}`}
+                  itemTitle={({index, data}) => data?.milestoneName || &#96;里程碑 ${index + 1}&#96;}
                   addText="添加里程碑"
                   list={[
                     <Input name="milestoneName" label="里程碑名称" rule="REQ" placeholder="例如：需求确认" />,
@@ -854,7 +864,7 @@ const BorderedExample = () => {
                 title="工作经历（important）"
                 name="workExperience"
                 bordered={bordered}
-                itemTitle={({index, data}) => data?.companyName || `工作经历 ${index + 1}`}
+                itemTitle={({index, data}) => data?.companyName || &#96;工作经历 ${index + 1}&#96;}
                 important
                 addText="添加工作经历"
                 list={[
@@ -868,7 +878,7 @@ const BorderedExample = () => {
                 title="教育经历（非important）"
                 name="educationHistory"
                 bordered={bordered}
-                itemTitle={({index, data}) => data?.schoolName || `教育经历 ${index + 1}`}
+                itemTitle={({index, data}) => data?.schoolName || &#96;教育经历 ${index + 1}&#96;}
                 addText="添加教育经历"
                 list={[
                     <Input name="schoolName" label="学校名称" rule="REQ" placeholder="例如：北京大学" />,
@@ -897,7 +907,6 @@ const BorderedExample = () => {
 render(<BorderedExample />);
 
 ```
-
 
 ### API
 

@@ -2,6 +2,7 @@ import React from 'react';
 import InfoPage from '@kne/info-page';
 import { useFlexBox } from '@kne/flex-box';
 import { FormInfo as FormInfoBase } from '@kne/react-form-plus';
+import { useIsMobile } from '@kne/responsive-utils';
 import { Row, Col } from 'antd';
 import classnames from 'classnames';
 import '@kne/info-page/dist/index.css';
@@ -9,7 +10,8 @@ import style from './style.module.scss';
 
 const FormInfo = props => {
   const { className, column, list, gap, ...others } = Object.assign({}, { column: 2, list: [] }, props);
-  const isFlexBox = !(Number.isInteger(column) && column > 0);
+  const isMobile = useIsMobile();
+  const isFlexBox = !isMobile && !(Number.isInteger(column) && column > 0);
   const { ref: flexBoxRef, column: flexBoxColumn } = useFlexBox(isFlexBox ? column : {});
   const renderInner = (column, notLayout) => {
     return (
@@ -34,6 +36,9 @@ const FormInfo = props => {
   };
 
   const renderColumn = () => {
+    if (isMobile) {
+      return renderInner(1);
+    }
     if (!isFlexBox) {
       return renderInner(column);
     }
