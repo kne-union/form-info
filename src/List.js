@@ -9,10 +9,24 @@ import withLocale from './withLocale';
 import { useIntl } from '@kne/react-intl';
 import '@kne/info-page/dist/index.css';
 import style from './style.module.scss';
+import { markNestBlock } from './nestBlock';
 
 const List = withLocale(p => {
   const { formatMessage } = useIntl();
-  const { className, itemClassName, removeIcon, removeText, addText, addIcon, important, title, bordered, ...others } = Object.assign(
+  const {
+    className,
+    itemClassName,
+    removeIcon,
+    removeText,
+    addText,
+    addIcon,
+    important,
+    title,
+    bordered,
+    styles: partStyles,
+    style: partStyle,
+    ...others
+  } = Object.assign(
     {},
     {
       addText: formatMessage({ id: 'addText' }),
@@ -23,7 +37,9 @@ const List = withLocale(p => {
     },
     p
   );
-  // bordered 只控制外层 Part；子项卡片边框由 CSS 固定，移动端用 container query 收起（勿用 isMobile 开关以免闪断）
+  // 以 InfoPage.Part（外层 list-part）的 bordered 区分两种子项样式：
+  // - Part bordered：子项无描边、表头全圆角、body 无左右 padding
+  // - Part 非 bordered：子项有描边、表头仅上圆角（下边直角）、body 保留左右 padding
   const showBorder = !!bordered;
   return (
     <SubList
@@ -44,23 +60,29 @@ const List = withLocale(p => {
             <FormInfo
               {...props}
               title={titleNode}
-              bordered={showBorder}
+              // 子项不走 InfoPage.Part 的 bordered（会带 24px padding 把 header 顶开）；
+              // 描边/圆角只由外层 Part.bordered → in-bordered / plain 的 CSS 控制
+              bordered={false}
               className={classnames(style['list-item-part'], {
-                [style['list-item-part-no-title']]: !hasItemTitle
+                [style['list-item-part-no-title']]: !hasItemTitle,
+                [style['list-item-part-in-bordered']]: showBorder,
+                [style['list-item-part-plain']]: !showBorder
               })}
               styles={{
                 header: {
                   borderBottom: 'none',
-                  // 四角统一圆角（antd 默认只有上方圆角）
-                  borderRadius: 'var(--radius-default, 8px)'
+                  borderRadius: showBorder ? 'var(--radius-default, 8px)' : 'var(--radius-default, 8px) var(--radius-default, 8px) 0 0'
                 },
-                body: {
-                  borderRadius: '0 0 var(--radius-default, 8px) var(--radius-default, 8px)'
-                }
+                body: showBorder
+                  ? undefined
+                  : {
+                      borderRadius: '0 0 var(--radius-default, 8px) var(--radius-default, 8px)'
+                    }
               }}
               style={{
                 borderRadius: 'var(--radius-default, 8px)',
-                overflow: 'hidden'
+                overflow: 'hidden',
+                padding: 0
               }}
               gap={16}
               extra={
@@ -80,6 +102,8 @@ const List = withLocale(p => {
             className={classnames(className, itemClassName, style['list-part'])}
             title={title}
             bordered={showBorder}
+            styles={partStyles}
+            style={partStyle}
             extra={
               <div className={style['extra-container']}>
                 {allowAdd && (
@@ -98,4 +122,4 @@ const List = withLocale(p => {
   );
 });
 
-export default List;
+export default markNestBlock(List);

@@ -105,6 +105,17 @@
     font-size: var(--font-size-large);
   }
 
+  // 嵌套 List / FormInfo 整行时保证占满可用宽度，并与上方字段留出间距
+  .nest-block-col {
+    max-width: 100%;
+    margin-top: 8px;
+
+    > :global(.part) {
+      width: 100%;
+      max-width: 100%;
+    }
+  }
+
   @include resp.mobile-container {
     &:global(.ant-card) {
       > :global(.ant-card-head) {
@@ -138,12 +149,6 @@
 .list-part {
   > :global(.ant-card-head .part-title) {
     font-size: var(--font-size-large);
-  }
-
-  .list-part .extra-btn {
-    padding: 0;
-    border: none;
-    min-width: 0;
   }
 
   &:global {
@@ -182,10 +187,6 @@
       }
 
       .list-item-part {
-        border: none !important;
-        box-shadow: none !important;
-        background: transparent;
-
         &:global(.ant-card) {
           :global(.ant-card-head) {
             height: auto;
@@ -197,10 +198,6 @@
             border-bottom: none;
           }
 
-          :global(.ant-card-body) {
-            padding: 4px 0 0;
-          }
-
           // 字段之间留出呼吸感
           :global(.ant-row) {
             row-gap: 12px !important;
@@ -210,13 +207,30 @@
             padding-bottom: 4px;
           }
         }
+
+        // 移动端仍按外层 Part.bordered 区分
+        &.list-item-part-in-bordered:global(.ant-card) {
+          border: none !important;
+          box-shadow: none !important;
+          background: transparent;
+
+          :global(.ant-card-body) {
+            padding: 4px 0 0 !important;
+          }
+        }
+
+        &.list-item-part-plain:global(.ant-card) {
+          padding: 0 !important;
+          border: 1px solid var(--font-color-grey-4) !important;
+          background: #fff;
+
+          :global(.ant-card-body) {
+            padding: 12px !important;
+          }
+        }
       }
 
       &.is-important {
-        > .list-item-part {
-          border: none !important;
-        }
-
         > .list-item-part:global(.ant-card > .ant-card-head) {
           background: transparent;
           padding: 0 0 8px;
@@ -268,7 +282,8 @@
         }
       }
 
-      .list-item-part {
+      // 嵌套 List 子项仍跟外层 Part.bordered，不要一律去边框
+      .list-item-part.list-item-part-in-bordered {
         border: none !important;
         background: transparent;
 
@@ -306,28 +321,6 @@
       font-weight: 500;
     }
 
-    > .list-item-part:global(.ant-card) .list-part:global(.ant-card > .ant-card-head) {
-      background: transparent !important;
-      padding: 0;
-      border: none;
-      line-height: 1;
-
-      :global(.part-title) {
-        background: var(--primary-color-06);
-        color: var(--primary-color);
-        font-size: var(--font-size-small);
-        font-weight: bold;
-      }
-    }
-
-    > .list-item-part:global(.ant-card) .list-part:global(.ant-card > .ant-card-body) {
-      padding: 16px 0;
-    }
-
-    > .list-item-part {
-      border-color: var(--primary-color-5);
-    }
-
     .table-list-inner {
       border: none;
     }
@@ -336,7 +329,7 @@
   .list-item-part {
     padding: 0;
 
-    // 覆盖 antd Card CSS-in-JS：去头部分割线；头上圆角、身下圆角，整卡 overflow 裁切
+    // 覆盖 antd Card CSS-in-JS：去头部分割线
     &:global(.ant-card) {
       border-radius: var(--radius-default, 8px) !important;
       overflow: hidden !important;
@@ -345,8 +338,6 @@
         background: #f8f8f8;
         border: none !important;
         border-bottom: none !important;
-        // 去掉底边后四角统一圆角，避免底边仍是直角
-        border-radius: var(--radius-default, 8px) !important;
         min-height: 36px;
         height: 36px;
         padding: 0 16px;
@@ -406,10 +397,248 @@
         border-radius: 0;
         line-height: 22px;
       }
+    }
+
+    // 外层 Part bordered：子项无描边、表头全圆角、body 无左右 padding
+    &.list-item-part-in-bordered:global(.ant-card) {
+      border: none !important;
+      box-shadow: none !important;
+      background: transparent;
+
+      > :global(.ant-card-head) {
+        border-radius: var(--radius-default, 8px) !important;
+      }
 
       > :global(.ant-card-body) {
-        padding: 16px;
+        padding: 16px 0 !important;
+      }
+    }
+
+    // 外层 Part 非 bordered：子项有描边、表头紧贴顶边（仅上圆角）、body 保留左右 padding
+    &.list-item-part-plain:global(.ant-card) {
+      padding: 0 !important;
+      border: 1px solid var(--font-color-grey-4) !important;
+      box-shadow: none !important;
+      background: #fff;
+
+      > :global(.ant-card-head) {
+        margin: 0 !important;
+        border-radius: var(--radius-default, 8px) var(--radius-default, 8px) 0 0 !important;
+      }
+
+      > :global(.ant-card-body) {
+        padding: 16px !important;
         border-radius: 0 0 var(--radius-default, 8px) var(--radius-default, 8px) !important;
+      }
+    }
+
+    // —— 多层嵌套（桌面/移动通用）——
+    // 纵向整行堆叠：左侧色条 + 浅底；逐层收紧，避免与字段横向并排挤扁
+    .list-part {
+      margin-top: 4px;
+      width: 100%;
+      max-width: 100%;
+      padding: 0 !important;
+      border: 1px solid rgba(0, 0, 0, 0.06) !important;
+      box-shadow: none !important;
+      border-radius: var(--radius-default, 8px) !important;
+      overflow: hidden !important;
+      background: var(--bg-color-grey-1, #fafafa);
+      border-left: 3px solid var(--primary-color-2, var(--primary-color, #1677ff)) !important;
+      box-sizing: border-box;
+
+      &:global(.ant-card) {
+        > :global(.ant-card-head) {
+          padding: 6px 12px;
+          min-height: 40px;
+          height: auto;
+          display: flex;
+          align-items: center;
+          background: rgba(0, 0, 0, 0.03) !important;
+          border: none !important;
+          border-bottom: none !important;
+          border-radius: var(--radius-default, 8px) var(--radius-default, 8px) 0 0 !important;
+
+          :global(.ant-card-head-wrapper) {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+          }
+
+          :global(.ant-card-head-title),
+          :global(.ant-card-extra) {
+            padding: 0 !important;
+            display: flex;
+            align-items: center;
+          }
+
+          :global(.ant-card-extra) {
+            margin-inline-start: auto;
+            flex-shrink: 0;
+          }
+
+          :global(.part-title) {
+            font-size: var(--font-size-default, 14px);
+            font-weight: 600;
+            background: transparent !important;
+            color: rgba(0, 0, 0, 0.88) !important;
+            padding: 0 !important;
+            border-radius: 0;
+            line-height: 22px;
+          }
+        }
+
+        > :global(.ant-card-body) {
+          padding: 12px !important;
+        }
+      }
+
+      // 嵌套「添加」按钮：保持可见描边，尺寸略紧凑，避免贴边/被裁切
+      .extra-container {
+        min-height: 0;
+        display: flex;
+        align-items: center;
+      }
+
+      .extra-btn:global(.ant-btn) {
+        height: 28px;
+        padding: 0 10px !important;
+        font-size: 13px;
+        line-height: 26px;
+        border: 1px solid var(--font-color-grey-2, #d9d9d9) !important;
+        border-radius: var(--radius-default, 4px) !important;
+        background: #fff !important;
+        min-width: auto !important;
+        box-shadow: none !important;
+      }
+
+      .list-item {
+        margin-bottom: 12px;
+
+        &:not(:last-child) {
+          margin-bottom: 12px;
+        }
+
+        .list-item-part {
+          &:global(.ant-card) {
+            > :global(.ant-card-head) {
+              background: rgba(0, 0, 0, 0.02);
+              min-height: 32px;
+              height: 32px;
+              padding: 0 12px;
+            }
+          }
+
+          &.list-item-part-in-bordered:global(.ant-card) > :global(.ant-card-body) {
+            padding: 12px 0 !important;
+          }
+
+          &.list-item-part-plain:global(.ant-card) {
+            border-color: rgba(0, 0, 0, 0.08);
+
+            > :global(.ant-card-body) {
+              padding: 12px !important;
+            }
+          }
+        }
+      }
+
+      // 第 3 层起：减弱色条、虚线边框、更紧凑
+      .list-part {
+        margin-top: 8px;
+        background: #fff;
+        border-left-color: var(--font-color-grey-3, #d9d9d9) !important;
+
+        .list-item-part {
+          &:global(.ant-card) {
+            > :global(.ant-card-head) {
+              background: transparent;
+              min-height: 28px;
+              height: 28px;
+              padding: 0 8px;
+            }
+          }
+
+          &.list-item-part-in-bordered:global(.ant-card) > :global(.ant-card-body) {
+            padding: 8px 0 !important;
+          }
+
+          &.list-item-part-plain:global(.ant-card) {
+            border-style: dashed;
+
+            > :global(.ant-card-body) {
+              padding: 8px !important;
+            }
+          }
+        }
+
+        // 第 4 层及更深：细虚线色条
+        .list-part {
+          margin-top: 6px;
+          background: var(--bg-color-grey-1, #fafafa);
+          border-left-width: 2px !important;
+          border-left-style: dashed !important;
+
+          .list-item {
+            margin-bottom: 8px;
+
+            .list-item-part {
+              &:global(.ant-card) {
+                > :global(.ant-card-head) {
+                  min-height: 26px;
+                  height: 26px;
+                  padding: 0 8px;
+                }
+              }
+
+              &.list-item-part-in-bordered:global(.ant-card) > :global(.ant-card-body) {
+                padding: 8px 0 !important;
+              }
+
+              &.list-item-part-plain:global(.ant-card) {
+                border-color: rgba(0, 0, 0, 0.06);
+
+                > :global(.ant-card-body) {
+                  padding: 8px !important;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    // 子项内嵌套的普通 FormInfo（如分组信息，非 List 子项卡）
+    .form-info:global(.ant-card):not(.list-item-part):not(.list-part) {
+      margin-top: 0;
+      width: 100%;
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      border-radius: var(--radius-default, 8px) !important;
+      overflow: hidden !important;
+      background: var(--bg-color-grey-1, #fafafa);
+      box-sizing: border-box;
+
+      > :global(.ant-card-head) {
+        border: none !important;
+        border-bottom: none !important;
+        border-radius: var(--radius-default, 8px) var(--radius-default, 8px) 0 0 !important;
+        background: rgba(0, 0, 0, 0.03);
+        min-height: 32px;
+        padding: 0 12px;
+
+        :global(.part-title) {
+          background: transparent !important;
+          color: rgba(0, 0, 0, 0.88);
+          font-size: 13px;
+          font-weight: 600;
+          padding: 0 !important;
+          border-radius: 0;
+        }
+      }
+
+      > :global(.ant-card-body) {
+        padding: 12px !important;
       }
     }
   }
@@ -453,11 +682,22 @@
 }
 
 .list-item-part {
-  // 子项卡片边框固定展示；圆角+裁切保证上下边角一致
-  border: 1px solid var(--font-color-grey-4);
   border-radius: var(--radius-default, 8px) !important;
   overflow: hidden !important;
   box-sizing: border-box;
+
+  &.list-item-part-in-bordered {
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent;
+  }
+
+  &.list-item-part-plain {
+    padding: 0 !important;
+    border: 1px solid var(--font-color-grey-4) !important;
+    box-shadow: none !important;
+    background: #fff;
+  }
 }
 
 .multi-field {

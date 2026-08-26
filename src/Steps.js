@@ -10,6 +10,7 @@ import omit from 'lodash/omit';
 import { useIntl } from '@kne/react-intl';
 import FormInfo from './FormInfo';
 import withLocale from './withLocale';
+import { markNestBlock } from './nestBlock';
 import style from './style.module.scss';
 
 const collectFieldNames = (item = {}) => {
@@ -225,4 +226,4 @@ const Steps = withLocale(p => {
   );
 });
 
-export default Steps;
+export default markNestBlock(Steps);
