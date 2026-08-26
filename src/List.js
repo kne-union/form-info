@@ -63,6 +63,7 @@ const List = withLocale(p => {
     <SubList
       {...others}
       listRender={({ id, allowRemove, onRemove, index, groupArgs, title: itemTitle, list: itemList, ...props }) => {
+        // 无 itemTitle：不展示标题文案；占位 title 避免 InfoPage 打上 no-title，header（灰底+删除）仍在
         const hasItemTitle = itemTitle != null && itemTitle !== '';
         const titleNode = hasItemTitle ? itemTitle : <span className={style['list-item-title-placeholder']} aria-hidden="true" />;
         // 子嵌套 List 深度 = 当前 + 1（显式写入 props，不依赖 Context）
