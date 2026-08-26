@@ -11,3 +11,5 @@ export { default as Form } from './Form';
 export { default as FormModal } from './FormModal';
 export { default as FormSteps } from './FormSteps';
 export { default as FormStepsModal } from './FormStepsModal';
+/** 嵌入父级 Form 的分步区域；独立多 Form 向导请用 FormSteps */
+export { default as Steps, validateFieldsByName } from './Steps';

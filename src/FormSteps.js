@@ -1,7 +1,8 @@
 import React, { useRef } from 'react';
-import { Steps, Flex } from 'antd';
+import { Steps as AntSteps, Flex } from 'antd';
 import { useIsMobile } from '@kne/responsive-utils';
 import Form from './Form';
+import EmbedSteps from './Steps';
 import useControlValue from '@kne/use-control-value';
 import omit from 'lodash/omit';
 import classnames from 'classnames';
@@ -55,11 +56,11 @@ const FormSteps = p => {
 
   const inner = (
     <Flex className={className} vertical={!isVerticalSteps || isMobile} gap={24}>
-      <Steps
+      <AntSteps
         {...omit(stepProps, ['current', 'defaultCurrent', 'onChange', 'direction', 'orientation'])}
         direction={stepsDirection}
         orientation={stepsDirection}
-        className={classnames(stepsClassName, style['steps'], {
+        className={classnames('kne-form-steps', stepsClassName, style['steps'], {
           [style['steps-vertical']]: isVerticalSteps
         })}
         items={stepItems}
@@ -119,5 +120,8 @@ const FormSteps = p => {
     </Form>
   );
 };
+
+/** 嵌入父 Form 的分步（校验/提交跳步/重置）；独立向导仍用 FormSteps 本身 */
+FormSteps.Embed = EmbedSteps;
 
 export default FormSteps;
