@@ -24,7 +24,7 @@ const List = withLocale(p => {
     title,
     bordered,
     nestDepth: nestDepthProp,
-    nestParentTitles: _nestParentTitles,
+    nestParentTitles: _unusedNestParentTitles,
     styles: partStyles,
     style: partStyle,
     ...others

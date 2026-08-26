@@ -1,5 +1,31 @@
 @use '~@kne/responsive-utils/scss' as resp;
 
+// 嵌套 List 色条：蓝 → 橙 → 灰 → 虚线（第 5 级）
+$nest-rail-blue: var(--primary-color-2, var(--primary-color, #1677ff));
+$nest-rail-orange: #e8b07a;
+$nest-rail-gray: var(--font-color-grey-3, #d9d9d9);
+$nest-head-bg: rgba(0, 0, 0, 0.03);
+$nest-radius: var(--radius-default, 8px);
+
+@mixin nest-extra-btn {
+  height: 28px;
+  padding: 0 10px !important;
+  font-size: 13px;
+  line-height: 26px;
+  border: 1px solid var(--font-color-grey-2, #d9d9d9) !important;
+  border-radius: var(--radius-default, 4px) !important;
+  background: #fff !important;
+  min-width: auto !important;
+  box-shadow: none !important;
+}
+
+@mixin nest-full-width {
+  width: 100% !important;
+  max-width: 100% !important;
+  padding: 0 !important;
+  box-sizing: border-box;
+}
+
 .form-outer {
   :global(.multi-field-delete-label) {
     display: none;
@@ -251,16 +277,13 @@
 
     // 嵌套 List：左侧色条 + 浅底；Header 贴边满宽（padding 只放 body）
     .list-part:not(.nest-beyond) {
+      @include nest-full-width;
       margin: 12px 0 0;
-      padding: 0 !important;
-      width: 100% !important;
-      max-width: 100% !important;
       border: none !important;
       box-shadow: none !important;
       border-radius: 8px;
       background: var(--bg-color-grey-1, #fafafa);
-      border-left: 3px solid var(--primary-color-2, var(--primary-color)) !important;
-      box-sizing: border-box;
+      border-left: 3px solid $nest-rail-blue !important;
       overflow: hidden;
 
       &:global(.ant-card) {
@@ -269,7 +292,7 @@
           margin: 0 !important;
           padding: 8px 12px !important;
           min-height: auto;
-          background: rgba(0, 0, 0, 0.03) !important;
+          background: $nest-head-bg !important;
           border-bottom: none;
 
           :global(.part-title) {
@@ -289,7 +312,6 @@
         }
       }
 
-      // 嵌套 List 子项仍跟外层 Part.bordered，不要一律去边框
       .list-item-part.list-item-part-in-bordered {
         border: none !important;
         background: transparent;
@@ -303,60 +325,16 @@
         }
       }
 
-      // 更深层嵌套：橙色色条；同样 Header 贴边
+      // 第 3 层起：橙色色条
       .list-part:not(.nest-beyond) {
         margin-top: 8px;
         padding: 0 !important;
         background: rgba(0, 0, 0, 0.02);
-        border-left-color: #e8b07a !important;
+        border-left-color: $nest-rail-orange !important;
 
         &:global(.ant-card) > :global(.ant-card-body) {
           padding: 10px 10px 10px 12px !important;
         }
-      }
-    }
-
-    // 移动端第 5 级起：强制满宽、无左右缩进
-    .list-part.nest-beyond {
-      margin: 8px 0 0 !important;
-      margin-inline: 0 !important;
-      padding: 0 !important;
-      width: 100% !important;
-      max-width: 100% !important;
-      background: transparent !important;
-
-      &:global(.ant-card) {
-        > :global(.ant-card-head) {
-          height: auto !important;
-          padding: 8px 12px !important;
-
-          :global(.ant-card-head-wrapper) {
-            flex-wrap: wrap;
-          }
-
-          :global(.ant-card-head-title) {
-            white-space: normal !important;
-          }
-        }
-
-        > :global(.ant-card-body) {
-          padding: 8px 0 0 !important;
-        }
-      }
-
-      .list-part.nest-beyond {
-        margin-inline: 0 !important;
-        padding: 0 !important;
-        width: 100% !important;
-        border-left: none !important;
-      }
-
-      .list-part.nest-beyond.nest-beyond-rail {
-        border-left: 2px dashed var(--font-color-grey-3, #d9d9d9) !important;
-      }
-
-      .nest-block-col {
-        padding-inline: 0 !important;
       }
     }
   }
@@ -487,20 +465,16 @@
       }
     }
 
-    // —— 多层嵌套（桌面/移动通用）——
-    // 仅第 1～4 级：左侧色条 + 浅底；第 5 级起走 .nest-beyond，这里必须排除
+    // —— 第 1～4 级嵌套：左侧色条蓝→橙→灰；第 5 级起见 .nest-beyond ——
     .list-part:not(.nest-beyond) {
+      @include nest-full-width;
       margin-top: 4px;
-      width: 100% !important;
-      max-width: 100% !important;
-      padding: 0 !important;
       border: 1px solid rgba(0, 0, 0, 0.06) !important;
       box-shadow: none !important;
-      border-radius: var(--radius-default, 8px) !important;
+      border-radius: $nest-radius !important;
       overflow: hidden !important;
       background: var(--bg-color-grey-1, #fafafa);
-      border-left: 3px solid var(--primary-color-2, var(--primary-color, #1677ff)) !important;
-      box-sizing: border-box;
+      border-left: 3px solid $nest-rail-blue !important;
 
       &:global(.ant-card) {
         > :global(.ant-card-head) {
@@ -511,10 +485,10 @@
           height: auto;
           display: flex;
           align-items: center;
-          background: rgba(0, 0, 0, 0.03) !important;
+          background: $nest-head-bg !important;
           border: none !important;
           border-bottom: none !important;
-          border-radius: var(--radius-default, 8px) var(--radius-default, 8px) 0 0 !important;
+          border-radius: $nest-radius $nest-radius 0 0 !important;
 
           :global(.ant-card-head-wrapper) {
             width: 100%;
@@ -551,7 +525,6 @@
         }
       }
 
-      // 嵌套「添加」按钮：保持可见描边，尺寸略紧凑，避免贴边/被裁切
       .extra-container {
         min-height: 0;
         display: flex;
@@ -559,23 +532,11 @@
       }
 
       .extra-btn:global(.ant-btn) {
-        height: 28px;
-        padding: 0 10px !important;
-        font-size: 13px;
-        line-height: 26px;
-        border: 1px solid var(--font-color-grey-2, #d9d9d9) !important;
-        border-radius: var(--radius-default, 4px) !important;
-        background: #fff !important;
-        min-width: auto !important;
-        box-shadow: none !important;
+        @include nest-extra-btn;
       }
 
       .list-item {
         margin-bottom: 12px;
-
-        &:not(:last-child) {
-          margin-bottom: 12px;
-        }
 
         .list-item-part {
           &:global(.ant-card) {
@@ -601,11 +562,11 @@
         }
       }
 
-      // 第 3 层：橙色色条
+      // 第 3 层：橙
       .list-part:not(.nest-beyond) {
         margin-top: 8px;
         background: #fff;
-        border-left-color: #e8b07a !important;
+        border-left-color: $nest-rail-orange !important;
 
         .list-item-part {
           &:global(.ant-card) {
@@ -630,13 +591,13 @@
           }
         }
 
-        // 第 4 层：灰色实线色条
+        // 第 4 层：灰
         .list-part:not(.nest-beyond) {
           margin-top: 6px;
           background: var(--bg-color-grey-1, #fafafa);
           border-left-width: 3px !important;
           border-left-style: solid !important;
-          border-left-color: var(--font-color-grey-3, #d9d9d9) !important;
+          border-left-color: $nest-rail-gray !important;
 
           .list-item {
             margin-bottom: 8px;
@@ -727,11 +688,8 @@
   }
 
   :global(.ant-divider) {
-    border-top-color: var(--font-color-grey-2);
-  }
-
-  :global(.ant-divider) {
     display: none;
+    border-top-color: var(--font-color-grey-2);
   }
 
   &:not(:last-child) {
@@ -740,7 +698,7 @@
 }
 
 .list-item-part {
-  border-radius: var(--radius-default, 8px) !important;
+  border-radius: $nest-radius !important;
   overflow: hidden !important;
   box-sizing: border-box;
 
@@ -758,27 +716,27 @@
   }
 }
 
-// —— 第 5 级起：满宽同宽、无缩进；仅第 5 级画左侧色条 ——
+// —— 第 5 级起：满宽同宽；仅第 5 级虚线色条 ——
 .list-part.nest-beyond {
+  @include nest-full-width;
   display: block;
   margin: 8px 0 0 !important;
   margin-inline: 0 !important;
-  width: 100% !important;
-  max-width: 100% !important;
-  padding: 0 !important;
   border: none !important;
-  border-left: none !important; // 第 6 级及更深：无左边框
+  border-left: none !important;
   border-radius: 0 !important;
   box-shadow: none !important;
   background: transparent;
-  box-sizing: border-box !important;
   overflow: visible !important;
 
-  // 仅第 5 级：虚线色条 + 整块圆角
   &.nest-beyond-rail {
-    border-left: 2px dashed var(--font-color-grey-3, #d9d9d9) !important;
-    border-radius: var(--radius-default, 8px) !important;
+    border-left: 2px dashed $nest-rail-gray !important;
+    border-radius: $nest-radius !important;
     overflow: hidden !important;
+
+    &:global(.ant-card) {
+      overflow: hidden !important;
+    }
   }
 
   &:global(.ant-card) {
@@ -789,10 +747,9 @@
       padding: 8px 12px !important;
       height: auto !important;
       min-height: 36px;
-      background: rgba(0, 0, 0, 0.03) !important;
+      background: $nest-head-bg !important;
       border: none !important;
-      // 右侧上下圆角（左侧贴色条保持直角）
-      border-radius: 0 var(--radius-default, 8px) var(--radius-default, 8px) 0 !important;
+      border-radius: 0 $nest-radius $nest-radius 0 !important;
       overflow: visible !important;
 
       :global(.ant-card-head-wrapper) {
@@ -835,11 +792,6 @@
     }
   }
 
-  // 盖过上方 ant-card 的 overflow:visible，保证圆角裁切生效
-  &.nest-beyond-rail:global(.ant-card) {
-    overflow: hidden !important;
-  }
-
   .nest-beyond-title {
     display: inline-flex;
     align-items: center;
@@ -877,13 +829,7 @@
   }
 
   .extra-btn:global(.ant-btn) {
-    height: 28px;
-    padding: 0 10px !important;
-    font-size: 13px;
-    border: 1px solid var(--font-color-grey-2, #d9d9d9) !important;
-    background: #fff !important;
-    min-width: auto !important;
-    box-shadow: none !important;
+    @include nest-extra-btn;
     white-space: nowrap;
   }
 
@@ -912,44 +858,35 @@
       > :global(.ant-card-head) {
         padding: 0 12px !important;
         overflow: visible !important;
-        // 子项 header 同样右侧俩圆角
-        border-radius: 0 var(--radius-default, 8px) var(--radius-default, 8px) 0 !important;
+        border-radius: 0 $nest-radius $nest-radius 0 !important;
 
         :global(.ant-card-extra) {
           flex-shrink: 0 !important;
         }
       }
 
-      // 子项正文无左右 / 底部多余 padding，避免多层 nest-beyond 底空白叠加
       > :global(.ant-card-body) {
         padding: 8px 0 0 !important;
         overflow: visible !important;
       }
     }
-
-    &.list-item-part-in-bordered:global(.ant-card) > :global(.ant-card-body),
-    &.list-item-part-plain:global(.ant-card) > :global(.ant-card-body) {
-      padding: 8px 0 0 !important;
-    }
   }
 
-  // 所有字段列（含「说明」）统一左右 padding；嵌套块列除外
   :global(.ant-col):not(.nest-block-col) {
     padding-left: 12px !important;
     padding-right: 12px !important;
   }
 
-  // 再嵌套的 nest-beyond：强制同宽、无左边框（仅第 5 级 rail 保留虚线）
   .list-part.nest-beyond {
     width: 100% !important;
     max-width: 100% !important;
     margin-inline: 0 !important;
     border-left: none !important;
     background: transparent !important;
-  }
 
-  .list-part.nest-beyond.nest-beyond-rail {
-    border-left: 2px dashed var(--font-color-grey-3, #d9d9d9) !important;
+    &.nest-beyond-rail {
+      border-left: 2px dashed $nest-rail-gray !important;
+    }
   }
 
   .nest-block-col {
@@ -970,9 +907,6 @@
 .list-item-part:has([data-nest-beyond='true']),
 .list-item-part:has([data-nest-beyond='true']):global(.ant-card) {
   overflow: visible !important;
-}
-
-.multi-field {
 }
 
 .multi-field-item {
