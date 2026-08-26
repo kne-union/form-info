@@ -6,6 +6,7 @@ import { useFormContext } from '@kne/react-form-antd';
 import { useIsMobile } from '@kne/responsive-utils';
 import useControlValue from '@kne/use-control-value';
 import classnames from 'classnames';
+import omit from 'lodash/omit';
 import { useIntl } from '@kne/react-intl';
 import FormInfo from './FormInfo';
 import withLocale from './withLocale';
@@ -182,14 +183,7 @@ const Steps = withLocale(p => {
       <InfoPage.Part title={title} subtitle={subtitle} bordered={bordered}>
         <Flex vertical gap={24}>
           <AntSteps
-            {...Object.assign({}, stepProps, {
-              current: undefined,
-              defaultCurrent: undefined,
-              onChange: undefined,
-              direction: undefined,
-              orientation: undefined,
-              items: undefined
-            })}
+            {...omit(stepProps, ['current', 'defaultCurrent', 'onChange', 'direction', 'orientation', 'items'])}
             current={currentStep}
             direction={stepsDirection}
             orientation={stepsDirection}
@@ -199,7 +193,6 @@ const Steps = withLocale(p => {
             items={items.map((item, index) => ({
               title: item.title || formatMessage({ id: 'untitledStep' }, { index: index + 1 })
             }))}
-            onChange={undefined}
           />
 
           {items.map((item, index) => (
