@@ -38,6 +38,24 @@
       ]
     },
     {
+      "title": "超多层列表嵌套",
+      "description": "第 1～4 级常规嵌套；第 5 级起同宽无缩进，仅第 5 级保留左侧色条；可切换边框",
+      "code": "./nested-deep.js",
+      "scope": [
+        {
+          "name": "_FormInfo",
+          "packageName": "@kne/current-lib_form-info"
+        },
+        {
+          "name": "antd",
+          "packageName": "antd"
+        },
+        {
+          "packageName": "@kne/current-lib_form-info/dist/index.css"
+        }
+      ]
+    },
+    {
       "title": "模态框表单示例",
       "description": "演示FormModal组件的使用，展示如何在弹窗中展示表单，支持表单数据初始化和提交后的自动关闭功能",
       "code": "./form-modal.js",

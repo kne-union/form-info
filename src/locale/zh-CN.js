@@ -6,7 +6,8 @@ const locale = {
   next: '下一步',
   addText: '添加',
   deleteText: '删除',
-  untitledStep: '第{index}步'
+  untitledStep: '第{index}步',
+  nestLevel: '第{level}级'
 };
 
 export default locale;

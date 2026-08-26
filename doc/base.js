@@ -55,6 +55,7 @@ const BaseExample = () => {
         <List 
             title="工作经历" 
             name="workExperience"
+            bordered
             itemTitle={({index, data}) => data?.companyName || `工作经历 ${index + 1}`}
             important
             maxLength={5}
@@ -67,6 +68,7 @@ const BaseExample = () => {
                 <List 
                     title="项目经历" 
                     name="projects"
+                    bordered
                     itemTitle={({index, data}) => data?.projectName || `项目 ${index + 1}`}
                     list={[
                         <Input name="projectName" label="项目名称" rule="REQ" placeholder="例如：双十一活动系统" />,

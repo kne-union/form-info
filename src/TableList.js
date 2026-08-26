@@ -11,6 +11,7 @@ import classnames from 'classnames';
 import '@kne/info-page/dist/index.css';
 import '@kne/table-view/dist/index.css';
 import style from './style.module.scss';
+import { markNestBlock } from './nestBlock';
 
 /** 亚像素/边框舍入不算溢出，避免无意义浮动 */
 const isHorizontallyOverflowing = el => el && el.scrollWidth - el.clientWidth > 8;
@@ -47,6 +48,8 @@ const TableList = withLocale(p => {
     bordered,
     renderMobile = true,
     list,
+    styles: partStyles,
+    style: partStyle,
     ...others
   } = Object.assign(
     {},
@@ -96,6 +99,8 @@ const TableList = withLocale(p => {
       title={title}
       className={classnames(className, style['table-list'], extraClassName)}
       bordered={bordered}
+      styles={partStyles}
+      style={partStyle}
       extra={
         <div className={style['extra-container']}>
           {allowAdd && (
@@ -207,4 +212,4 @@ const TableList = withLocale(p => {
   return <TableView columns={columns} dataSource={[]} empty={null} className={style['table-list-view']} renderMobile={tableViewRenderMobile} render={() => renderDesktop()} />;
 });
 
-export default TableList;
+export default markNestBlock(TableList);

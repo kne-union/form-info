@@ -1,5 +1,31 @@
 @use '~@kne/responsive-utils/scss' as resp;
 
+// 嵌套 List 色条：蓝 → 橙 → 灰 → 虚线（第 5 级）
+$nest-rail-blue: var(--primary-color-2, var(--primary-color, #1677ff));
+$nest-rail-orange: #e8b07a;
+$nest-rail-gray: var(--font-color-grey-3, #d9d9d9);
+$nest-head-bg: rgba(0, 0, 0, 0.03);
+$nest-radius: var(--radius-default, 8px);
+
+@mixin nest-extra-btn {
+  height: 28px;
+  padding: 0 10px !important;
+  font-size: 13px;
+  line-height: 26px;
+  border: 1px solid var(--font-color-grey-2, #d9d9d9) !important;
+  border-radius: var(--radius-default, 4px) !important;
+  background: #fff !important;
+  min-width: auto !important;
+  box-shadow: none !important;
+}
+
+@mixin nest-full-width {
+  width: 100% !important;
+  max-width: 100% !important;
+  padding: 0 !important;
+  box-sizing: border-box;
+}
+
 .form-outer {
   :global(.multi-field-delete-label) {
     display: none;
@@ -105,6 +131,18 @@
     font-size: var(--font-size-large);
   }
 
+  // 嵌套 List / FormInfo 整行时保证占满可用宽度，并与上方字段留出间距
+  // 注意：不要在此清 gutter；第 1～4 级需保留 Row 左右 padding。仅 nest-beyond 内再清（见下）
+  .nest-block-col {
+    max-width: 100%;
+    margin-top: 8px;
+
+    > :global(.part) {
+      width: 100%;
+      max-width: 100%;
+    }
+  }
+
   @include resp.mobile-container {
     &:global(.ant-card) {
       > :global(.ant-card-head) {
@@ -138,12 +176,6 @@
 .list-part {
   > :global(.ant-card-head .part-title) {
     font-size: var(--font-size-large);
-  }
-
-  .list-part .extra-btn {
-    padding: 0;
-    border: none;
-    min-width: 0;
   }
 
   &:global {
@@ -182,10 +214,6 @@
       }
 
       .list-item-part {
-        border: none !important;
-        box-shadow: none !important;
-        background: transparent;
-
         &:global(.ant-card) {
           :global(.ant-card-head) {
             height: auto;
@@ -197,10 +225,6 @@
             border-bottom: none;
           }
 
-          :global(.ant-card-body) {
-            padding: 4px 0 0;
-          }
-
           // 字段之间留出呼吸感
           :global(.ant-row) {
             row-gap: 12px !important;
@@ -210,13 +234,30 @@
             padding-bottom: 4px;
           }
         }
+
+        // 移动端仍按外层 Part.bordered 区分
+        &.list-item-part-in-bordered:global(.ant-card) {
+          border: none !important;
+          box-shadow: none !important;
+          background: transparent;
+
+          :global(.ant-card-body) {
+            padding: 4px 0 0 !important;
+          }
+        }
+
+        &.list-item-part-plain:global(.ant-card) {
+          padding: 0 !important;
+          border: 1px solid var(--font-color-grey-4) !important;
+          background: #fff;
+
+          :global(.ant-card-body) {
+            padding: 12px !important;
+          }
+        }
       }
 
       &.is-important {
-        > .list-item-part {
-          border: none !important;
-        }
-
         > .list-item-part:global(.ant-card > .ant-card-head) {
           background: transparent;
           padding: 0 0 8px;
@@ -234,21 +275,24 @@
       }
     }
 
-    // 嵌套 List：左侧色条 + 浅底圆角块表示包含
-    .list-part {
+    // 嵌套 List：左侧色条 + 浅底；Header 贴边满宽（padding 只放 body）
+    .list-part:not(.nest-beyond) {
+      @include nest-full-width;
       margin: 12px 0 0;
-      padding: 12px 12px 12px 14px !important;
       border: none !important;
       box-shadow: none !important;
       border-radius: 8px;
       background: var(--bg-color-grey-1, #fafafa);
-      border-left: 3px solid var(--primary-color-2, var(--primary-color)) !important;
-      box-sizing: border-box;
+      border-left: 3px solid $nest-rail-blue !important;
+      overflow: hidden;
 
       &:global(.ant-card) {
         > :global(.ant-card-head) {
-          padding: 0 0 8px;
-          background: transparent;
+          width: 100%;
+          margin: 0 !important;
+          padding: 8px 12px !important;
+          min-height: auto;
+          background: $nest-head-bg !important;
           border-bottom: none;
 
           :global(.part-title) {
@@ -257,7 +301,7 @@
         }
 
         > :global(.ant-card-body) {
-          padding: 4px 0 0;
+          padding: 12px 12px 12px 14px !important;
         }
       }
 
@@ -268,7 +312,7 @@
         }
       }
 
-      .list-item-part {
+      .list-item-part.list-item-part-in-bordered {
         border: none !important;
         background: transparent;
 
@@ -281,12 +325,16 @@
         }
       }
 
-      // 更深层嵌套：减弱色条对比，保持内边距
-      .list-part {
+      // 第 3 层起：橙色色条
+      .list-part:not(.nest-beyond) {
         margin-top: 8px;
-        padding: 10px 10px 10px 12px !important;
+        padding: 0 !important;
         background: rgba(0, 0, 0, 0.02);
-        border-left-color: var(--font-color-grey-3, #d9d9d9) !important;
+        border-left-color: $nest-rail-orange !important;
+
+        &:global(.ant-card) > :global(.ant-card-body) {
+          padding: 10px 10px 10px 12px !important;
+        }
       }
     }
   }
@@ -306,28 +354,6 @@
       font-weight: 500;
     }
 
-    > .list-item-part:global(.ant-card) .list-part:global(.ant-card > .ant-card-head) {
-      background: transparent !important;
-      padding: 0;
-      border: none;
-      line-height: 1;
-
-      :global(.part-title) {
-        background: var(--primary-color-06);
-        color: var(--primary-color);
-        font-size: var(--font-size-small);
-        font-weight: bold;
-      }
-    }
-
-    > .list-item-part:global(.ant-card) .list-part:global(.ant-card > .ant-card-body) {
-      padding: 16px 0;
-    }
-
-    > .list-item-part {
-      border-color: var(--primary-color-5);
-    }
-
     .table-list-inner {
       border: none;
     }
@@ -336,7 +362,7 @@
   .list-item-part {
     padding: 0;
 
-    // 覆盖 antd Card CSS-in-JS：去头部分割线；头上圆角、身下圆角，整卡 overflow 裁切
+    // 覆盖 antd Card CSS-in-JS：去头部分割线
     &:global(.ant-card) {
       border-radius: var(--radius-default, 8px) !important;
       overflow: hidden !important;
@@ -345,8 +371,6 @@
         background: #f8f8f8;
         border: none !important;
         border-bottom: none !important;
-        // 去掉底边后四角统一圆角，避免底边仍是直角
-        border-radius: var(--radius-default, 8px) !important;
         min-height: 36px;
         height: 36px;
         padding: 0 16px;
@@ -406,10 +430,234 @@
         border-radius: 0;
         line-height: 22px;
       }
+    }
+
+    // 外层 Part bordered：子项无描边、表头全圆角、body 无左右 padding
+    &.list-item-part-in-bordered:global(.ant-card) {
+      border: none !important;
+      box-shadow: none !important;
+      background: transparent;
+
+      > :global(.ant-card-head) {
+        border-radius: var(--radius-default, 8px) !important;
+      }
 
       > :global(.ant-card-body) {
-        padding: 16px;
+        padding: 16px 0 !important;
+      }
+    }
+
+    // 外层 Part 非 bordered：子项有描边、表头紧贴顶边（仅上圆角）、body 保留左右 padding
+    &.list-item-part-plain:global(.ant-card) {
+      padding: 0 !important;
+      border: 1px solid var(--font-color-grey-4) !important;
+      box-shadow: none !important;
+      background: #fff;
+
+      > :global(.ant-card-head) {
+        margin: 0 !important;
+        border-radius: var(--radius-default, 8px) var(--radius-default, 8px) 0 0 !important;
+      }
+
+      > :global(.ant-card-body) {
+        padding: 16px !important;
         border-radius: 0 0 var(--radius-default, 8px) var(--radius-default, 8px) !important;
+      }
+    }
+
+    // —— 第 1～4 级嵌套：左侧色条蓝→橙→灰；第 5 级起见 .nest-beyond ——
+    .list-part:not(.nest-beyond) {
+      @include nest-full-width;
+      margin-top: 4px;
+      border: 1px solid rgba(0, 0, 0, 0.06) !important;
+      box-shadow: none !important;
+      border-radius: $nest-radius !important;
+      overflow: hidden !important;
+      background: var(--bg-color-grey-1, #fafafa);
+      border-left: 3px solid $nest-rail-blue !important;
+
+      &:global(.ant-card) {
+        > :global(.ant-card-head) {
+          width: 100% !important;
+          margin: 0 !important;
+          padding: 6px 12px !important;
+          min-height: 40px;
+          height: auto;
+          display: flex;
+          align-items: center;
+          background: $nest-head-bg !important;
+          border: none !important;
+          border-bottom: none !important;
+          border-radius: $nest-radius $nest-radius 0 0 !important;
+
+          :global(.ant-card-head-wrapper) {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+          }
+
+          :global(.ant-card-head-title),
+          :global(.ant-card-extra) {
+            padding: 0 !important;
+            display: flex;
+            align-items: center;
+          }
+
+          :global(.ant-card-extra) {
+            margin-inline-start: auto;
+            flex-shrink: 0;
+          }
+
+          :global(.part-title) {
+            font-size: var(--font-size-default, 14px);
+            font-weight: 600;
+            background: transparent !important;
+            color: rgba(0, 0, 0, 0.88) !important;
+            padding: 0 !important;
+            border-radius: 0;
+            line-height: 22px;
+          }
+        }
+
+        > :global(.ant-card-body) {
+          padding: 12px !important;
+        }
+      }
+
+      .extra-container {
+        min-height: 0;
+        display: flex;
+        align-items: center;
+      }
+
+      .extra-btn:global(.ant-btn) {
+        @include nest-extra-btn;
+      }
+
+      .list-item {
+        margin-bottom: 12px;
+
+        .list-item-part {
+          &:global(.ant-card) {
+            > :global(.ant-card-head) {
+              background: rgba(0, 0, 0, 0.02);
+              min-height: 32px;
+              height: 32px;
+              padding: 0 12px;
+            }
+          }
+
+          &.list-item-part-in-bordered:global(.ant-card) > :global(.ant-card-body) {
+            padding: 12px 0 !important;
+          }
+
+          &.list-item-part-plain:global(.ant-card) {
+            border-color: rgba(0, 0, 0, 0.08);
+
+            > :global(.ant-card-body) {
+              padding: 12px !important;
+            }
+          }
+        }
+      }
+
+      // 第 3 层：橙
+      .list-part:not(.nest-beyond) {
+        margin-top: 8px;
+        background: #fff;
+        border-left-color: $nest-rail-orange !important;
+
+        .list-item-part {
+          &:global(.ant-card) {
+            > :global(.ant-card-head) {
+              background: transparent;
+              min-height: 28px;
+              height: 28px;
+              padding: 0 8px;
+            }
+          }
+
+          &.list-item-part-in-bordered:global(.ant-card) > :global(.ant-card-body) {
+            padding: 8px 0 !important;
+          }
+
+          &.list-item-part-plain:global(.ant-card) {
+            border-style: dashed;
+
+            > :global(.ant-card-body) {
+              padding: 8px !important;
+            }
+          }
+        }
+
+        // 第 4 层：灰
+        .list-part:not(.nest-beyond) {
+          margin-top: 6px;
+          background: var(--bg-color-grey-1, #fafafa);
+          border-left-width: 3px !important;
+          border-left-style: solid !important;
+          border-left-color: $nest-rail-gray !important;
+
+          .list-item {
+            margin-bottom: 8px;
+
+            .list-item-part {
+              &:global(.ant-card) {
+                > :global(.ant-card-head) {
+                  min-height: 26px;
+                  height: 26px;
+                  padding: 0 8px;
+                }
+              }
+
+              &.list-item-part-in-bordered:global(.ant-card) > :global(.ant-card-body) {
+                padding: 8px 0 !important;
+              }
+
+              &.list-item-part-plain:global(.ant-card) {
+                border-color: rgba(0, 0, 0, 0.06);
+
+                > :global(.ant-card-body) {
+                  padding: 8px !important;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    // 子项内嵌套的普通 FormInfo（如分组信息，非 List 子项卡）
+    .form-info:global(.ant-card):not(.list-item-part):not(.list-part) {
+      margin-top: 0;
+      width: 100%;
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      border-radius: var(--radius-default, 8px) !important;
+      overflow: hidden !important;
+      background: var(--bg-color-grey-1, #fafafa);
+      box-sizing: border-box;
+
+      > :global(.ant-card-head) {
+        border: none !important;
+        border-bottom: none !important;
+        border-radius: var(--radius-default, 8px) var(--radius-default, 8px) 0 0 !important;
+        background: rgba(0, 0, 0, 0.03);
+        min-height: 32px;
+        padding: 0 12px;
+
+        :global(.part-title) {
+          background: transparent !important;
+          color: rgba(0, 0, 0, 0.88);
+          font-size: 13px;
+          font-weight: 600;
+          padding: 0 !important;
+          border-radius: 0;
+        }
+      }
+
+      > :global(.ant-card-body) {
+        padding: 12px !important;
       }
     }
   }
@@ -440,11 +688,8 @@
   }
 
   :global(.ant-divider) {
-    border-top-color: var(--font-color-grey-2);
-  }
-
-  :global(.ant-divider) {
     display: none;
+    border-top-color: var(--font-color-grey-2);
   }
 
   &:not(:last-child) {
@@ -453,14 +698,215 @@
 }
 
 .list-item-part {
-  // 子项卡片边框固定展示；圆角+裁切保证上下边角一致
-  border: 1px solid var(--font-color-grey-4);
-  border-radius: var(--radius-default, 8px) !important;
+  border-radius: $nest-radius !important;
   overflow: hidden !important;
   box-sizing: border-box;
+
+  &.list-item-part-in-bordered {
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent;
+  }
+
+  &.list-item-part-plain {
+    padding: 0 !important;
+    border: 1px solid var(--font-color-grey-4) !important;
+    box-shadow: none !important;
+    background: #fff;
+  }
 }
 
-.multi-field {
+// —— 第 5 级起：满宽同宽；仅第 5 级虚线色条 ——
+.list-part.nest-beyond {
+  @include nest-full-width;
+  display: block;
+  margin: 8px 0 0 !important;
+  margin-inline: 0 !important;
+  border: none !important;
+  border-left: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  background: transparent;
+  overflow: visible !important;
+
+  &.nest-beyond-rail {
+    border-left: 2px dashed $nest-rail-gray !important;
+    border-radius: $nest-radius !important;
+    overflow: hidden !important;
+
+    &:global(.ant-card) {
+      overflow: hidden !important;
+    }
+  }
+
+  &:global(.ant-card) {
+    overflow: visible !important;
+
+    > :global(.ant-card-head) {
+      margin: 0 !important;
+      padding: 8px 12px !important;
+      height: auto !important;
+      min-height: 36px;
+      background: $nest-head-bg !important;
+      border: none !important;
+      border-radius: 0 $nest-radius $nest-radius 0 !important;
+      overflow: visible !important;
+
+      :global(.ant-card-head-wrapper) {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 6px 8px;
+        width: 100%;
+        min-width: 0;
+        overflow: visible !important;
+      }
+
+      :global(.ant-card-head-title) {
+        flex: 1 1 120px;
+        min-width: 0;
+        max-width: 100%;
+        overflow: visible !important;
+        white-space: normal !important;
+        padding: 0 !important;
+      }
+
+      :global(.ant-card-extra) {
+        flex: 0 0 auto;
+        margin-inline-start: auto;
+        overflow: visible !important;
+      }
+
+      :global(.part-title) {
+        background: transparent !important;
+        padding: 0 !important;
+        white-space: normal !important;
+        max-width: 100%;
+      }
+    }
+
+    > :global(.ant-card-body) {
+      margin: 0 !important;
+      padding: 8px 0 0 !important;
+      overflow: visible !important;
+    }
+  }
+
+  .nest-beyond-title {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .nest-beyond-title-text {
+    min-width: 0;
+    white-space: normal;
+    word-break: break-word;
+  }
+
+  .nest-parent-tag:global(.ant-tag) {
+    margin: 0 !important;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    border-radius: 999px !important;
+    border-color: #f0d2b0;
+    background: #fff7ef;
+    color: #b07a45;
+    font-size: 12px;
+    line-height: 20px;
+    padding: 0 10px;
+  }
+
+  .extra-container {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .extra-btn:global(.ant-btn) {
+    @include nest-extra-btn;
+    white-space: nowrap;
+  }
+
+  .list-item {
+    margin-bottom: 8px;
+    max-width: 100%;
+    overflow: visible !important;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .list-item-part,
+  .list-item-part-beyond {
+    overflow: visible !important;
+    max-width: 100%;
+    box-sizing: border-box;
+    border: none !important;
+    background: transparent !important;
+
+    &:global(.ant-card) {
+      overflow: visible !important;
+      background: transparent !important;
+
+      > :global(.ant-card-head) {
+        padding: 0 12px !important;
+        overflow: visible !important;
+        border-radius: 0 $nest-radius $nest-radius 0 !important;
+
+        :global(.ant-card-extra) {
+          flex-shrink: 0 !important;
+        }
+      }
+
+      > :global(.ant-card-body) {
+        padding: 8px 0 0 !important;
+        overflow: visible !important;
+      }
+    }
+  }
+
+  :global(.ant-col):not(.nest-block-col) {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+
+  .list-part.nest-beyond {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-inline: 0 !important;
+    border-left: none !important;
+    background: transparent !important;
+
+    &.nest-beyond-rail {
+      border-left: 2px dashed $nest-rail-gray !important;
+    }
+  }
+
+  .nest-block-col {
+    padding-inline: 0 !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    overflow: visible !important;
+  }
+}
+
+// 父级包住 nest-beyond 时清 gutter，避免每层窄一截
+.nest-block-col:has(> [data-nest-beyond='true']) {
+  padding-inline: 0 !important;
+  max-width: 100% !important;
+  overflow: visible !important;
+}
+
+.list-item-part:has([data-nest-beyond='true']),
+.list-item-part:has([data-nest-beyond='true']):global(.ant-card) {
+  overflow: visible !important;
 }
 
 .multi-field-item {
