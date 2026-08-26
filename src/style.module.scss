@@ -124,6 +124,14 @@
     border-radius: var(--radius-default, 2px);
     border: 1px solid var(--font-color-grey-2);
     padding: 6px 12px;
+    box-shadow: none !important;
+
+    &:hover,
+    &:focus,
+    &:active,
+    &:focus-visible {
+      box-shadow: none !important;
+    }
   }
 }
 
@@ -287,7 +295,7 @@
 .list-item {
   &.is-important {
     > .list-item-part:global(.ant-card > .ant-card-head) {
-      background: var(--primary-color-06);
+      background: var(--primary-color-06) !important;
     }
 
     > .list-item-part:global(.ant-card > .ant-card-head .ant-card-head-title .part-title) {
@@ -299,7 +307,7 @@
     }
 
     > .list-item-part:global(.ant-card) .list-part:global(.ant-card > .ant-card-head) {
-      background: transparent;
+      background: transparent !important;
       padding: 0;
       border: none;
       line-height: 1;
@@ -327,13 +335,45 @@
 
   .list-item-part {
     padding: 0;
+
+    // 覆盖 antd Card CSS-in-JS：去头部分割线；头上圆角、身下圆角，整卡 overflow 裁切
     &:global(.ant-card) {
-      :global(.ant-card-head) {
+      border-radius: var(--radius-default, 8px) !important;
+      overflow: hidden !important;
+
+      > :global(.ant-card-head) {
         background: #f8f8f8;
-        border-bottom: 1px solid var(--font-color-grey-4);
-        line-height: 36px;
+        border: none !important;
+        border-bottom: none !important;
+        // 去掉底边后四角统一圆角，避免底边仍是直角
+        border-radius: var(--radius-default, 8px) !important;
+        min-height: 36px;
         height: 36px;
         padding: 0 16px;
+        display: flex;
+        align-items: center;
+
+        :global(.ant-card-head-wrapper) {
+          width: 100%;
+          display: flex;
+          align-items: center;
+        }
+
+        :global(.ant-card-extra) {
+          display: inline-flex;
+          align-items: center;
+          margin-block: 0;
+          padding: 0;
+          float: none;
+        }
+
+        :global(.ant-btn) {
+          display: inline-flex;
+          align-items: center;
+          height: auto;
+          line-height: 1;
+          padding: 0;
+        }
 
         .extra-btn {
           min-width: auto !important;
@@ -343,6 +383,7 @@
         }
       }
 
+      > :global(.ant-card-head-title) :global(.part-title),
       :global(.ant-card-head-title) :global(.part-title) {
         background: transparent;
         font-weight: normal;
@@ -350,8 +391,9 @@
         color: var(--font-color);
       }
 
-      :global(.ant-card-body) {
+      > :global(.ant-card-body) {
         padding: 16px;
+        border-radius: 0 0 var(--radius-default, 8px) var(--radius-default, 8px) !important;
       }
     }
   }
@@ -370,7 +412,11 @@
 }
 
 .list-item-part {
+  // 子项卡片边框固定展示；圆角+裁切保证上下边角一致
   border: 1px solid var(--font-color-grey-4);
+  border-radius: var(--radius-default, 8px) !important;
+  overflow: hidden !important;
+  box-sizing: border-box;
 }
 
 .multi-field {
@@ -425,20 +471,34 @@
       display: none;
     }
 
+    // 表头/数据行各自为 flex，按内容宽度会错位；统一行宽 + 等分列宽对齐
+    .ant-row {
+      flex-wrap: nowrap;
+      width: 100%;
+      min-width: calc(var(--table-list-field-count, 1) * var(--table-list-col-min-width, 160px) + var(--table-list-options-width, 100px));
+      box-sizing: border-box;
+      background: #fff;
+    }
+
     .ant-row:not(:last-child) {
       border-bottom: solid 1px var(--bg-color-grey-3);
     }
 
     .ant-row:hover {
-      background: var(--bg-color-grey-1) !important;
+      background: var(--bg-color-grey-1, #fafafa) !important;
     }
 
     .ant-col {
       padding: 16px;
-      width: var(--col-width);
+      flex: 1 1 0;
+      width: 0;
+      min-width: var(--table-list-col-min-width, 160px);
+      box-sizing: border-box;
+      overflow: hidden;
     }
   }
 
+  // JS is-mobile 与容器查询双通道：预览框/窄容器也能露出字段 label
   &.is-mobile {
     :global {
       .react-form__field-label {
@@ -446,12 +506,41 @@
       }
     }
   }
+
+  @include resp.mobile-container {
+    &:global(.ant-card) {
+      border: none !important;
+      box-shadow: none !important;
+      background: transparent;
+
+      > :global(.ant-card-head) {
+        padding: 0 0 4px;
+        min-height: auto;
+        background: transparent;
+        border-bottom: none;
+      }
+
+      > :global(.ant-card-body) {
+        padding: 12px 0 0;
+      }
+    }
+
+    :global {
+      .react-form__field-label {
+        display: block;
+      }
+    }
+
+    .table-list-inner {
+      border: none;
+    }
+  }
 }
 
 .table-list-mobile-list {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
 }
 
 .table-list-mobile-card {
@@ -459,10 +548,10 @@
   flex-direction: column;
   align-items: stretch;
   gap: 12px;
-  padding: 16px;
+  padding: 12px;
   background: #fff;
   border: 1px solid var(--font-color-grey-4, #f0f0f0);
-  border-radius: 8px;
+  border-radius: var(--radius-default, 8px);
   box-sizing: border-box;
 }
 
@@ -491,16 +580,36 @@
 
 .table-list-inner {
   border: solid 1px var(--bg-color-grey-3);
+  border-radius: var(--radius-default, 8px);
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  box-sizing: border-box;
 }
 
 .table-list-field {
   &:global(.ant-col) {
     padding-bottom: 0;
   }
+
+  :global {
+    .react-form__field,
+    .react-form__field-component {
+      width: 100%;
+      max-width: 100%;
+    }
+  }
 }
 
+// 表头底色需压过 .table-list .ant-row { background:#fff } 与 hover !important
 .table-list-header {
-  background: var(--bg-color-grey-1);
+  &:global(.ant-row) {
+    background: var(--bg-color-grey-1, #fafafa) !important;
+  }
+
+  &:global(.ant-row:hover) {
+    background: var(--bg-color-grey-1, #fafafa) !important;
+  }
 
   .is-req:before {
     color: var(--color-warning);
@@ -515,43 +624,214 @@
   :global {
     .ant-col {
       padding: 8px 16px;
+      background: transparent;
     }
   }
 }
 
 .table-options {
-  flex-basis: 100px;
+  &:global(.ant-col) {
+    flex: 0 0 100px;
+    width: 100px;
+    min-width: 100px;
+    max-width: 100px;
+    align-self: stretch;
+  }
+
+  position: relative;
   text-align: right;
+  background: transparent;
+  // 默认不浮动、无分割线；仅横向溢出时由 .is-overflow 开启
 }
 
+.table-options-header {
+  background: var(--bg-color-grey-1, #fafafa) !important;
+}
+
+// 需要横向滚动时：表头+行操作列一起 sticky，左侧分割线整列连通
+.table-list-inner.is-overflow {
+  .table-options {
+    position: sticky;
+    right: 0;
+    z-index: 2;
+    // inherit 行底色，hover 时与行一致；遮住横向滚过的内容
+    background: inherit;
+    border-left: 1px solid var(--bg-color-grey-3);
+    box-shadow: none;
+
+    // 水平渐变贴左边；略微上下重叠，跨行视觉连成一条
+    &::before {
+      content: '';
+      position: absolute;
+      top: -1px;
+      bottom: -1px;
+      left: -8px;
+      width: 8px;
+      pointer-events: none;
+      background: linear-gradient(to right, transparent, rgba(0, 0, 0, 0.06));
+    }
+  }
+
+  .table-options-header {
+    z-index: 3;
+    background: var(--bg-color-grey-1, #fafafa) !important;
+  }
+}
+
+// 水平 Steps：整体随内容宽度居中（不限制总宽）；标题随文字；步骤间横线最多 40px
 .steps {
   justify-content: center;
-  width: auto;
+  width: fit-content;
+  max-width: 100%;
+  margin-inline: auto;
+  box-sizing: border-box;
 
   :global(.ant-steps-item) {
-    max-width: 450px;
+    flex: none;
+    width: auto;
+    min-width: auto;
+    max-width: none;
+    overflow: visible;
   }
 
+  :global(.ant-steps-item-section) {
+    flex: none;
+    width: auto;
+    min-width: 0;
+  }
+
+  :global(.ant-steps-item-header) {
+    width: auto;
+  }
+
+  :global(.ant-steps-item-title),
   :global(.ant-steps-item-content) {
+    flex: none;
+    width: auto;
+    max-width: none;
+    white-space: nowrap;
     text-wrap: nowrap;
   }
+
+  // antd 6：步骤间连接轨
+  :global(.ant-steps-item-rail) {
+    flex: 0 0 40px !important;
+    width: 40px !important;
+    max-width: 40px;
+    min-width: 0;
+  }
+
+  // 兼容 title 伪元素连线
+  :global(.ant-steps-item-title)::after {
+    width: 40px !important;
+    max-width: 40px;
+  }
+}
+
+// 供 form-creator 等直接使用 antd Steps 时复用同一套样式（仅水平）
+:global(.kne-form-steps.ant-steps-horizontal) {
+  justify-content: center;
+  width: fit-content;
+  max-width: 100%;
+  margin-inline: auto;
+  box-sizing: border-box;
+}
+
+:global(.kne-form-steps.ant-steps-horizontal .ant-steps-item) {
+  flex: none;
+  width: auto;
+  min-width: auto;
+  max-width: none;
+  overflow: visible;
+}
+
+:global(.kne-form-steps.ant-steps-horizontal .ant-steps-item-section) {
+  flex: none;
+  width: auto;
+  min-width: 0;
+}
+
+:global(.kne-form-steps.ant-steps-horizontal .ant-steps-item-header) {
+  width: auto;
+}
+
+:global(.kne-form-steps.ant-steps-horizontal .ant-steps-item-title),
+:global(.kne-form-steps.ant-steps-horizontal .ant-steps-item-content) {
+  flex: none;
+  width: auto;
+  max-width: none;
+  white-space: nowrap;
+  text-wrap: nowrap;
+}
+
+:global(.kne-form-steps.ant-steps-horizontal .ant-steps-item-rail) {
+  flex: 0 0 40px !important;
+  width: 40px !important;
+  max-width: 40px;
+  min-width: 0;
+}
+
+:global(.kne-form-steps.ant-steps-horizontal .ant-steps-item-title)::after {
+  width: 40px !important;
+  max-width: 40px;
 }
 
 .steps-vertical {
   width: 100%;
   justify-content: flex-start;
+  margin-inline: 0;
 
   :global(.ant-steps-item) {
+    flex: none;
+    width: 100%;
     max-width: none;
   }
 
+  :global(.ant-steps-item-section) {
+    flex: 1;
+    width: auto;
+  }
+
+  :global(.ant-steps-item-title),
   :global(.ant-steps-item-content) {
+    white-space: normal;
     text-wrap: wrap;
+  }
+
+  :global(.ant-steps-item-rail) {
+    flex: none !important;
+    width: auto !important;
+    max-width: none;
   }
 }
 
 .steps-form-inner {
   width: 100%;
+}
+
+.steps-embed {
+  width: 100%;
+}
+
+.steps-embed-panel {
+  width: 100%;
+}
+
+.steps-actions {
+  margin-top: 4px;
+  padding: 0;
+  width: 100%;
+}
+
+.steps-actions-side {
+  min-height: 24px;
+  display: flex;
+  align-items: center;
+
+  &:last-child {
+    margin-left: auto;
+    justify-content: flex-end;
+  }
 }
 
 .steps-modal .steps {

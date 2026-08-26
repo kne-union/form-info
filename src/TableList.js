@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useRef, useState, useLayoutEffect } from 'react';
 import InfoPage from '@kne/info-page';
 import { Empty, Row, Col, Button } from 'antd';
 import { TableList as TableListBase, FieldList, SubList } from '@kne/react-form-plus';
@@ -11,6 +11,9 @@ import classnames from 'classnames';
 import '@kne/info-page/dist/index.css';
 import '@kne/table-view/dist/index.css';
 import style from './style.module.scss';
+
+/** 亚像素/边框舍入不算溢出，避免无意义浮动 */
+const isHorizontallyOverflowing = el => el && el.scrollWidth - el.clientWidth > 8;
 
 const buildColumns = (list, { removeText }) => {
   const fieldList = Array.isArray(list) ? list : [];
@@ -61,6 +64,32 @@ const TableList = withLocale(p => {
   const useMobileRender = isRenderMobileActive(renderMobile, isMobile);
   const resolvedRenderMobile = useMemo(() => resolveRenderMobile(renderMobile), [renderMobile]);
   const columns = useMemo(() => buildColumns(list, { removeText }), [list, removeText]);
+  const fieldCount = useMemo(() => (Array.isArray(list) ? list : []).filter(item => item?.props?.display !== false && !item?.props?.hidden).length, [list]);
+  const innerRef = useRef(null);
+  const [isOverflow, setIsOverflow] = useState(false);
+
+  useLayoutEffect(() => {
+    if (useMobileRender) {
+      setIsOverflow(false);
+      return;
+    }
+    const el = innerRef.current;
+    if (!el) {
+      return;
+    }
+    const update = () => setIsOverflow(isHorizontallyOverflowing(el));
+    update();
+    const ro = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(update) : null;
+    ro?.observe(el);
+    const mo = typeof MutationObserver !== 'undefined' ? new MutationObserver(update) : null;
+    mo?.observe(el, { childList: true, subtree: true, characterData: true });
+    window.addEventListener('resize', update);
+    return () => {
+      ro?.disconnect();
+      mo?.disconnect();
+      window.removeEventListener('resize', update);
+    };
+  }, [useMobileRender, list, columns]);
 
   const renderPart = (children, { onAdd, allowAdd }, extraClassName) => (
     <InfoPage.Part
@@ -85,17 +114,11 @@ const TableList = withLocale(p => {
     <TableListBase
       {...others}
       list={list}
-      headerRender={(children, { width }) => {
+      headerRender={children => {
         return (
-          <Row
-            className={style['table-list-header']}
-            wrap={false}
-            style={{
-              '--col-width': width
-            }}
-          >
+          <Row className={style['table-list-header']} wrap={false}>
             {children}
-            <Col className={style['table-options']}></Col>
+            <Col className={classnames(style['table-options'], style['table-options-header'])} />
           </Row>
         );
       }}
@@ -112,22 +135,11 @@ const TableList = withLocale(p => {
         );
       }}
       itemRender={children => {
-        return (
-          <Col className={style['table-list-field']} flex={1}>
-            {children}
-          </Col>
-        );
+        return <Col className={style['table-list-field']}>{children}</Col>;
       }}
-      listRender={(children, { id, width, onRemove, allowRemove }) => {
+      listRender={(children, { id, onRemove, allowRemove }) => {
         return (
-          <Row
-            key={id}
-            wrap={false}
-            align="top"
-            style={{
-              '--col-width': width
-            }}
-          >
+          <Row key={id} wrap={false} align="top">
             {children}
             <Col className={style['table-options']}>
               <Button type="link" onClick={onRemove} danger disabled={!allowRemove} icon={removeIcon}>
@@ -138,7 +150,22 @@ const TableList = withLocale(p => {
         );
       }}
     >
-      {(children, controls) => renderPart(<div className={style['table-list-inner']}>{children}</div>, controls)}
+      {(children, controls) =>
+        renderPart(
+          <div
+            ref={innerRef}
+            className={classnames(style['table-list-inner'], {
+              [style['is-overflow']]: isOverflow
+            })}
+            style={{
+              '--table-list-field-count': Math.max(fieldCount, 1)
+            }}
+          >
+            {children}
+          </div>,
+          controls
+        )
+      }
     </TableListBase>
   );
 
@@ -174,16 +201,10 @@ const TableList = withLocale(p => {
     </SubList>
   );
 
-  return (
-    <TableView
-      columns={columns}
-      dataSource={[]}
-      empty={null}
-      className={style['table-list-view']}
-      renderMobile={useMobileRender ? (typeof resolvedRenderMobile === 'function' ? resolvedRenderMobile : () => renderMobileList()) : false}
-      render={() => renderDesktop()}
-    />
-  );
+  // 交给 TableView + useIsMobile（viewport/container）决定是否走移动端；勿在外层提前关掉
+  const tableViewRenderMobile = renderMobile === false ? false : typeof resolvedRenderMobile === 'function' ? resolvedRenderMobile : renderMobile === true || resolvedRenderMobile === true ? () => renderMobileList() : false;
+
+  return <TableView columns={columns} dataSource={[]} empty={null} className={style['table-list-view']} renderMobile={tableViewRenderMobile} render={() => renderDesktop()} />;
 });
 
 export default TableList;

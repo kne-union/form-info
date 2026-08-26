@@ -69,7 +69,13 @@ const BorderedExample = () => {
                 list={[
                     <Input name="memberName" label="姓名" rule="REQ" placeholder="家庭成员姓名" />,
                     <Input name="relationship" label="关系" rule="REQ" placeholder="例如：配偶、子女" />,
-                    <Input name="memberPhone" label="联系电话" rule="TEL" placeholder="联系电话" />
+                    <Input name="memberPhone" label="联系电话" rule="TEL" placeholder="联系电话" />,
+                    <Input name="memberCompany" label="工作单位" placeholder="工作单位名称" />,
+                    <Input name="memberPosition" label="职位" placeholder="例如：工程师" />,
+                    <Input name="memberIdCard" label="证件号码" placeholder="身份证号" />,
+                    <Input name="memberAddress" label="居住地址" placeholder="省市区街道" />,
+                    <Input name="memberEmail" label="电子邮箱" placeholder="name@example.com" />,
+                    <Input name="memberEmergency" label="紧急联系" placeholder="是否紧急联系人" />
                 ]}
             />
         </Flex>

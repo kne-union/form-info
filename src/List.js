@@ -4,7 +4,6 @@ import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import FormInfo from './FormInfo';
 import InfoPage from '@kne/info-page';
 import { SubList } from '@kne/react-form-plus';
-import { useIsMobile } from '@kne/responsive-utils';
 import classnames from 'classnames';
 import withLocale from './withLocale';
 import { useIntl } from '@kne/react-intl';
@@ -13,7 +12,6 @@ import style from './style.module.scss';
 
 const List = withLocale(p => {
   const { formatMessage } = useIntl();
-  const isMobile = useIsMobile();
   const { className, itemClassName, removeIcon, removeText, addText, addIcon, important, title, bordered, ...others } = Object.assign(
     {},
     {
@@ -25,7 +23,8 @@ const List = withLocale(p => {
     },
     p
   );
-  const showBorder = isMobile ? false : bordered;
+  // bordered 只控制外层 Part；子项卡片边框由 CSS 固定，移动端用 container query 收起（勿用 isMobile 开关以免闪断）
+  const showBorder = !!bordered;
   return (
     <SubList
       {...others}
@@ -41,6 +40,20 @@ const List = withLocale(p => {
               {...props}
               bordered={showBorder}
               className={style['list-item-part']}
+              styles={{
+                header: {
+                  borderBottom: 'none',
+                  // 四角统一圆角（antd 默认只有上方圆角）
+                  borderRadius: 'var(--radius-default, 8px)'
+                },
+                body: {
+                  borderRadius: '0 0 var(--radius-default, 8px) var(--radius-default, 8px)'
+                }
+              }}
+              style={{
+                borderRadius: 'var(--radius-default, 8px)',
+                overflow: 'hidden'
+              }}
               gap={16}
               extra={
                 allowRemove && (

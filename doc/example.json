@@ -20,6 +20,24 @@
       ]
     },
     {
+      "title": "混合场景（FormInfo / List / TableList / MultiField / Steps）",
+      "description": "对齐 form-creator 预览的五种模块同屏组合：验收 TableList 列最小宽度与操作列 sticky、Steps 标题随文字且连线最大 40px、List 默认无边框等",
+      "code": "./mixed.js",
+      "scope": [
+        {
+          "name": "_FormInfo",
+          "packageName": "@kne/current-lib_form-info"
+        },
+        {
+          "name": "antd",
+          "packageName": "antd"
+        },
+        {
+          "packageName": "@kne/current-lib_form-info/dist/index.css"
+        }
+      ]
+    },
+    {
       "title": "模态框表单示例",
       "description": "演示FormModal组件的使用，展示如何在弹窗中展示表单，支持表单数据初始化和提交后的自动关闭功能",
       "code": "./form-modal.js",

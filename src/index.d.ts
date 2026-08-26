@@ -61,6 +61,37 @@ export interface FormStepsProps {
   children?: ReactNode | ((props: any) => ReactNode);
 }
 
+export interface StepsItem {
+  title?: string | ReactNode;
+  key?: string | number;
+  id?: string | number;
+  column?: number | object;
+  gap?: number;
+  list?: ReactNode[];
+  children?: ReactNode;
+  /** 显式指定本步校验字段；默认从 list[].props.name 收集 */
+  fieldNames?: string[];
+}
+
+export interface StepsProps {
+  className?: string;
+  stepsClassName?: string;
+  title?: string | ReactNode;
+  subtitle?: string | ReactNode;
+  bordered?: boolean;
+  items: StepsItem[];
+  current?: number;
+  defaultCurrent?: number;
+  onChange?: (current: number) => void;
+  direction?: string;
+  orientation?: string;
+  showActions?: boolean;
+  prevText?: string | ReactNode;
+  nextText?: string | ReactNode;
+  prevIcon?: ReactNode;
+  nextIcon?: ReactNode;
+}
+
 export interface FormStepsModalProps {
   items: StepItem[];
   modalProps?: {
@@ -133,8 +164,10 @@ export interface FormProps {
 // 组件类型声明
 export declare const FormInfo: FC<FormInfoProps>;
 export declare const FormModal: FC<FormModalProps>;
-export declare const FormSteps: FC<FormStepsProps>;
+export declare const FormSteps: FC<FormStepsProps> & { Embed: FC<StepsProps> };
 export declare const FormStepsModal: FC<FormStepsModalProps>;
+export declare const Steps: FC<StepsProps>;
+export declare const validateFieldsByName: (openApi: any, names?: string[]) => Promise<boolean>;
 export declare const List: FC<ListProps>;
 export declare const SubList: FC<ListProps>;
 export declare const TableList: FC<TableListProps>;
