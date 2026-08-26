@@ -5,11 +5,11 @@ import { FormInfo as FormInfoBase } from '@kne/react-form-plus';
 import { useIsMobile } from '@kne/responsive-utils';
 import { Row, Col } from 'antd';
 import classnames from 'classnames';
-import { isNestBlockElement, markNestBlock } from './nestBlock';
+import { isNestBlockElement, isNestBlockType, markNestBlock } from './nestBlock';
 import '@kne/info-page/dist/index.css';
 import style from './style.module.scss';
 
-/** List / TableList / FormInfo / Steps 等嵌套模块强制整行，避免与字段并排把深层挤扁 */
+/** 仅保证嵌套块整行；nestDepth 由 List 在 listRender 里写入，这里不覆盖 */
 const ensureNestBlocksFullWidth = list =>
   (Array.isArray(list) ? list : []).map(item => {
     if (!isNestBlockElement(item) || item.props?.block === true) {
@@ -24,7 +24,7 @@ const FormInfo = props => {
   const normalizedList = useMemo(() => ensureNestBlocksFullWidth(list), [list]);
   const isFlexBox = !isMobile && !(Number.isInteger(column) && column > 0);
   const { ref: flexBoxRef, column: flexBoxColumn } = useFlexBox(isFlexBox ? column : {});
-  const rowGap = gap || 24;
+  const rowGap = gap ?? 24;
 
   const renderInner = (column, notLayout) => {
     return (
@@ -38,8 +38,10 @@ const FormInfo = props => {
           if (props.hidden) {
             return <div style={{ display: 'none' }}>{children}</div>;
           }
+          // 仅 List/FormInfo 等嵌套块清 gutter；普通 block 字段（如 TextArea）保留左右 padding
+          const nestCol = isNestBlockType(children?.type);
           return (
-            <Col span={props.span} className={props.span === 24 ? style['nest-block-col'] : undefined}>
+            <Col span={props.span} className={nestCol ? style['nest-block-col'] : undefined}>
               {children}
             </Col>
           );

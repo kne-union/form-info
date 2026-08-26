@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Divider, Empty } from 'antd';
+import { Button, Divider, Empty, Tag } from 'antd';
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import FormInfo from './FormInfo';
 import InfoPage from '@kne/info-page';
@@ -9,7 +9,7 @@ import withLocale from './withLocale';
 import { useIntl } from '@kne/react-intl';
 import '@kne/info-page/dist/index.css';
 import style from './style.module.scss';
-import { markNestBlock } from './nestBlock';
+import { markNestBlock, decorateNestBlocks, NEST_DEPTH_BEYOND } from './nestBlock';
 
 const List = withLocale(p => {
   const { formatMessage } = useIntl();
@@ -23,6 +23,8 @@ const List = withLocale(p => {
     important,
     title,
     bordered,
+    nestDepth: nestDepthProp,
+    nestParentTitles: _nestParentTitles,
     styles: partStyles,
     style: partStyle,
     ...others
@@ -37,18 +39,34 @@ const List = withLocale(p => {
     },
     p
   );
-  // 以 InfoPage.Part（外层 list-part）的 bordered 区分两种子项样式：
-  // - Part bordered：子项无描边、表头全圆角、body 无左右 padding
-  // - Part 非 bordered：子项有描边、表头仅上圆角（下边直角）、body 保留左右 padding
+
+  // 只信 props.nestDepth（由上层 List decorateNestBlocks 写入）；根 List 为 0
+  const nestDepth = typeof nestDepthProp === 'number' ? nestDepthProp : 0;
   const showBorder = !!bordered;
+  // 第 5 级起：同宽、无缩进
+  const isNestBeyond = nestDepth >= NEST_DEPTH_BEYOND;
+  // 仅第 5 级保留左侧色条；第 6 级及更深不画左边框
+  const showNestRail = nestDepth === NEST_DEPTH_BEYOND;
+  // 等级展示：depth 0 = 第 1 级
+  const nestLevel = nestDepth + 1;
+
+  const partTitle = isNestBeyond ? (
+    <span className={style['nest-beyond-title']}>
+      <Tag className={style['nest-parent-tag']}>{formatMessage({ id: 'nestLevel' }, { level: nestLevel })}</Tag>
+      <span className={style['nest-beyond-title-text']}>{title}</span>
+    </span>
+  ) : (
+    title
+  );
+
   return (
     <SubList
       {...others}
-      listRender={({ id, allowRemove, onRemove, index, groupArgs, title: itemTitle, ...props }) => {
-        // 无 itemTitle：不展示标题文案（不做「列表 1」之类默认值）
-        // 子项始终保留 header（即使用户设了 minLength 导致不可删）：占位 title 避免 InfoPage 打上 no-title
+      listRender={({ id, allowRemove, onRemove, index, groupArgs, title: itemTitle, list: itemList, ...props }) => {
         const hasItemTitle = itemTitle != null && itemTitle !== '';
         const titleNode = hasItemTitle ? itemTitle : <span className={style['list-item-title-placeholder']} aria-hidden="true" />;
+        // 子嵌套 List 深度 = 当前 + 1（显式写入 props，不依赖 Context）
+        const nestedList = decorateNestBlocks(itemList, nestDepth + 1);
 
         return (
           <div
@@ -59,14 +77,14 @@ const List = withLocale(p => {
           >
             <FormInfo
               {...props}
+              list={nestedList}
               title={titleNode}
-              // 子项不走 InfoPage.Part 的 bordered（会带 24px padding 把 header 顶开）；
-              // 描边/圆角只由外层 Part.bordered → in-bordered / plain 的 CSS 控制
               bordered={false}
               className={classnames(style['list-item-part'], {
                 [style['list-item-part-no-title']]: !hasItemTitle,
                 [style['list-item-part-in-bordered']]: showBorder,
-                [style['list-item-part-plain']]: !showBorder
+                [style['list-item-part-plain']]: !showBorder,
+                [style['list-item-part-beyond']]: isNestBeyond
               })}
               styles={{
                 header: {
@@ -81,10 +99,10 @@ const List = withLocale(p => {
               }}
               style={{
                 borderRadius: 'var(--radius-default, 8px)',
-                overflow: 'hidden',
+                overflow: isNestBeyond ? 'visible' : 'hidden',
                 padding: 0
               }}
-              gap={16}
+              gap={isNestBeyond ? 0 : 16}
               extra={
                 <Button type="link" danger className="btn-no-padding" icon={removeIcon} disabled={!allowRemove} onClick={onRemove}>
                   {removeText}
@@ -99,11 +117,17 @@ const List = withLocale(p => {
       {(children, { allowAdd, onAdd }) => {
         return (
           <InfoPage.Part
-            className={classnames(className, itemClassName, style['list-part'])}
-            title={title}
-            bordered={showBorder}
+            className={classnames(className, itemClassName, style['list-part'], {
+              [style['nest-beyond']]: isNestBeyond,
+              [style['nest-beyond-rail']]: showNestRail
+            })}
+            title={partTitle}
+            bordered={isNestBeyond ? false : showBorder}
             styles={partStyles}
             style={partStyle}
+            data-nest-beyond={isNestBeyond ? 'true' : undefined}
+            data-nest-rail={showNestRail ? 'true' : undefined}
+            data-nest-depth={String(nestDepth)}
             extra={
               <div className={style['extra-container']}>
                 {allowAdd && (

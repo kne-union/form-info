@@ -179,6 +179,7 @@ const BaseExample = () => {
                                 <List 
                                     title="紧急联系人列表" 
                                     name="emergencyContacts"
+                                    bordered
                                     itemTitle={({index, data}) => data?.name || `联系人 ${index + 1}`}
                                     important
                                     maxLength={3}

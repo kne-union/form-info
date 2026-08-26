@@ -6,7 +6,8 @@ const locale = {
   next: 'Next',
   addText: 'Add',
   deleteText: 'Delete',
-  untitledStep: 'Step {index}'
+  untitledStep: 'Step {index}',
+  nestLevel: 'L{level}'
 };
 
 export default locale;

@@ -135,6 +135,7 @@ const BaseExample = () => {
                 <List 
                   title="项目团队成员" 
                   name="teamMembers"
+                  bordered
                   itemTitle={({index, data}) => data?.name || `成员 ${index + 1}`}
                   important
                   maxLength={10}
@@ -191,6 +192,7 @@ const BaseExample = () => {
                 <List 
                   title="里程碑计划" 
                   name="milestones"
+                  bordered
                   itemTitle={({index, data}) => data?.milestoneName || `里程碑 ${index + 1}`}
                   addText="添加里程碑"
                   list={[
