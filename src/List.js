@@ -28,7 +28,12 @@ const List = withLocale(p => {
   return (
     <SubList
       {...others}
-      listRender={({ id, allowRemove, onRemove, index, groupArgs, ...props }) => {
+      listRender={({ id, allowRemove, onRemove, index, groupArgs, title: itemTitle, ...props }) => {
+        // 无 itemTitle：不展示标题文案（不做「列表 1」之类默认值）
+        // 子项始终保留 header（即使用户设了 minLength 导致不可删）：占位 title 避免 InfoPage 打上 no-title
+        const hasItemTitle = itemTitle != null && itemTitle !== '';
+        const titleNode = hasItemTitle ? itemTitle : <span className={style['list-item-title-placeholder']} aria-hidden="true" />;
+
         return (
           <div
             key={id}
@@ -38,8 +43,11 @@ const List = withLocale(p => {
           >
             <FormInfo
               {...props}
+              title={titleNode}
               bordered={showBorder}
-              className={style['list-item-part']}
+              className={classnames(style['list-item-part'], {
+                [style['list-item-part-no-title']]: !hasItemTitle
+              })}
               styles={{
                 header: {
                   borderBottom: 'none',
@@ -56,11 +64,9 @@ const List = withLocale(p => {
               }}
               gap={16}
               extra={
-                allowRemove && (
-                  <Button type="link" danger className="btn-no-padding" icon={removeIcon} onClick={onRemove}>
-                    {removeText}
-                  </Button>
-                )
+                <Button type="link" danger className="btn-no-padding" icon={removeIcon} disabled={!allowRemove} onClick={onRemove}>
+                  {removeText}
+                </Button>
               }
             />
             <Divider />

@@ -355,15 +355,27 @@
 
         :global(.ant-card-head-wrapper) {
           width: 100%;
+          height: 100%;
           display: flex;
           align-items: center;
+        }
+
+        // 有 title 时 antd 默认给 title/extra 上下 padding，会把删除挤偏；无 title 时 header 仍保留
+        :global(.ant-card-head-title) {
+          padding: 0 !important;
+          display: flex;
+          align-items: center;
+          overflow: hidden;
+          line-height: 22px;
         }
 
         :global(.ant-card-extra) {
           display: inline-flex;
           align-items: center;
+          align-self: center;
           margin-block: 0;
-          padding: 0;
+          margin-inline-start: auto;
+          padding: 0 !important;
           float: none;
         }
 
@@ -385,10 +397,14 @@
 
       > :global(.ant-card-head-title) :global(.part-title),
       :global(.ant-card-head-title) :global(.part-title) {
-        background: transparent;
+        // 覆盖嵌套 Part 的 pill 样式，避免标题区变高导致删除不居中
+        background: transparent !important;
         font-weight: normal;
         font-size: 14px;
         color: var(--font-color);
+        padding: 0 !important;
+        border-radius: 0;
+        line-height: 22px;
       }
 
       > :global(.ant-card-body) {
@@ -396,6 +412,31 @@
         border-radius: 0 0 var(--radius-default, 8px) var(--radius-default, 8px) !important;
       }
     }
+  }
+
+  // 无 itemTitle：不显示标题文案，但 header（灰底 + 删除）仍在
+  .list-item-part-no-title:global(.ant-card) {
+    > :global(.ant-card-head) {
+      min-height: 36px;
+      height: 36px;
+    }
+
+    > :global(.ant-card-head-title) :global(.part-title) {
+      padding: 0 !important;
+      margin: 0 !important;
+      background: transparent !important;
+      line-height: 0;
+      font-size: 0;
+    }
+  }
+
+  .list-item-title-placeholder {
+    display: block;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    padding: 0;
+    margin: 0;
   }
 
   :global(.ant-divider) {
