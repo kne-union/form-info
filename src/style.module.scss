@@ -5,7 +5,7 @@ $nest-rail-blue: var(--primary-color-2, var(--primary-color, #1677ff));
 $nest-rail-orange: #e8b07a;
 $nest-rail-gray: var(--font-color-grey-3, #d9d9d9);
 $nest-head-bg: rgba(0, 0, 0, 0.03);
-$nest-item-hover-bg: rgba(0, 0, 0, 0.04);
+$nest-item-hover-bg: rgba(176, 122, 69, 0.1);
 $nest-radius: var(--radius-default, 8px);
 
 @mixin nest-extra-btn {
