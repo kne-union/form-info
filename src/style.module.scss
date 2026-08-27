@@ -254,6 +254,10 @@ $nest-radius: var(--radius-default, 8px);
           :global(.ant-card-body) {
             padding: 12px !important;
           }
+
+          &:has([data-nest-beyond='true']) :global(.ant-card-body) {
+            padding-inline: 0 !important;
+          }
         }
       }
 
@@ -432,6 +436,12 @@ $nest-radius: var(--radius-default, 8px);
       }
     }
 
+    &.list-item-part-beyond:global(.ant-card) {
+      overflow: visible !important;
+      border: none !important;
+      background: transparent !important;
+    }
+
     // 外层 Part bordered：子项无描边、表头全圆角、body 无左右 padding
     &.list-item-part-in-bordered:global(.ant-card) {
       border: none !important;
@@ -462,6 +472,11 @@ $nest-radius: var(--radius-default, 8px);
       > :global(.ant-card-body) {
         padding: 16px !important;
         border-radius: 0 0 var(--radius-default, 8px) var(--radius-default, 8px) !important;
+      }
+
+      // 内含 nest-beyond 时去掉左右 padding，避免满宽被阶梯缩进
+      &:has([data-nest-beyond='true']) > :global(.ant-card-body) {
+        padding-inline: 0 !important;
       }
     }
 
@@ -558,6 +573,10 @@ $nest-radius: var(--radius-default, 8px);
             > :global(.ant-card-body) {
               padding: 12px !important;
             }
+
+            &:has([data-nest-beyond='true']) > :global(.ant-card-body) {
+              padding-inline: 0 !important;
+            }
           }
         }
       }
@@ -587,6 +606,10 @@ $nest-radius: var(--radius-default, 8px);
 
             > :global(.ant-card-body) {
               padding: 8px !important;
+            }
+
+            &:has([data-nest-beyond='true']) > :global(.ant-card-body) {
+              padding-inline: 0 !important;
             }
           }
         }
@@ -620,6 +643,10 @@ $nest-radius: var(--radius-default, 8px);
 
                 > :global(.ant-card-body) {
                   padding: 8px !important;
+                }
+
+                &:has([data-nest-beyond='true']) > :global(.ant-card-body) {
+                  padding-inline: 0 !important;
                 }
               }
             }
@@ -714,6 +741,14 @@ $nest-radius: var(--radius-default, 8px);
     box-shadow: none !important;
     background: #fff;
   }
+
+  // nest-beyond 子项：无描边、不裁切更深嵌套
+  &.list-item-part-beyond {
+    overflow: visible !important;
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+  }
 }
 
 // —— 第 5 级起：满宽同宽；仅第 5 级虚线色条 ——
@@ -732,10 +767,11 @@ $nest-radius: var(--radius-default, 8px);
   &.nest-beyond-rail {
     border-left: 2px dashed $nest-rail-gray !important;
     border-radius: $nest-radius !important;
-    overflow: hidden !important;
+    // 勿 hidden：会裁掉第 6 级及更深的 nest-beyond
+    overflow: visible !important;
 
     &:global(.ant-card) {
-      overflow: hidden !important;
+      overflow: visible !important;
     }
   }
 
@@ -898,15 +934,34 @@ $nest-radius: var(--radius-default, 8px);
 }
 
 // 父级包住 nest-beyond 时清 gutter，避免每层窄一截
-.nest-block-col:has(> [data-nest-beyond='true']) {
+// 1) 显式 class（FormInfo 按 nestDepth 打上，SchemaRenderer 路径可靠）
+// 2) :has 兜底（不要求直接子节点，兼容中间 wrapper）
+.nest-block-col-beyond,
+.nest-block-col:has([data-nest-beyond='true']) {
   padding-inline: 0 !important;
   max-width: 100% !important;
   overflow: visible !important;
 }
 
+// 父项包住 nest-beyond：清左右 padding（尤其 plain 的 12px 四边会阶梯缩进）
 .list-item-part:has([data-nest-beyond='true']),
 .list-item-part:has([data-nest-beyond='true']):global(.ant-card) {
   overflow: visible !important;
+
+  > :global(.ant-card-body) {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+}
+
+.list-item-part-plain:has([data-nest-beyond='true']):global(.ant-card),
+.list-item-part-in-bordered:has([data-nest-beyond='true']):global(.ant-card) {
+  overflow: visible !important;
+
+  > :global(.ant-card-body) {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
 }
 
 .multi-field-item {
