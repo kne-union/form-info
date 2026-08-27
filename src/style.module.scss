@@ -5,7 +5,11 @@ $nest-rail-blue: var(--primary-color-2, var(--primary-color, #1677ff));
 $nest-rail-orange: #e8b07a;
 $nest-rail-gray: var(--font-color-grey-3, #d9d9d9);
 $nest-head-bg: rgba(0, 0, 0, 0.03);
-$nest-item-hover-bg: rgba(176, 122, 69, 0.1);
+// 超深层子项 hover / 等级标签：#f0f5ff 色系
+$nest-item-hover-bg: rgba(109, 169, 252, 0.1);
+$nest-beyond-tag-bg: #f0f5ff;
+$nest-beyond-tag-border: #d6e4ff;
+$nest-beyond-tag-color: #2f54eb;
 $nest-radius: var(--radius-default, 8px);
 
 @mixin nest-extra-btn {
@@ -861,13 +865,13 @@ $nest-radius: var(--radius-default, 8px);
 
     &:focus-visible {
       border-radius: 999px;
-      box-shadow: 0 0 0 2px rgba(176, 122, 69, 0.35);
+      box-shadow: 0 0 0 2px rgba(47, 84, 235, 0.35);
     }
   }
 
   .nest-toggle-icon {
     font-size: 10px;
-    color: #b07a45;
+    color: $nest-beyond-tag-color;
     line-height: 1;
   }
 
@@ -884,9 +888,9 @@ $nest-radius: var(--radius-default, 8px);
     text-overflow: ellipsis;
     white-space: nowrap;
     border-radius: 999px !important;
-    border-color: #f0d2b0;
-    background: #fff7ef;
-    color: #b07a45;
+    border-color: $nest-beyond-tag-border;
+    background: $nest-beyond-tag-bg;
+    color: $nest-beyond-tag-color;
     font-size: 12px;
     line-height: 20px;
     padding: 0 10px;
