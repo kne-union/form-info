@@ -43,6 +43,9 @@ const List = withLocale(p => {
   // 只信 props.nestDepth（由上层 List decorateNestBlocks 写入）；根 List 为 0
   const nestDepth = typeof nestDepthProp === 'number' ? nestDepthProp : 0;
   const showBorder = !!bordered;
+  const isRootList = nestDepth === 0;
+  // bordered 只控根 List 外层 Part；内部子项/嵌套 List 样式固定，不随开关变化
+  const showOuterBorder = isRootList && showBorder;
   // 第 5 级起：同宽、无缩进
   const isNestBeyond = nestDepth >= NEST_DEPTH_BEYOND;
   // 仅第 5 级保留左侧色条；第 6 级及更深不画左边框
@@ -83,20 +86,14 @@ const List = withLocale(p => {
               bordered={false}
               className={classnames(style['list-item-part'], {
                 [style['list-item-part-no-title']]: !hasItemTitle,
-                [style['list-item-part-in-bordered']]: showBorder,
-                [style['list-item-part-plain']]: !showBorder,
+                [style['list-item-part-in-bordered']]: !isNestBeyond,
                 [style['list-item-part-beyond']]: isNestBeyond
               })}
               styles={{
                 header: {
                   borderBottom: 'none',
-                  borderRadius: showBorder ? 'var(--radius-default, 8px)' : 'var(--radius-default, 8px) var(--radius-default, 8px) 0 0'
-                },
-                body: showBorder
-                  ? undefined
-                  : {
-                      borderRadius: '0 0 var(--radius-default, 8px) var(--radius-default, 8px)'
-                    }
+                  borderRadius: 'var(--radius-default, 8px)'
+                }
               }}
               style={{
                 borderRadius: 'var(--radius-default, 8px)',
@@ -123,7 +120,7 @@ const List = withLocale(p => {
               [style['nest-beyond-rail']]: showNestRail
             })}
             title={partTitle}
-            bordered={isNestBeyond ? false : showBorder}
+            bordered={isNestBeyond ? false : isRootList ? showOuterBorder : true}
             styles={partStyles}
             style={partStyle}
             data-nest-beyond={isNestBeyond ? 'true' : undefined}
