@@ -7,7 +7,9 @@ const locale = {
   addText: 'Add',
   deleteText: 'Delete',
   untitledStep: 'Step {index}',
-  nestLevel: 'L{level}'
+  nestLevel: 'L{level}',
+  nestExpand: 'Expand L{level}',
+  nestCollapse: 'Collapse L{level}'
 };
 
 export default locale;

@@ -350,7 +350,7 @@ render(<MixedExample />);
 ```
 
 - 超多层列表嵌套
-- 第 1～4 级常规嵌套；第 5 级起同宽无缩进，仅第 5 级保留左侧色条；可切换边框
+- 第 1～4 级常规嵌套；第 5 级起同宽无缩进，仅第 5 级保留左侧色条；标签可展开/收起；子项 hover 高亮；可切换边框
 - _FormInfo(@kne/current-lib_form-info),antd(antd),(@kne/current-lib_form-info/dist/index.css)
 
 ```jsx
@@ -376,7 +376,7 @@ const NestedDeepExample = () => {
         type="info"
         showIcon
         message="超多层列表嵌套"
-        description="第 1～4 级（部门→小组→成员→任务）为常规嵌套；从第 5 级「子步骤」起同宽无缩进，仅第 5 级保留左侧色条，字段左右 padding 一致。"
+        description="第 1～4 级（部门→小组→成员→任务）为常规嵌套；从第 5 级「子步骤」起同宽无缩进，仅第 5 级保留左侧色条。第 5 级起标签可展开/收起（样式隐藏、不删 DOM），子项 hover 高亮当前范围。"
       />
       <Space>
         <span>边框模式：</span>

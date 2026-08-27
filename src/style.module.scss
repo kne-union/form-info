@@ -5,6 +5,7 @@ $nest-rail-blue: var(--primary-color-2, var(--primary-color, #1677ff));
 $nest-rail-orange: #e8b07a;
 $nest-rail-gray: var(--font-color-grey-3, #d9d9d9);
 $nest-head-bg: rgba(0, 0, 0, 0.03);
+$nest-item-hover-bg: rgba(0, 0, 0, 0.04);
 $nest-radius: var(--radius-default, 8px);
 
 @mixin nest-extra-btn {
@@ -783,6 +784,11 @@ $nest-radius: var(--radius-default, 8px);
     }
   }
 
+  // 收起：仅样式隐藏 body，不卸载 DOM（保留表单字段）
+  &.nest-beyond-collapsed:global(.ant-card) > :global(.ant-card-body) {
+    display: none !important;
+  }
+
   &:global(.ant-card) {
     overflow: visible !important;
 
@@ -845,6 +851,26 @@ $nest-radius: var(--radius-default, 8px);
     max-width: 100%;
   }
 
+  .nest-level-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    user-select: none;
+    outline: none;
+
+    &:focus-visible {
+      border-radius: 999px;
+      box-shadow: 0 0 0 2px rgba(176, 122, 69, 0.35);
+    }
+  }
+
+  .nest-toggle-icon {
+    font-size: 10px;
+    color: #b07a45;
+    line-height: 1;
+  }
+
   .nest-beyond-title-text {
     min-width: 0;
     white-space: normal;
@@ -864,6 +890,7 @@ $nest-radius: var(--radius-default, 8px);
     font-size: 12px;
     line-height: 20px;
     padding: 0 10px;
+    cursor: pointer;
   }
 
   .extra-container {
@@ -881,6 +908,17 @@ $nest-radius: var(--radius-default, 8px);
     margin-bottom: 8px;
     max-width: 100%;
     overflow: visible !important;
+    border-radius: $nest-radius;
+    transition: background-color 0.15s ease;
+
+    // hover 高亮当前 item 范围；嵌套时只亮最内层
+    &:hover {
+      background: $nest-item-hover-bg;
+    }
+
+    &:hover .list-item:not(:hover) {
+      background: transparent;
+    }
 
     &:last-child {
       margin-bottom: 0;
