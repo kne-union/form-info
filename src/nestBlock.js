@@ -33,9 +33,7 @@ export const isNestBlockElement = element => {
   if (!element || typeof element !== 'object' || !element.type) {
     return false;
   }
-  if (element.props?.block === true) {
-    return true;
-  }
+  // 勿把字段的 layout `block`（如 TextArea block）当成嵌套块，否则会误写 nestDepth 到 DOM
   return isNestBlockType(element.type);
 };
 
@@ -46,7 +44,7 @@ export const isNestBlockElement = element => {
  */
 export const decorateNestBlocks = (list, nestDepth) =>
   (Array.isArray(list) ? list : []).map(item => {
-    if (!item || typeof item !== 'object' || !isNestBlockElement(item)) {
+    if (!item || typeof item !== 'object' || !isNestBlockType(item.type)) {
       return item;
     }
     return React.cloneElement(item, {

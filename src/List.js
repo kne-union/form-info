@@ -9,7 +9,7 @@ import withLocale from './withLocale';
 import { useIntl } from '@kne/react-intl';
 import '@kne/info-page/dist/index.css';
 import style from './style.module.scss';
-import { markNestBlock, decorateNestBlocks, NEST_DEPTH_BEYOND, isNestBlockElement } from './nestBlock';
+import { markNestBlock, decorateNestBlocks, NEST_DEPTH_BEYOND, isNestBlockType } from './nestBlock';
 
 const List = withLocale(p => {
   const { formatMessage } = useIntl();
@@ -97,7 +97,7 @@ const List = withLocale(p => {
         const titleNode = hasItemTitle ? itemTitle : <span className={style['list-item-title-placeholder']} aria-hidden="true" />;
         // 子嵌套 List 深度 = 当前 + 1（显式写入 props，不依赖 Context）
         const nestedList = decorateNestBlocks(itemList, nestDepth + 1);
-        const itemWrapsNestBeyond = nestedList.some(el => isNestBlockElement(el) && typeof el.props?.nestDepth === 'number' && el.props.nestDepth >= NEST_DEPTH_BEYOND);
+        const itemWrapsNestBeyond = nestedList.some(el => isNestBlockType(el?.type) && typeof el.props?.nestDepth === 'number' && el.props.nestDepth >= NEST_DEPTH_BEYOND);
 
         return (
           <div
