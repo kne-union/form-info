@@ -21,8 +21,8 @@ const ensureNestBlocksFullWidth = list =>
 const FormInfo = props => {
   const { className, column, list, gap, bordered, nestDepth, ...others } = Object.assign({}, { column: 2, list: [] }, props);
   const isMobile = useIsMobile();
-  // 嵌套块（nestDepth >= 1）内部样式固定，不受外层 bordered 开关影响
-  const partBordered = typeof nestDepth === 'number' && nestDepth >= 1 ? true : bordered;
+  // 第二级起嵌套块不走 info-page bordered；样式由 SCSS 色条/子项 plain 负责
+  const partBordered = typeof nestDepth === 'number' && nestDepth >= 1 ? false : bordered;
   const normalizedList = useMemo(() => ensureNestBlocksFullWidth(list), [list]);
   const isFlexBox = !isMobile && !(Number.isInteger(column) && column > 0);
   const { ref: flexBoxRef, column: flexBoxColumn } = useFlexBox(isFlexBox ? column : {});
@@ -40,7 +40,7 @@ const FormInfo = props => {
           if (props.hidden) {
             return <div style={{ display: 'none' }}>{children}</div>;
           }
-          // 嵌套块整行；第 5 级起按 nestDepth 清 gutter（不依赖 :has 直选，SchemaRenderer 路径同样生效）
+          // 嵌套块整行；nest-beyond Col 保留 Row gutter 左右 padding，与同层字段（如备注）对齐
           const nestCol = isNestBlockType(children?.type);
           const nestDepth = children?.props?.nestDepth;
           const nestBeyond = nestCol && typeof nestDepth === 'number' && nestDepth >= NEST_DEPTH_BEYOND;
