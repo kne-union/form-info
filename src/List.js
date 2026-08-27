@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Divider, Empty, Tag } from 'antd';
-import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
+import { DeleteOutlined, DownOutlined, PlusOutlined, RightOutlined } from '@ant-design/icons';
 import FormInfo from './FormInfo';
 import InfoPage from '@kne/info-page';
 import { SubList } from '@kne/react-form-plus';
@@ -52,13 +52,36 @@ const List = withLocale(p => {
   const showNestRail = nestDepth === NEST_DEPTH_BEYOND;
   // 等级展示：depth 0 = 第 1 级
   const nestLevel = nestDepth + 1;
+  // nest-beyond：展开/收起仅样式隐藏，不卸载 DOM（保留表单字段状态）
+  const [nestExpanded, setNestExpanded] = useState(true);
 
   // 卡片模式仅第一级 List 子项特殊；第二级起与普通模式一致
   const isCardModeItem = isRootList && showBorder;
 
+  const toggleNestExpanded = e => {
+    e.preventDefault();
+    e.stopPropagation();
+    setNestExpanded(v => !v);
+  };
+
   const partTitle = isNestBeyond ? (
     <span className={style['nest-beyond-title']}>
-      <Tag className={style['nest-parent-tag']}>{formatMessage({ id: 'nestLevel' }, { level: nestLevel })}</Tag>
+      <span
+        className={style['nest-level-toggle']}
+        role="button"
+        tabIndex={0}
+        aria-expanded={nestExpanded}
+        aria-label={formatMessage({ id: nestExpanded ? 'nestCollapse' : 'nestExpand' }, { level: nestLevel })}
+        onClick={toggleNestExpanded}
+        onKeyDown={e => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            toggleNestExpanded(e);
+          }
+        }}
+      >
+        <Tag className={style['nest-parent-tag']}>{formatMessage({ id: 'nestLevel' }, { level: nestLevel })}</Tag>
+        {nestExpanded ? <DownOutlined className={style['nest-toggle-icon']} /> : <RightOutlined className={style['nest-toggle-icon']} />}
+      </span>
       <span className={style['nest-beyond-title-text']}>{title}</span>
     </span>
   ) : (
@@ -123,7 +146,8 @@ const List = withLocale(p => {
           <InfoPage.Part
             className={classnames(className, itemClassName, style['list-part'], {
               [style['nest-beyond']]: isNestBeyond,
-              [style['nest-beyond-rail']]: showNestRail
+              [style['nest-beyond-rail']]: showNestRail,
+              [style['nest-beyond-collapsed']]: isNestBeyond && !nestExpanded
             })}
             title={partTitle}
             bordered={showOuterBorder}
@@ -132,6 +156,7 @@ const List = withLocale(p => {
             data-nest-beyond={isNestBeyond ? 'true' : undefined}
             data-nest-rail={showNestRail ? 'true' : undefined}
             data-nest-depth={String(nestDepth)}
+            data-nest-collapsed={isNestBeyond && !nestExpanded ? 'true' : undefined}
             extra={
               <div className={style['extra-container']}>
                 {allowAdd && (
