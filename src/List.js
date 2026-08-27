@@ -9,7 +9,7 @@ import withLocale from './withLocale';
 import { useIntl } from '@kne/react-intl';
 import '@kne/info-page/dist/index.css';
 import style from './style.module.scss';
-import { markNestBlock, decorateNestBlocks, NEST_DEPTH_BEYOND } from './nestBlock';
+import { markNestBlock, decorateNestBlocks, NEST_DEPTH_BEYOND, isNestBlockElement } from './nestBlock';
 
 const List = withLocale(p => {
   const { formatMessage } = useIntl();
@@ -44,7 +44,7 @@ const List = withLocale(p => {
   const nestDepth = typeof nestDepthProp === 'number' ? nestDepthProp : 0;
   const showBorder = !!bordered;
   const isRootList = nestDepth === 0;
-  // bordered 只控根 List 外层 Part；内部子项/嵌套 List 样式固定，不随开关变化
+  // bordered 只控根 List 外层 Part；第一级子项随 bordered 分卡片/普通，第二级起固定普通样式
   const showOuterBorder = isRootList && showBorder;
   // 第 5 级起：同宽、无缩进
   const isNestBeyond = nestDepth >= NEST_DEPTH_BEYOND;
@@ -52,6 +52,9 @@ const List = withLocale(p => {
   const showNestRail = nestDepth === NEST_DEPTH_BEYOND;
   // 等级展示：depth 0 = 第 1 级
   const nestLevel = nestDepth + 1;
+
+  // 卡片模式仅第一级 List 子项特殊；第二级起与普通模式一致
+  const isCardModeItem = isRootList && showBorder;
 
   const partTitle = isNestBeyond ? (
     <span className={style['nest-beyond-title']}>
@@ -71,6 +74,7 @@ const List = withLocale(p => {
         const titleNode = hasItemTitle ? itemTitle : <span className={style['list-item-title-placeholder']} aria-hidden="true" />;
         // 子嵌套 List 深度 = 当前 + 1（显式写入 props，不依赖 Context）
         const nestedList = decorateNestBlocks(itemList, nestDepth + 1);
+        const itemWrapsNestBeyond = nestedList.some(el => isNestBlockElement(el) && typeof el.props?.nestDepth === 'number' && el.props.nestDepth >= NEST_DEPTH_BEYOND);
 
         return (
           <div
@@ -86,13 +90,15 @@ const List = withLocale(p => {
               bordered={false}
               className={classnames(style['list-item-part'], {
                 [style['list-item-part-no-title']]: !hasItemTitle,
-                [style['list-item-part-in-bordered']]: !isNestBeyond,
-                [style['list-item-part-beyond']]: isNestBeyond
+                [style['list-item-part-in-bordered']]: !isNestBeyond && isCardModeItem,
+                [style['list-item-part-plain']]: !isNestBeyond && !isCardModeItem,
+                [style['list-item-part-beyond']]: isNestBeyond,
+                [style['list-item-part-wraps-nest-beyond']]: itemWrapsNestBeyond
               })}
               styles={{
                 header: {
                   borderBottom: 'none',
-                  borderRadius: 'var(--radius-default, 8px)'
+                  borderRadius: isCardModeItem ? 'var(--radius-default, 8px)' : 'var(--radius-default, 8px) var(--radius-default, 8px) 0 0'
                 }
               }}
               style={{
@@ -120,7 +126,7 @@ const List = withLocale(p => {
               [style['nest-beyond-rail']]: showNestRail
             })}
             title={partTitle}
-            bordered={isNestBeyond ? false : isRootList ? showOuterBorder : true}
+            bordered={showOuterBorder}
             styles={partStyles}
             style={partStyle}
             data-nest-beyond={isNestBeyond ? 'true' : undefined}

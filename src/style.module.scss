@@ -254,10 +254,10 @@ $nest-radius: var(--radius-default, 8px);
           :global(.ant-card-body) {
             padding: 12px !important;
           }
+        }
 
-          &:has([data-nest-beyond='true']) :global(.ant-card-body) {
-            padding-inline: 0 !important;
-          }
+        &.list-item-part-wraps-nest-beyond:global(.ant-card) :global(.ant-card-body) {
+          overflow: visible !important;
         }
       }
 
@@ -454,10 +454,12 @@ $nest-radius: var(--radius-default, 8px);
 
       > :global(.ant-card-body) {
         padding: 16px 0 !important;
+        overflow: hidden;
+        box-sizing: border-box;
       }
     }
 
-    // 外层 Part 非 bordered：子项有描边、表头紧贴顶边（仅上圆角）、body 保留左右 padding
+    // 普通模式 / 第二级起：子项有描边、表头仅上圆角、body 保留左右 padding
     &.list-item-part-plain:global(.ant-card) {
       padding: 0 !important;
       border: 1px solid var(--font-color-grey-4) !important;
@@ -472,12 +474,13 @@ $nest-radius: var(--radius-default, 8px);
       > :global(.ant-card-body) {
         padding: 16px !important;
         border-radius: 0 0 var(--radius-default, 8px) var(--radius-default, 8px) !important;
+        overflow: hidden;
+        box-sizing: border-box;
       }
+    }
 
-      // 内含 nest-beyond 时去掉左右 padding，避免满宽被阶梯缩进
-      &:has([data-nest-beyond='true']) > :global(.ant-card-body) {
-        padding-inline: 0 !important;
-      }
+    &.list-item-part-wraps-nest-beyond:global(.ant-card) > :global(.ant-card-body) {
+      overflow: visible !important;
     }
 
     // —— 第 1～4 级嵌套：左侧色条蓝→橙→灰；第 5 级起见 .nest-beyond ——
@@ -537,6 +540,8 @@ $nest-radius: var(--radius-default, 8px);
 
         > :global(.ant-card-body) {
           padding: 12px !important;
+          overflow: hidden;
+          box-sizing: border-box;
         }
       }
 
@@ -572,10 +577,8 @@ $nest-radius: var(--radius-default, 8px);
 
             > :global(.ant-card-body) {
               padding: 12px !important;
-            }
-
-            &:has([data-nest-beyond='true']) > :global(.ant-card-body) {
-              padding-inline: 0 !important;
+              overflow: hidden;
+              box-sizing: border-box;
             }
           }
         }
@@ -606,10 +609,8 @@ $nest-radius: var(--radius-default, 8px);
 
             > :global(.ant-card-body) {
               padding: 8px !important;
-            }
-
-            &:has([data-nest-beyond='true']) > :global(.ant-card-body) {
-              padding-inline: 0 !important;
+              overflow: hidden;
+              box-sizing: border-box;
             }
           }
         }
@@ -643,10 +644,8 @@ $nest-radius: var(--radius-default, 8px);
 
                 > :global(.ant-card-body) {
                   padding: 8px !important;
-                }
-
-                &:has([data-nest-beyond='true']) > :global(.ant-card-body) {
-                  padding-inline: 0 !important;
+                  overflow: hidden;
+                  box-sizing: border-box;
                 }
               }
             }
@@ -740,6 +739,15 @@ $nest-radius: var(--radius-default, 8px);
     border: 1px solid var(--font-color-grey-4) !important;
     box-shadow: none !important;
     background: #fff;
+
+    &:global(.ant-card) > :global(.ant-card-body) {
+      overflow: hidden;
+      box-sizing: border-box;
+    }
+  }
+
+  &.list-item-part-wraps-nest-beyond:global(.ant-card) > :global(.ant-card-body) {
+    overflow: visible !important;
   }
 
   // nest-beyond 子项：无描边、不裁切更深嵌套
@@ -933,34 +941,18 @@ $nest-radius: var(--radius-default, 8px);
   }
 }
 
-// 父级包住 nest-beyond 时清 gutter，避免每层窄一截
-// 1) 显式 class（FormInfo 按 nestDepth 打上，SchemaRenderer 路径可靠）
-// 2) :has 兜底（不要求直接子节点，兼容中间 wrapper）
-.nest-block-col-beyond,
-.nest-block-col:has([data-nest-beyond='true']) {
-  padding-inline: 0 !important;
+// nest-beyond 标记（Col / 子项 overflow）；保留 gutter 左右 padding 与同层字段对齐
+.nest-block-col-beyond {
   max-width: 100% !important;
   overflow: visible !important;
 }
 
-// 父项包住 nest-beyond：清左右 padding（尤其 plain 的 12px 四边会阶梯缩进）
-.list-item-part:has([data-nest-beyond='true']),
-.list-item-part:has([data-nest-beyond='true']):global(.ant-card) {
+// 直接包住 nest-beyond 的子项：仅放开 overflow，保留 plain body 左右 padding
+.list-item-part-wraps-nest-beyond:global(.ant-card) {
   overflow: visible !important;
 
   > :global(.ant-card-body) {
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-  }
-}
-
-.list-item-part-plain:has([data-nest-beyond='true']):global(.ant-card),
-.list-item-part-in-bordered:has([data-nest-beyond='true']):global(.ant-card) {
-  overflow: visible !important;
-
-  > :global(.ant-card-body) {
-    padding-left: 0 !important;
-    padding-right: 0 !important;
+    overflow: visible !important;
   }
 }
 
