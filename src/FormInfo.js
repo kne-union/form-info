@@ -5,14 +5,14 @@ import { FormInfo as FormInfoBase } from '@kne/react-form-plus';
 import { useIsMobile } from '@kne/responsive-utils';
 import { Row, Col } from 'antd';
 import classnames from 'classnames';
-import { isNestBlockElement, isNestBlockType, markNestBlock, NEST_DEPTH_BEYOND } from './nestBlock';
+import { isNestBlockType, markNestBlock, NEST_DEPTH_BEYOND } from './nestBlock';
 import '@kne/info-page/dist/index.css';
 import style from './style.module.scss';
 
 /** 仅保证嵌套块整行；nestDepth 由 List 在 listRender 里写入，这里不覆盖 */
 const ensureNestBlocksFullWidth = list =>
   (Array.isArray(list) ? list : []).map(item => {
-    if (!isNestBlockElement(item) || item.props?.block === true) {
+    if (!isNestBlockType(item?.type) || item.props?.block === true) {
       return item;
     }
     return React.cloneElement(item, { block: true });
