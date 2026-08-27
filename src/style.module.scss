@@ -220,14 +220,17 @@ $nest-radius: var(--radius-default, 8px);
 
       .list-item-part {
         &:global(.ant-card) {
+          // 保留桌面同级的灰底操作条高度，避免仅「删除」时被压成 ~22px
           :global(.ant-card-head) {
             height: auto;
-            min-height: auto;
+            min-height: 36px;
             line-height: 1.5;
-            padding: 0 0 8px;
+            padding: 8px 12px;
             margin-bottom: 0;
-            background: transparent;
+            background: #f8f8f8;
             border-bottom: none;
+            display: flex;
+            align-items: center;
           }
 
           // 字段之间留出呼吸感
@@ -246,6 +249,10 @@ $nest-radius: var(--radius-default, 8px);
           box-shadow: none !important;
           background: transparent;
 
+          :global(.ant-card-head) {
+            padding: 8px 0;
+          }
+
           :global(.ant-card-body) {
             padding: 4px 0 0 !important;
           }
@@ -255,6 +262,11 @@ $nest-radius: var(--radius-default, 8px);
           padding: 0 !important;
           border: 1px solid var(--font-color-grey-4) !important;
           background: #fff;
+
+          :global(.ant-card-head) {
+            padding: 8px 12px;
+            border-radius: var(--radius-default, 8px) var(--radius-default, 8px) 0 0 !important;
+          }
 
           :global(.ant-card-body) {
             padding: 12px !important;
@@ -268,8 +280,9 @@ $nest-radius: var(--radius-default, 8px);
 
       &.is-important {
         > .list-item-part:global(.ant-card > .ant-card-head) {
-          background: transparent;
-          padding: 0 0 8px;
+          background: #f8f8f8;
+          min-height: 36px;
+          padding: 8px 12px;
 
           :global(.part-title) {
             display: inline-block;
@@ -697,7 +710,7 @@ $nest-radius: var(--radius-default, 8px);
   .list-item-part-no-title:global(.ant-card) {
     > :global(.ant-card-head) {
       min-height: 36px;
-      height: 36px;
+      height: auto;
     }
 
     > :global(.ant-card-head-title) :global(.part-title) {
