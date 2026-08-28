@@ -1308,7 +1308,7 @@ render(<BorderedExample />);
 | cancelButtonProps | 取消按钮属性 | `object` | - |
 | onOk | 自定义确认逻辑 | `() => void \| Promise` | - |
 | footer | 底部区域；可为函数 `({ defaultFooter, props }) => ReactNode` | `ReactNode \| function` | - |
-| renderModal | 自定义整窗渲染 | `(props) => ReactNode` | - |
+| renderModal | 自定义整窗渲染。除 antd Modal 参数外，会传入 `formProps`、`cancelText`、`saveText`、`autoClose`；默认实现会剥掉这些字段再交给 antd Modal | `(props) => ReactNode` | - |
 | modalRender | 自定义内容渲染 `({ formChildren, defaultChildren, props })` | `function` | - |
 | width / centered / closable / maskClosable / destroyOnClose / className | 透传 antd Modal | - | - |
 
