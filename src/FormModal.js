@@ -75,13 +75,17 @@ const FormModal = withLocale(p => {
       okType: 'primary',
       okText: formatMessage({ id: 'submit' }),
       cancelText: formatMessage({ id: 'cancel' }),
-      renderModal: props => <Modal {...props} />
+      renderModal: ({ formProps, saveText, autoClose, ...props }) => <Modal {...props} />
     },
     p
   );
 
   return renderModal(
     Object.assign({}, others, {
+      formProps,
+      cancelText,
+      saveText: okText,
+      autoClose,
       modalRender: children => (
         <ModalForm
           {...Object.assign({}, others, {
