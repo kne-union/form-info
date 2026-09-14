@@ -185,7 +185,9 @@ $nest-radius: var(--radius-default, 8px);
 
   &:global {
     &.ant-card .ant-card-body {
-      padding: 16px 0 0;
+      // 只改上下，勿用 padding 简写盖掉 info-page .part.bordered 的左 24px
+      padding-top: 16px;
+      padding-bottom: 0;
       border-radius: 0;
     }
   }
@@ -205,7 +207,8 @@ $nest-radius: var(--radius-default, 8px);
       }
 
       > :global(.ant-card-body) {
-        padding: 12px 0 0;
+        padding-top: 12px;
+        padding-bottom: 0;
       }
     }
 
