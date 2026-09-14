@@ -5,7 +5,7 @@
 | 属性名 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
 | column | 列数；支持数字，或传给 `@kne/flex-box` 的配置对象 | `number \| object` | `2` |
-| list | 表单项列表 | `ReactNode[]` | `[]` |
+| list | 表单项列表。字段 key 由 `@kne/react-form-plus` FieldList 按 `fieldKey` / `name`（分组内 `groupId:name`）生成，不拼 list 下标 | `ReactNode[]` | `[]` |
 | gap | 字段间距 | `number` | `24` |
 | className | 自定义样式类名 | `string` | - |
 | title | 标题 | `string \| ReactNode` | - |
