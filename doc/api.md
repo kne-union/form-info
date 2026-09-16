@@ -58,7 +58,7 @@
 | current | 受控当前步骤 | `number` | - |
 | defaultCurrent | 默认步骤 | `number` | `0` |
 | autoStep | 提交成功后自动进入下一步 / 触发完成 | `boolean` | `true` |
-| direction / orientation | 步骤条方向 | `string` | `horizontal` |
+| direction / orientation | 步骤条方向。未指定时桌面横排、放不下自动竖排，移动端竖排；`horizontal` 强制横排；`vertical` 强制竖排 | `string` | - |
 | onChange | 步骤变化 | `(current: number) => void` | - |
 | onComplete | 最后一步完成回调，参数为各步缓存 | `(stepCache) => void` | - |
 | stepsClassName | 步骤条样式类名 | `string` | - |
@@ -94,7 +94,7 @@
 | current | 受控当前步骤 | `number` | - |
 | defaultCurrent | 默认步骤 | `number` | `0` |
 | onChange | 步骤变化 | `(current: number) => void` | - |
-| direction / orientation | 步骤条方向 | `string` | - |
+| direction / orientation | 步骤条方向。未指定时桌面横排、放不下自动竖排，移动端竖排；`horizontal` 强制横排；`vertical` 强制竖排 | `string` | - |
 | showActions | 是否显示上一步 / 下一步 | `boolean` | `true` |
 | prevText / nextText | 按钮文案 | `string \| ReactNode` | 上一步 / 下一步 |
 | prevIcon / nextIcon | 按钮图标 | `ReactNode` | - |

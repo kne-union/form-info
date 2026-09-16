@@ -6,6 +6,7 @@ import EmbedSteps from './Steps';
 import useControlValue from '@kne/use-control-value';
 import omit from 'lodash/omit';
 import classnames from 'classnames';
+import useStepsOrientation from './useStepsOrientation';
 import style from './style.module.scss';
 
 const FormSteps = p => {
@@ -50,22 +51,31 @@ const FormSteps = p => {
     return currentItem;
   });
 
-  // 移动端强制垂直布局，不允许水平 Steps
-  const stepsDirection = isMobile ? 'vertical' : stepProps.direction || stepProps.orientation;
-  const isVerticalSteps = stepsDirection === 'vertical';
+  const { stepsOrientation, isVerticalSteps, overflowVertical, containerRef, stepsRef } = useStepsOrientation({
+    direction: stepProps.direction,
+    orientation: stepProps.orientation,
+    items: stepProps.items
+  });
+
+  // 横排 / 移动端 / 溢出自动竖排：上下堆叠；宽屏强制竖排步骤条时可左右并排
+  const stackLayout = !isVerticalSteps || isMobile || overflowVertical;
 
   const inner = (
-    <Flex className={className} vertical={!isVerticalSteps || isMobile} gap={24}>
-      <AntSteps
-        {...omit(stepProps, ['current', 'defaultCurrent', 'onChange', 'direction', 'orientation'])}
-        direction={stepsDirection}
-        orientation={stepsDirection}
-        className={classnames('kne-form-steps', stepsClassName, style['steps'], {
-          [style['steps-vertical']]: isVerticalSteps
-        })}
-        items={stepItems}
-        current={currentStep}
-      />
+    <Flex className={className} vertical={stackLayout} gap={24}>
+      <div ref={containerRef} className={style['steps-nav']}>
+        <div ref={stepsRef} className={style['steps-measure']}>
+          <AntSteps
+            {...omit(stepProps, ['current', 'defaultCurrent', 'onChange', 'direction', 'orientation'])}
+            direction={stepsOrientation}
+            orientation={stepsOrientation}
+            className={classnames('kne-form-steps', stepsClassName, style['steps'], {
+              [style['steps-vertical']]: isVerticalSteps
+            })}
+            items={stepItems}
+            current={currentStep}
+          />
+        </div>
+      </div>
       <div className={style['steps-form-inner']}>{stepItems[currentStep]?.children}</div>
     </Flex>
   );
