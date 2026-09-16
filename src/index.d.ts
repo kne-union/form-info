@@ -52,8 +52,10 @@ export interface FormStepsProps {
   current?: number;
   defaultCurrent?: number;
   autoStep?: boolean;
-  direction?: string;
-  orientation?: string;
+  /** 未指定：桌面横排、溢出自动竖排，移动端竖排；`horizontal` 强制横排；`vertical` 强制竖排 */
+  direction?: 'horizontal' | 'vertical' | string;
+  /** 同 direction */
+  orientation?: 'horizontal' | 'vertical' | string;
   onChange?: (current: number) => void;
   onComplete?: (data: any[]) => void;
   stepsClassName?: string;
@@ -83,8 +85,10 @@ export interface StepsProps {
   current?: number;
   defaultCurrent?: number;
   onChange?: (current: number) => void;
-  direction?: string;
-  orientation?: string;
+  /** 未指定：桌面横排、溢出自动竖排，移动端竖排；`horizontal` 强制横排；`vertical` 强制竖排 */
+  direction?: 'horizontal' | 'vertical' | string;
+  /** 同 direction */
+  orientation?: 'horizontal' | 'vertical' | string;
   showActions?: boolean;
   prevText?: string | ReactNode;
   nextText?: string | ReactNode;

@@ -3,7 +3,6 @@ import { Button, Flex, Steps as AntSteps } from 'antd';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import InfoPage from '@kne/info-page';
 import { useFormContext } from '@kne/react-form-antd';
-import { useIsMobile } from '@kne/responsive-utils';
 import useControlValue from '@kne/use-control-value';
 import classnames from 'classnames';
 import omit from 'lodash/omit';
@@ -11,6 +10,7 @@ import { useIntl } from '@kne/react-intl';
 import FormInfo from './FormInfo';
 import withLocale from './withLocale';
 import { markNestBlock } from './nestBlock';
+import useStepsOrientation from './useStepsOrientation';
 import style from './style.module.scss';
 
 const collectFieldNames = (item = {}) => {
@@ -105,7 +105,6 @@ const Steps = withLocale(p => {
     p
   );
 
-  const isMobile = useIsMobile();
   const { openApi } = useFormContext() || {};
   const rootRef = useRef(null);
   const [nextLoading, setNextLoading] = useState(false);
@@ -114,8 +113,11 @@ const Steps = withLocale(p => {
     defaultValue: 'defaultCurrent'
   });
 
-  const stepsDirection = isMobile ? 'vertical' : stepProps.direction || stepProps.orientation;
-  const isVerticalSteps = stepsDirection === 'vertical';
+  const { stepsOrientation, isVerticalSteps, containerRef, stepsRef } = useStepsOrientation({
+    direction: stepProps.direction,
+    orientation: stepProps.orientation,
+    items
+  });
   const isLastStep = currentStep >= items.length - 1;
 
   const jumpToErrorStep = useCallback(
@@ -183,18 +185,22 @@ const Steps = withLocale(p => {
     <div ref={rootRef} className={classnames(className, style['steps-embed'])}>
       <InfoPage.Part title={title} subtitle={subtitle} bordered={bordered}>
         <Flex vertical gap={24}>
-          <AntSteps
-            {...omit(stepProps, ['current', 'defaultCurrent', 'onChange', 'direction', 'orientation', 'items'])}
-            current={currentStep}
-            direction={stepsDirection}
-            orientation={stepsDirection}
-            className={classnames('kne-form-steps', stepsClassName, style['steps'], {
-              [style['steps-vertical']]: isVerticalSteps
-            })}
-            items={items.map((item, index) => ({
-              title: item.title || formatMessage({ id: 'untitledStep' }, { index: index + 1 })
-            }))}
-          />
+          <div ref={containerRef} className={style['steps-nav']}>
+            <div ref={stepsRef} className={style['steps-measure']}>
+              <AntSteps
+                {...omit(stepProps, ['current', 'defaultCurrent', 'onChange', 'direction', 'orientation', 'items'])}
+                current={currentStep}
+                direction={stepsOrientation}
+                orientation={stepsOrientation}
+                className={classnames('kne-form-steps', stepsClassName, style['steps'], {
+                  [style['steps-vertical']]: isVerticalSteps
+                })}
+                items={items.map((item, index) => ({
+                  title: item.title || formatMessage({ id: 'untitledStep' }, { index: index + 1 })
+                }))}
+              />
+            </div>
+          </div>
 
           {items.map((item, index) => (
             <div key={item.key || item.id || index} className={style['steps-embed-panel']} style={index === currentStep ? undefined : { display: 'none' }} aria-hidden={index !== currentStep}>

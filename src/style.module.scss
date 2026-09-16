@@ -156,7 +156,8 @@ $nest-radius: var(--radius-default, 8px);
       }
 
       > :global(.ant-card-body) {
-        padding: 12px 0 0;
+        // 只改上边距，勿用 padding 简写盖掉 info-page .part.bordered 的左内边距
+        padding-top: 12px;
       }
     }
   }
@@ -1268,6 +1269,19 @@ $nest-radius: var(--radius-default, 8px);
     z-index: 3;
     background: var(--bg-color-grey-1, #fafafa) !important;
   }
+}
+
+// 步骤条测量容器：占满可用宽，供溢出检测
+.steps-nav {
+  width: 100%;
+  min-width: 0;
+}
+
+.steps-measure {
+  width: fit-content;
+  max-width: 100%;
+  margin-inline: auto;
+  box-sizing: border-box;
 }
 
 // 水平 Steps：整体随内容宽度居中（不限制总宽）；标题随文字；步骤间横线最多 40px
