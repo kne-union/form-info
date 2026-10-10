@@ -20,11 +20,11 @@ npm i --save @kne/form-info
 
 **美观优雅的界面设计** - 采用现代化的视觉风格，配合精心设计的间距、色彩和排版，让表单界面更加专业美观。
 
-**多样化的表单组件** - 提供 FormInfo、FormModal、FormSteps、FormStepsModal、List、TableList、MultiField 等丰富的表单组件，满足各种复杂的业务场景需求。
+**多样化的表单组件** - 提供 FormInfo、FormModal、FormSteps、FormStepsModal、List、TableList、EditableList、MultiField 等丰富的表单组件，满足各种复杂的业务场景需求。
 
 **灵活的布局系统** - 支持响应式网格布局和 Flexbox 布局，可以轻松实现单列、多列以及自定义复杂布局。
 
-**强大的列表功能** - 内置 List、TableList 等列表组件，支持动态添加/删除、嵌套列表等高级功能。
+**强大的列表功能** - 内置 List、TableList、EditableList 等列表组件，支持动态添加/删除、嵌套列表、行内编辑（大数据量不卡顿）等高级功能。
 
 **多步骤表单支持** - 提供 FormSteps 和 FormStepsModal 组件，轻松实现向导式表单流程，提升用户体验。
 
@@ -517,6 +517,92 @@ const NestedDeepExample = () => {
 };
 
 render(<NestedDeepExample />);
+
+```
+
+- 行内编辑列表（EditableList）
+- 大数据量列表场景：每行只读摘要展示，点击编辑切换为独立表单，保存后整体写回父表单字段；通过 addPosition 控制底部追加 / 标题右侧插入首项 / 两处都显示，支持 maxHeight 超出滚动（默认 600px，可关闭）、minLength / maxLength、编辑中阻止父表单提交、嵌套 List 编辑
+- _FormInfo(@kne/current-lib_form-info),antd(antd),(@kne/current-lib_form-info/dist/index.css)
+
+```jsx
+const { default: FormInfo, EditableList, List, Form, Input, TextArea, SubmitButton } = _FormInfo;
+const { Flex, message, Space, Switch, Tag, Alert, Segmented } = antd;
+const { useMemo, useState } = React;
+
+const createTasks = count =>
+  Array.from({ length: count }, (_, index) => ({
+    id: &#96;task-${index + 1}&#96;,
+    taskName: &#96;岗位核心任务 ${index + 1}&#96;,
+    taskCode: &#96;T${String(index + 1).padStart(3, '0')}&#96;,
+    frequency: ['每日', '每周', '每月'][index % 3],
+    description: '负责梳理业务需求，输出技术方案并推动落地，保证交付质量与进度',
+    evidence: [{ source: 'JD 原文', content: '具备独立完成复杂需求的能力' }]
+  }));
+
+const EditableListExample = () => {
+  const [large, setLarge] = useState(false);
+  const [editing, setEditing] = useState(false);
+  const [addPosition, setAddPosition] = useState('bottom');
+  const [limitHeight, setLimitHeight] = useState(true);
+  const data = useMemo(() => ({ positionName: '高级前端工程师', tasks: createTasks(large ? 200 : 3) }), [large]);
+
+  return (
+    <Flex vertical gap={16}>
+      <Space>
+        <span>200 条数据：</span>
+        <Switch checked={large} onChange={setLarge} />
+        <span>添加按钮位置：</span>
+        <Segmented
+          value={addPosition}
+          onChange={setAddPosition}
+          options={[
+            { label: '底部追加 bottom', value: 'bottom' },
+            { label: '标题插入首项 top', value: 'top' },
+            { label: '两处 both', value: 'both' }
+          ]}
+        />
+        <span>最大高度 600px：</span>
+        <Switch checked={limitHeight} onChange={setLimitHeight} />
+        {editing ? <Tag color="processing">编辑中</Tag> : null}
+      </Space>
+      <Alert type="info" showIcon message="父表单只注册 tasks 一个字段，子字段仅在当前编辑行的独立表单中注册；编辑中提交父表单会提示先保存或取消。" />
+      <Form
+        key={large ? 'large' : 'small'}
+        data={data}
+        onSubmit={formData => {
+          console.log(formData);
+          message.success(&#96;提交成功，共 ${formData.tasks.length} 条 Task&#96;);
+        }}
+      >
+        <FormInfo title="岗位信息" list={[<Input name="positionName" label="岗位名称" rule="REQ" />]} />
+        <EditableList
+          name="tasks"
+          title="Task 列表"
+          addPosition={addPosition}
+          maxHeight={limitHeight ? 600 : false}
+          minLength={1}
+          maxLength={500}
+          column={2}
+          itemTitle={({ data }) => data?.taskName}
+          createItem={() => ({ id: &#96;task-${Date.now()}&#96;, frequency: '每周' })}
+          onEditingChange={setEditing}
+          list={[
+            <Input name="taskName" label="任务名称" rule="REQ" />,
+            <Input name="taskCode" label="任务编号" rule="REQ" />,
+            <Input name="frequency" label="执行频率" />,
+            <TextArea name="description" label="任务描述" block />,
+            <List name="evidence" title="分析依据" itemTitle={({ index }) => &#96;依据 ${index + 1}&#96;} list={[<Input name="source" label="来源" />, <TextArea name="content" label="内容" block />]} />
+          ]}
+        />
+        <Flex justify="flex-end">
+          <SubmitButton>提交</SubmitButton>
+        </Flex>
+      </Form>
+    </Flex>
+  );
+};
+
+render(<EditableListExample />);
 
 ```
 
@@ -1430,6 +1516,36 @@ render(<BorderedExample />);
 | itemTitle | 子项标题函数 | `function` | - |
 | className | 样式类名 | `string` | - |
 
+#### EditableList
+
+行内编辑列表。每行默认只读展示摘要，点击编辑后该行切换为独立表单，保存时把整行数据写回父表单的单一数组字段；通过 `addPosition` 控制在底部追加或在标题右侧插入到第一项。子字段只注册在当前编辑行的独立表单中，父表单只注册一个字段，适合 `List` 数据量大导致卡顿的场景。编辑中提交父表单会校验失败，提示先保存或取消。
+
+| 属性名 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| name | 字段名，值为数组 | `string` | - |
+| title | 列表标题 | `string \| ReactNode` | - |
+| list | 编辑态独立表单内的表单项；默认摘要取其中带 `label` 的非嵌套字段 | `ReactNode[]` | - |
+| column | 编辑态表单列数 | `number` | - |
+| itemTitle | 行标题；`({ index, data }) => ReactNode` | `function` | - |
+| renderItem | 自定义只读行内容；`(item, { index }) => ReactNode` | `function` | 字段摘要 |
+| createItem | 点击添加时新项的初始数据 | `() => object` | `() => ({})` |
+| rowKey | 行唯一键字段名或函数；缺省取 `id`，再退化为索引 | `string \| function` | `id` |
+| addPosition | 添加按钮位置：`bottom` 列表底部，新项追加到末尾；`top` 标题最右侧，新项插入到第一项；`both` 两处都显示 | `'bottom' \| 'top' \| 'both'` | `bottom` |
+| maxHeight | 行区域最大高度，超出后区域内滚动（底部添加按钮不随之滚动）；数字为 px，字符串为 CSS 值，传 `false` 关闭 | `number \| string \| false` | `600` |
+| minLength | 最少条数；不足时父表单校验失败并禁用删除 | `number` | `0` |
+| maxLength | 最多条数；达到后隐藏添加按钮 | `number` | - |
+| rule | 自定义校验；`(value, context) => { result, errMsg }` | `function` | - |
+| important | 必填标记 | `boolean` | `minLength > 0` |
+| onEditingChange | 进入 / 退出编辑态回调 | `(isEditing) => void` | - |
+| editingErrMsg | 编辑中提交父表单的错误文案 | `string` | 请先保存或取消正在编辑的项 |
+| minLengthErrMsg | 条数不足的错误文案 | `string` | 至少需要 {count} 项 |
+| bordered | 外层 Part 是否边框 | `boolean` | - |
+| addText / editText / removeText | 添加 / 编辑 / 删除文案 | `string \| ReactNode` | 添加 / 编辑 / 删除 |
+| saveText / cancelText | 编辑态保存 / 取消文案 | `string \| ReactNode` | 保存 / 取消 |
+| addIcon / editIcon / removeIcon | 图标 | `ReactNode` | `PlusOutlined` / `EditOutlined` / `DeleteOutlined` |
+| empty | 空状态 | `ReactNode` | `Empty` |
+| className | 样式类名 | `string` | - |
+
 #### MultiField
 
 同一字段可动态增减多条（同类型控件）。
@@ -1460,6 +1576,10 @@ render(<BorderedExample />);
 | next | 下一步 | Next |
 | addText | 添加 | Add |
 | deleteText | 删除 | Delete |
+| editText | 编辑 | Edit |
+| saveText | 保存 | Save |
+| editableListEditing | 请先保存或取消正在编辑的项 | Please save or cancel the item being edited |
+| editableListMinLength | 至少需要 {count} 项 | At least {count} item(s) required |
 | untitledStep | 第{index}步 | Step {index} |
 
 可通过 `withLocale` 或 `@kne/react-intl` 的 `useIntl` 覆盖。
