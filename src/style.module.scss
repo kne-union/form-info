@@ -1456,6 +1456,148 @@ $nest-radius: var(--radius-default, 8px);
   padding: 16px;
 }
 
+.editable-list-part {
+  :global {
+    .react-form__field-component {
+      width: 100%;
+    }
+  }
+}
+
+.editable-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
+  padding-bottom: 16px;
+}
+
+.editable-list-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.editable-list-rows-scroll {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-right: 4px;
+}
+
+.editable-list-empty {
+  padding: 8px 0;
+}
+
+.editable-list-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  min-width: 0;
+  padding: 12px 16px;
+  background: #fff;
+  border: 1px solid var(--bg-color-grey-3, #e5e5e5);
+  border-radius: var(--radius-default, 8px);
+}
+
+.editable-list-item-editing {
+  display: block;
+  padding: 12px 16px 16px;
+  border-color: var(--primary-color);
+}
+
+.editable-list-edit-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+// List 嵌套样式会把内层 Part 的 head/body padding 改掉，这里统一由外层卡片控制间距
+.editable-list-edit-form:global(.ant-card) {
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+
+  > :global(.ant-card-body) {
+    padding: 0 !important;
+  }
+}
+
+.editable-list-item-index {
+  flex-shrink: 0;
+  min-width: 20px;
+  line-height: 22px;
+  color: var(--font-color-grey);
+  font-size: var(--font-size-default, 14px);
+  font-weight: 500;
+}
+
+.editable-list-item-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.editable-list-item-title {
+  color: var(--font-color);
+  font-size: var(--font-size-default, 14px);
+  font-weight: 500;
+  line-height: 22px;
+  word-break: break-word;
+}
+
+.editable-list-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  margin-top: 2px;
+  font-size: var(--font-size-small, 12px);
+  line-height: 20px;
+}
+
+.editable-list-summary-item {
+  min-width: 0;
+  word-break: break-word;
+}
+
+.editable-list-summary-label {
+  margin-right: 4px;
+  color: var(--font-color-grey);
+}
+
+.editable-list-summary-value {
+  color: var(--font-color);
+}
+
+.editable-list-item-actions {
+  display: flex;
+  flex-shrink: 0;
+  gap: 12px;
+}
+
+.editable-list-edit-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.editable-list-add-btn {
+  margin-top: 4px;
+}
+
+@include resp.mobile-container {
+  .editable-list-item {
+    flex-wrap: wrap;
+  }
+
+  .editable-list-item-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+
 .extra-container {
   min-height: 32px;
 }

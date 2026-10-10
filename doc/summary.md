@@ -4,11 +4,11 @@
 
 **美观优雅的界面设计** - 采用现代化的视觉风格，配合精心设计的间距、色彩和排版，让表单界面更加专业美观。
 
-**多样化的表单组件** - 提供 FormInfo、FormModal、FormSteps、FormStepsModal、List、TableList、MultiField 等丰富的表单组件，满足各种复杂的业务场景需求。
+**多样化的表单组件** - 提供 FormInfo、FormModal、FormSteps、FormStepsModal、List、TableList、EditableList、MultiField 等丰富的表单组件，满足各种复杂的业务场景需求。
 
 **灵活的布局系统** - 支持响应式网格布局和 Flexbox 布局，可以轻松实现单列、多列以及自定义复杂布局。
 
-**强大的列表功能** - 内置 List、TableList 等列表组件，支持动态添加/删除、嵌套列表等高级功能。
+**强大的列表功能** - 内置 List、TableList、EditableList 等列表组件，支持动态添加/删除、嵌套列表、行内编辑（大数据量不卡顿）等高级功能。
 
 **多步骤表单支持** - 提供 FormSteps 和 FormStepsModal 组件，轻松实现向导式表单流程，提升用户体验。
 

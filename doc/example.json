@@ -56,6 +56,24 @@
       ]
     },
     {
+      "title": "行内编辑列表（EditableList）",
+      "description": "大数据量列表场景：每行只读摘要展示，点击编辑切换为独立表单，保存后整体写回父表单字段；通过 addPosition 控制底部追加 / 标题右侧插入首项 / 两处都显示，支持 maxHeight 超出滚动（默认 600px，可关闭）、minLength / maxLength、编辑中阻止父表单提交、嵌套 List 编辑",
+      "code": "./editable-list.js",
+      "scope": [
+        {
+          "name": "_FormInfo",
+          "packageName": "@kne/current-lib_form-info"
+        },
+        {
+          "name": "antd",
+          "packageName": "antd"
+        },
+        {
+          "packageName": "@kne/current-lib_form-info/dist/index.css"
+        }
+      ]
+    },
+    {
       "title": "模态框表单示例",
       "description": "演示FormModal组件的使用，展示如何在弹窗中展示表单，支持表单数据初始化和提交后的自动关闭功能",
       "code": "./form-modal.js",
