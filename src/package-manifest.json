@@ -372,6 +372,112 @@
         }
       }
     },
+    "EditableList": {
+      "description": "行内编辑列表：只读行摘要展示，点击编辑后切换为独立表单，保存后整体写回父表单单一字段；适合大数据量列表避免逐字段注册导致卡顿",
+      "type": "ReactNode",
+      "props": {
+        "name": {
+          "description": "表单字段名称，值为数组",
+          "type": "string"
+        },
+        "title": {
+          "description": "列表标题",
+          "type": "string|ReactNode"
+        },
+        "list": {
+          "description": "编辑态独立表单内的表单项；默认摘要取其中带 label 的字段",
+          "type": "ReactNode[]"
+        },
+        "column": {
+          "description": "编辑态表单列数",
+          "type": "number"
+        },
+        "itemTitle": {
+          "description": "行标题生成函数 ({ index, data }) => ReactNode",
+          "type": "function"
+        },
+        "renderItem": {
+          "description": "自定义只读行内容 (item, { index }) => ReactNode",
+          "type": "function"
+        },
+        "createItem": {
+          "description": "点击添加时新项的初始数据",
+          "type": "function"
+        },
+        "rowKey": {
+          "description": "行唯一键字段名或函数，缺省用 id，再退化为索引",
+          "type": "string|function",
+          "default": "id"
+        },
+        "addPosition": {
+          "description": "添加按钮位置：bottom 底部添加并追加到末尾；top 标题右侧添加并插入到第一项；both 两处都显示",
+          "type": "'bottom'|'top'|'both'",
+          "default": "bottom"
+        },
+        "maxHeight": {
+          "description": "行区域最大高度，超出滚动；数字为 px，字符串为 CSS 值，传 false 关闭",
+          "type": "number|string|false",
+          "default": 600
+        },
+        "minLength": {
+          "description": "最少条数，低于时父表单校验不通过且禁用删除",
+          "type": "number",
+          "default": 0
+        },
+        "maxLength": {
+          "description": "最多条数，达到后隐藏添加按钮",
+          "type": "number"
+        },
+        "rule": {
+          "description": "自定义校验函数 (value, context) => { result, errMsg }",
+          "type": "function"
+        },
+        "onEditingChange": {
+          "description": "进入/退出编辑态回调",
+          "type": "function"
+        },
+        "editingErrMsg": {
+          "description": "编辑中提交父表单时的错误文案",
+          "type": "string"
+        },
+        "minLengthErrMsg": {
+          "description": "条数不足时的错误文案",
+          "type": "string"
+        },
+        "bordered": {
+          "description": "外层 Part 是否显示边框",
+          "type": "boolean"
+        },
+        "empty": {
+          "description": "空状态展示内容",
+          "type": "ReactNode"
+        },
+        "addText": {
+          "description": "添加按钮文本",
+          "type": "string|ReactNode"
+        },
+        "editText": {
+          "description": "编辑按钮文本",
+          "type": "string|ReactNode"
+        },
+        "removeText": {
+          "description": "删除按钮文本",
+          "type": "string|ReactNode"
+        },
+        "saveText": {
+          "description": "保存按钮文本",
+          "type": "string|ReactNode"
+        },
+        "cancelText": {
+          "description": "取消按钮文本",
+          "type": "string|ReactNode"
+        },
+        "className": {
+          "description": "组件的CSS类名",
+          "type": "string"
+        }
+      }
+    },
     "MultiField": {
       "description": "多字段组件，支持动态添加和删除相同类型的字段组",
       "type": "ReactNode",

@@ -143,6 +143,41 @@ export interface TableListProps {
   renderMobile?: boolean | string | ((props: any) => ReactNode);
 }
 
+export interface EditableListProps {
+  name: string;
+  label?: string;
+  title?: string | ReactNode;
+  className?: string;
+  bordered?: boolean;
+  list?: ReactNode[];
+  column?: number;
+  itemTitle?: ({ index, data }: { index: number; data: any }) => ReactNode;
+  renderItem?: (item: any, { index }: { index: number }) => ReactNode;
+  createItem?: () => Record<string, any>;
+  rowKey?: string | ((item: any, index: number) => string | number);
+  /** bottom：底部添加并追加到末尾；top：标题右侧添加并插入到第一项；both：两处都显示 */
+  addPosition?: 'bottom' | 'top' | 'both';
+  /** 行区域最大高度，超出滚动；数字为 px，传 false 关闭，默认 600 */
+  maxHeight?: number | string | false;
+  minLength?: number;
+  maxLength?: number;
+  rule?: (value: any[], context: any) => Promise<{ result: boolean; errMsg?: string }> | { result: boolean; errMsg?: string };
+  important?: boolean;
+  empty?: ReactNode;
+  addText?: string | ReactNode;
+  addIcon?: ReactNode;
+  editText?: string | ReactNode;
+  editIcon?: ReactNode;
+  removeText?: string | ReactNode;
+  removeIcon?: ReactNode;
+  saveText?: string | ReactNode;
+  cancelText?: string | ReactNode;
+  editingErrMsg?: string;
+  minLengthErrMsg?: string;
+  onEditingChange?: (isEditing: boolean) => void;
+  [key: string]: any;
+}
+
 export interface MultiFieldProps {
   className?: string;
   addText?: string | ((label: string) => string);
@@ -175,6 +210,7 @@ export declare const validateFieldsByName: (openApi: any, names?: string[]) => P
 export declare const List: FC<ListProps>;
 export declare const SubList: FC<ListProps>;
 export declare const TableList: FC<TableListProps>;
+export declare const EditableList: FC<EditableListProps>;
 export declare const MultiField: FC<MultiFieldProps>;
 export declare const Form: FC<FormProps>;
 

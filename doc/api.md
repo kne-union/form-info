@@ -164,6 +164,36 @@
 | itemTitle | 子项标题函数 | `function` | - |
 | className | 样式类名 | `string` | - |
 
+### EditableList
+
+行内编辑列表。每行默认只读展示摘要，点击编辑后该行切换为独立表单，保存时把整行数据写回父表单的单一数组字段；通过 `addPosition` 控制在底部追加或在标题右侧插入到第一项。子字段只注册在当前编辑行的独立表单中，父表单只注册一个字段，适合 `List` 数据量大导致卡顿的场景。编辑中提交父表单会校验失败，提示先保存或取消。
+
+| 属性名 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| name | 字段名，值为数组 | `string` | - |
+| title | 列表标题 | `string \| ReactNode` | - |
+| list | 编辑态独立表单内的表单项；默认摘要取其中带 `label` 的非嵌套字段 | `ReactNode[]` | - |
+| column | 编辑态表单列数 | `number` | - |
+| itemTitle | 行标题；`({ index, data }) => ReactNode` | `function` | - |
+| renderItem | 自定义只读行内容；`(item, { index }) => ReactNode` | `function` | 字段摘要 |
+| createItem | 点击添加时新项的初始数据 | `() => object` | `() => ({})` |
+| rowKey | 行唯一键字段名或函数；缺省取 `id`，再退化为索引 | `string \| function` | `id` |
+| addPosition | 添加按钮位置：`bottom` 列表底部，新项追加到末尾；`top` 标题最右侧，新项插入到第一项；`both` 两处都显示 | `'bottom' \| 'top' \| 'both'` | `bottom` |
+| maxHeight | 行区域最大高度，超出后区域内滚动（底部添加按钮不随之滚动）；数字为 px，字符串为 CSS 值，传 `false` 关闭 | `number \| string \| false` | `600` |
+| minLength | 最少条数；不足时父表单校验失败并禁用删除 | `number` | `0` |
+| maxLength | 最多条数；达到后隐藏添加按钮 | `number` | - |
+| rule | 自定义校验；`(value, context) => { result, errMsg }` | `function` | - |
+| important | 必填标记 | `boolean` | `minLength > 0` |
+| onEditingChange | 进入 / 退出编辑态回调 | `(isEditing) => void` | - |
+| editingErrMsg | 编辑中提交父表单的错误文案 | `string` | 请先保存或取消正在编辑的项 |
+| minLengthErrMsg | 条数不足的错误文案 | `string` | 至少需要 {count} 项 |
+| bordered | 外层 Part 是否边框 | `boolean` | - |
+| addText / editText / removeText | 添加 / 编辑 / 删除文案 | `string \| ReactNode` | 添加 / 编辑 / 删除 |
+| saveText / cancelText | 编辑态保存 / 取消文案 | `string \| ReactNode` | 保存 / 取消 |
+| addIcon / editIcon / removeIcon | 图标 | `ReactNode` | `PlusOutlined` / `EditOutlined` / `DeleteOutlined` |
+| empty | 空状态 | `ReactNode` | `Empty` |
+| className | 样式类名 | `string` | - |
+
 ### MultiField
 
 同一字段可动态增减多条（同类型控件）。
@@ -194,6 +224,10 @@
 | next | 下一步 | Next |
 | addText | 添加 | Add |
 | deleteText | 删除 | Delete |
+| editText | 编辑 | Edit |
+| saveText | 保存 | Save |
+| editableListEditing | 请先保存或取消正在编辑的项 | Please save or cancel the item being edited |
+| editableListMinLength | 至少需要 {count} 项 | At least {count} item(s) required |
 | untitledStep | 第{index}步 | Step {index} |
 
 可通过 `withLocale` 或 `@kne/react-intl` 的 `useIntl` 覆盖。
