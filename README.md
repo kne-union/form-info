@@ -50,6 +50,35 @@ npm i --save @kne/form-info
     box-sizing: border-box;
   }
 }
+
+// TODO 临时验收：远程 components-core 内旧版 super-select 同名类会盖掉 --super-select-input-* 变量规则，清理 components-core 后删除
+.kne-super-select_d8lGc.kne-super-select_d8lGc {
+  background-color: var(--super-select-input-bg, #fff);
+  color: var(--super-select-input-color, inherit);
+  border: 1px solid var(--super-select-input-border-color, var(--font-color-grey-3));
+  padding: 0 var(--super-select-input-padding-x, var(--padding-x));
+
+  &:not(.kne-super-select_3kjwO):hover {
+    border-color: var(--super-select-input-hover-border-color, var(--primary-color));
+  }
+
+  &.kne-super-select_3kjwO {
+    background: var(--super-select-input-disabled-bg, var(--bg-color-grey-2));
+    color: var(--super-select-input-disabled-color, var(--font-color-grey-2));
+  }
+}
+
+.kne-super-select_g8QC-.kne-super-select_g8QC- {
+  color: var(--super-select-input-icon-color, var(--font-color-grey-2));
+}
+
+.kne-super-select_r3q69.kne-super-select_r3q69 {
+  color: var(--super-select-input-placeholder-color, var(--font-color-grey-2));
+}
+
+.kne-super-select_704J1.kne-super-select_HYGUN .kne-super-select_temy6.kne-super-select_temy6.is-popup {
+  padding: 12px;
+}
 ```
 
 #### 示例代码
@@ -60,7 +89,7 @@ npm i --save @kne/form-info
 
 ```jsx
 const {default: FormInfo, List, TableList, MultiField, Form, Input, TextArea, SubmitButton, ResetButton} = _FormInfo;
-const {Flex, message, Divider, Switch, Space} = antd;
+const {Flex, message, Switch, Space} = antd;
 const {useState} = React;
 
 const BaseExample = () => {
@@ -111,8 +140,6 @@ const BaseExample = () => {
             ]}
         />
         
-        <Divider />
-        
         <List 
             title="工作经历" 
             name="workExperience"
@@ -141,8 +168,6 @@ const BaseExample = () => {
             ]}
         />
         
-        <Divider />
-        
         <TableList 
             title="家庭成员信息" 
             name="familyMembers"
@@ -156,8 +181,6 @@ const BaseExample = () => {
                 <Input name="workUnit" label="工作单位" placeholder="工作单位名称" />
             ]}
         />
-        
-        <Divider />
         
         <FormInfo 
             title="紧急联系人" 
@@ -613,7 +636,7 @@ render(<EditableListExample />);
 ```jsx
 const {default: FormInfo, FormModal, List, Input, TextArea, SubmitButton} = _FormInfo;
 const {useState} = React;
-const {Button, Space, message, Divider, Switch} = antd;
+const {Button, Space, message, Switch} = antd;
 
 const BaseExample = () => {
     const [open, onOpenChange] = useState(false);
@@ -682,7 +705,7 @@ const BaseExample = () => {
     );
 
     return <>
-        <Space direction="vertical" size="middle">
+        <Space orientation="vertical" size="middle">
             <div>
                 <Space>
                     <span>自动关闭:</span>
@@ -726,9 +749,6 @@ const BaseExample = () => {
                     <TextArea name="remarks" label="备注" placeholder="备注信息" block />
                 ]}
             />
-            
-            <Divider />
-            
             <List
                 title="工作经历" 
                 name="workExperience"
@@ -964,8 +984,6 @@ const BaseExample = () => {
                 />
             </Card>
 
-            <Divider />
-
             {/* 垂直方向步骤表单 */}
             <Card title="员工入职办理流程（垂直布局）">
                 <FormSteps 
@@ -1034,7 +1052,7 @@ render(<BaseExample/>);
 
 ```jsx
 const { default: FormInfo, FormStepsModal, List, Input, TextArea, Select, DatePicker } = _FormInfo;
-const { Flex, Button, Space, message, Divider, Result } = antd;
+const { Flex, Button, Space, message, Result } = antd;
 const { useState } = React;
 
 const BaseExample = () => {
@@ -1091,7 +1109,7 @@ const BaseExample = () => {
   };
 
   return (
-    <Space direction="vertical" size="middle">
+    <Space orientation="vertical" size="middle">
       <Button 
         type="primary" 
         size="large"
@@ -1109,7 +1127,7 @@ const BaseExample = () => {
           title: '项目立项申请',
           onCancel: () => onOpenChange(false),
           width: 900,
-          destroyOnClose: false
+          destroyOnHidden: false
         }}
         items={[
           {
@@ -1133,7 +1151,6 @@ const BaseExample = () => {
                     <Input name="projectManager" label="项目经理" rule="REQ" placeholder="项目负责人" />
                   ]}
                 />
-                <Divider />
                 <FormInfo 
                   title="项目背景" 
                   column={1}
@@ -1166,7 +1183,6 @@ const BaseExample = () => {
                     <Input name="sponsorDept" label="发起人部门" rule="REQ" placeholder="所属部门" />
                   ]}
                 />
-                <Divider />
                 <List 
                   title="项目团队成员" 
                   name="teamMembers"
@@ -1223,7 +1239,6 @@ const BaseExample = () => {
                     />
                   ]}
                 />
-                <Divider />
                 <List 
                   title="里程碑计划" 
                   name="milestones"
@@ -1261,7 +1276,7 @@ render(<BaseExample />);
 
 ```jsx
 const {default: FormInfo, List, TableList, Form, Input, TextArea} = _FormInfo;
-const {Flex, Switch, Space, Divider} = antd;
+const {Flex, Switch, Space} = antd;
 const {useState} = React;
 
 const BorderedExample = () => {
@@ -1291,9 +1306,6 @@ const BorderedExample = () => {
                     <Input name="position" label="职位" rule="REQ" placeholder="例如：高级前端工程师" />
                 ]}
             />
-
-            <Divider />
-
             <List
                 title="工作经历（important）"
                 name="workExperience"
@@ -1320,9 +1332,6 @@ const BorderedExample = () => {
                     <Input name="degree" label="学历" rule="REQ" placeholder="例如：本科" />
                 ]}
             />
-
-            <Divider />
-
             <TableList
                 title="家庭成员信息"
                 name="familyMembers"
@@ -1345,6 +1354,245 @@ const BorderedExample = () => {
 };
 
 render(<BorderedExample />);
+
+```
+
+- 移动端布局与登录场景
+- 移动端默认采用纵向卡片布局（label 在上、字段分隔线、按钮整宽、单列）；登录等场景在 Form 上传 mobile={false} 关闭布局适配，Select 弹层遮罩、16px 字号等字段级优化仍生效
+- _FormInfo(@kne/current-lib_form-info),antd(antd),(@kne/current-lib_form-info/dist/index.css)
+
+```jsx
+const {default: FormInfo, Form, Input, Select, DatePicker, InputNumber, SubmitButton} = _FormInfo;
+const {Flex, Card} = antd;
+
+const MobileExample = () => {
+    return (<Flex vertical gap={24}>
+        <Card title="移动端自动适配（默认）：纵向卡片 + 字段分隔线" size="small">
+            <Form onSubmit={data => console.log('提交请假申请', data)}>
+                <FormInfo
+                    title="请假申请"
+                    column={2}
+                    list={[
+                        <Select name="leaveType" label="请假类型" rule="REQ" options={[
+                            {label: '年假', value: 'annual'},
+                            {label: '事假', value: 'personal'},
+                            {label: '病假', value: 'sick'}
+                        ]}/>,
+                        <InputNumber name="days" label="请假天数" rule="REQ" min={0.5} step={0.5}/>,
+                        <DatePicker name="startDate" label="开始日期" rule="REQ"/>,
+                        <Input name="handover" label="工作交接人" placeholder="请输入交接人姓名"/>
+                    ]}
+                />
+                <SubmitButton>提交申请</SubmitButton>
+            </Form>
+        </Card>
+
+        <Card title="登录场景：mobile={false} 关闭移动端布局，Select 弹层遮罩等字段优化仍生效" size="small">
+            <Form mobile={false} onSubmit={data => console.log('登录', data)}>
+                <FormInfo
+                    column={1}
+                    list={[
+                        <Input name="account" label="账号" rule="REQ" placeholder="手机号 / 邮箱"/>,
+                        <Input.Password name="password" label="密码" rule="REQ" placeholder="请输入密码"/>,
+                        <Select name="tenant" label="登录租户" options={[
+                            {label: '总部', value: 'hq'},
+                            {label: '华东分公司', value: 'east'}
+                        ]}/>
+                    ]}
+                />
+                <SubmitButton block>登录</SubmitButton>
+            </Form>
+        </Card>
+    </Flex>);
+};
+
+render(<MobileExample/>);
+
+```
+
+- SuperSelect / SuperSelectPlus 字段
+- 将 @kne/super-select（列表、表格、树、级联）与 @kne/super-select-plus（城市、职能、行业）选择器通过 @kne/react-form-helper 的 hooks.useOnChange 封装成 Field，放入 FormInfo 展示 label、必填校验、编码回显，以及下拉/弹窗两种展示模式在 PC 与移动端的表现
+- _FormInfo(@kne/current-lib_form-info),_SuperSelect(@kne/super-select),_SuperSelectPlus(@kne/super-select-plus),_ReactFormHelper(@kne/react-form-helper),antd(antd),(@kne/current-lib_form-info/dist/index.css),(@kne/super-select/dist/index.css),(@kne/super-select-plus/dist/index.css)
+
+```jsx
+const { default: FormInfo, Form, SubmitButton, ResetButton } = _FormInfo;
+const { default: SelectList, SelectTableList, SelectTree, SelectCascader } = _SuperSelect;
+const { SelectFunction, SelectIndustry, SelectAddress } = _SuperSelectPlus;
+const { hooks } = _ReactFormHelper;
+const { Flex, Switch, message } = antd;
+const { useState } = React;
+
+// 把受控选择组件包装成表单 Field：label、校验、报错由 useOnChange 统一渲染
+const createField = (Component, defaultProps) => {
+  const FieldComponent = props => {
+    const render = hooks.useOnChange(Object.assign({ style: { width: '100%' } }, defaultProps, props));
+    return render(Component);
+  };
+  FieldComponent.Field = Component;
+  return FieldComponent;
+};
+
+const SelectListField = createField(SelectList, { placeholder: '请选择' });
+const SelectTableListField = createField(SelectTableList, { placeholder: '请选择' });
+const SelectTreeField = createField(SelectTree, { placeholder: '请选择', valueKey: 'id', labelKey: 'name' });
+const SelectCascaderField = createField(SelectCascader, { placeholder: '请选择', valueKey: 'id', labelKey: 'name', menuItemWidth: 160 });
+const SelectFunctionField = createField(SelectFunction);
+const SelectIndustryField = createField(SelectIndustry);
+const SelectAddressField = createField(SelectAddress);
+
+const departmentOptions = [
+  { value: 'tech', label: '技术研发部' },
+  { value: 'product', label: '产品设计部' },
+  { value: 'operation', label: '运营管理部' },
+  { value: 'hr', label: '人力资源部' },
+  { value: 'finance', label: '财务部', disabled: true },
+  { value: 'marketing', label: '市场营销部' }
+];
+
+const userOptions = [
+  { value: 'u1', label: '张三', email: 'zhangsan@company.com' },
+  { value: 'u2', label: '李四', email: 'lisi@company.com' },
+  { value: 'u3', label: '王五', email: 'wangwu@company.com' },
+  { value: 'u4', label: '赵六', email: 'zhaoliu@company.com' },
+  { value: 'u5', label: '钱七', email: 'qianqi@company.com' }
+];
+
+const projectOptions = [
+  { id: 1, name: '电商平台', count: 15, description: '在线购物平台' },
+  { id: 2, name: 'OA系统', count: 8, description: '办公自动化系统', disabled: true },
+  { id: 3, name: 'CRM系统', count: 10, description: '客户关系管理' },
+  { id: 4, name: '数据大屏', count: 5, description: '数据可视化展示' },
+  { id: 5, name: '移动APP', count: 12, description: '移动端应用' }
+];
+
+const organizationTree = [
+  { id: 'root', parentId: null, name: '集团总部' },
+  { id: 'tech', parentId: 'root', name: '技术中心' },
+  { id: 'tech-fe', parentId: 'tech', name: '前端开发组' },
+  { id: 'tech-be', parentId: 'tech', name: '后端开发组' },
+  { id: 'product', parentId: 'root', name: '产品中心' },
+  { id: 'product-design', parentId: 'product', name: '产品设计组' },
+  { id: 'hr', parentId: 'root', name: '人力资源部' }
+];
+
+const regionData = [
+  {
+    id: 'guangdong',
+    name: '广东省',
+    children: [
+      {
+        id: 'guangzhou',
+        name: '广州市',
+        children: [
+          { id: 'tianhe', name: '天河区' },
+          { id: 'yuexiu', name: '越秀区' }
+        ]
+      },
+      {
+        id: 'shenzhen',
+        name: '深圳市',
+        children: [
+          { id: 'nanshan', name: '南山区' },
+          { id: 'futian', name: '福田区' }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'zhejiang',
+    name: '浙江省',
+    children: [
+      {
+        id: 'hangzhou',
+        name: '杭州市',
+        children: [
+          { id: 'xihu', name: '西湖区' },
+          { id: 'binjiang', name: '滨江区' }
+        ]
+      }
+    ]
+  }
+];
+
+// 编辑场景：后端只返回编码，组件加载数据后自动解析 label
+const initialData = {
+  department: [{ value: 'tech', label: '技术研发部' }],
+  city: [{ value: '010' }, { value: '020' }],
+  industry: ['001']
+};
+
+const BaseExample = () => {
+  const [isPopup, setIsPopup] = useState(true);
+
+  return (
+    <Flex vertical gap={16}>
+      <Flex align="center" gap={12}>
+        <span>展示模式：</span>
+        <Switch checked={isPopup} onChange={setIsPopup} checkedChildren="下拉" unCheckedChildren="弹窗" />
+      </Flex>
+      <Form
+        data={initialData}
+        onSubmit={async data => {
+          console.log('提交的表单数据:', data);
+          message.success('提交成功');
+        }}
+      >
+        <FormInfo
+          title="SuperSelect 字段"
+          subtitle="@kne/super-select 组件封装成 Field"
+          column={2}
+          list={[
+            <SelectListField name="department" label="所属部门" rule="REQ" isPopup={isPopup} options={departmentOptions} />,
+            <SelectListField name="owner" label="负责人" rule="REQ" single isPopup={isPopup} options={userOptions} />,
+            <SelectListField
+              name="members"
+              label="项目成员"
+              isPopup={isPopup}
+              allowSelectedAll
+              maxLength={3}
+              options={userOptions}
+              placeholder="最多选择 3 人"
+              getSearchCallback={({ searchText }, item) => !searchText || item.label.includes(searchText) || item.email.includes(searchText)}
+            />,
+            <SelectTableListField
+              name="project"
+              label="关联项目"
+              isPopup={isPopup}
+              valueKey="id"
+              labelKey="name"
+              options={projectOptions}
+              columns={[
+                { name: 'name', title: '项目名称', span: 8 },
+                { name: 'count', title: '团队人数', span: 8 },
+                { name: 'description', title: '项目描述', span: 8 }
+              ]}
+              getSearchCallback={({ searchText }, item) => !searchText || item.name.includes(searchText)}
+            />,
+            <SelectTreeField name="organization" label="组织架构" isPopup={isPopup} options={organizationTree} />,
+            <SelectCascaderField name="region" label="工作地区" rule="REQ" isPopup={isPopup} options={regionData} onlyAllowLastLevel />
+          ]}
+        />
+        <FormInfo
+          title="SuperSelectPlus 字段"
+          subtitle="@kne/super-select-plus 业务选择器封装成 Field"
+          column={2}
+          list={[
+            <SelectAddressField name="city" label="期望城市" rule="REQ" isPopup={isPopup} maxLength={5} />,
+            <SelectAddressField name="currentCity" label="现居城市" single isPopup={isPopup} />,
+            <SelectFunctionField name="function" label="期望职能" rule="REQ" isPopup={isPopup} maxLength={3} />,
+            <SelectIndustryField name="industry" label="期望行业" isPopup={isPopup} />
+          ]}
+        />
+        <Flex justify="center" gap={12} style={{ marginTop: 24 }}>
+          <SubmitButton>提交</SubmitButton>
+          <ResetButton>重置</ResetButton>
+        </Flex>
+      </Form>
+    </Flex>
+  );
+};
+
+render(<BaseExample />);
 
 ```
 
@@ -1372,6 +1620,7 @@ render(<BorderedExample />);
 | 属性名 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
 | type | 表单类型 | `string` | `inner` |
+| mobile | 传 `false` 关闭本表单的移动端布局（如登录页）：不强制单列、不套纵向卡片样式、Steps/TableList 按桌面端处理；Select 弹层遮罩、16px 字号等字段级移动端优化不受影响 | `boolean` | - |
 | className | 自定义样式类名 | `string` | - |
 | children | 子节点 | `ReactNode` | - |
 | onSubmit | 提交回调 | `(data, ...args) => any` | - |
@@ -1387,7 +1636,7 @@ render(<BorderedExample />);
 | open | 是否显示 | `boolean` | `false` |
 | title | 弹窗标题 | `ReactNode` | - |
 | onCancel | 关闭回调 | `() => void` | - |
-| formProps | 透传给内部 Form 的属性（含 `data`、`onSubmit` 等） | `object` | `{}` |
+| formProps | 透传给内部 Form 的属性（含 `data`、`onSubmit`、`mobile` 等） | `object` | `{}` |
 | autoClose | 提交成功后自动关闭 | `boolean` | `true` |
 | okType | 确认按钮类型 | `string` | `primary` |
 | okText | 确认按钮文案 | `string \| ReactNode` | 提交 |
@@ -1398,7 +1647,7 @@ render(<BorderedExample />);
 | footer | 底部区域；可为函数 `({ defaultFooter, props }) => ReactNode` | `ReactNode \| function` | - |
 | renderModal | 自定义整窗渲染。除 antd Modal 参数外，会传入 `formProps`、`cancelText`、`saveText`、`autoClose`；默认实现会剥掉这些字段再交给 antd Modal | `(props) => ReactNode` | - |
 | modalRender | 自定义内容渲染 `({ formChildren, defaultChildren, props })` | `function` | - |
-| width / centered / closable / maskClosable / destroyOnClose / className | 透传 antd Modal | - | - |
+| width / centered / closable / mask / destroyOnHidden / className | 透传 antd Modal | - | - |
 
 #### FormSteps
 
@@ -1410,11 +1659,12 @@ render(<BorderedExample />);
 | current | 受控当前步骤 | `number` | - |
 | defaultCurrent | 默认步骤 | `number` | `0` |
 | autoStep | 提交成功后自动进入下一步 / 触发完成 | `boolean` | `true` |
-| direction / orientation | 步骤条方向。未指定时桌面横排、放不下自动竖排，移动端竖排；`horizontal` 强制横排；`vertical` 强制竖排 | `string` | - |
+| orientation | 步骤条方向。未指定时桌面横排、放不下自动竖排，移动端竖排；`horizontal` 强制横排；`vertical` 强制竖排 | `string` | - |
 | onChange | 步骤变化 | `(current: number) => void` | - |
 | onComplete | 最后一步完成回调，参数为各步缓存 | `(stepCache) => void` | - |
 | stepsClassName | 步骤条样式类名 | `string` | - |
 | className | 外层样式类名 | `string` | - |
+| mobile | 传 `false` 关闭移动端布局：步骤条按桌面端处理，并透传给各步 Form（`items[].formProps.mobile` 优先）；FormStepsModal 同样支持 | `boolean` | - |
 | children | 自定义包裹渲染；可为函数 | `ReactNode \| function` | - |
 
 每个 `items[]` 项：
@@ -1446,7 +1696,7 @@ render(<BorderedExample />);
 | current | 受控当前步骤 | `number` | - |
 | defaultCurrent | 默认步骤 | `number` | `0` |
 | onChange | 步骤变化 | `(current: number) => void` | - |
-| direction / orientation | 步骤条方向。未指定时桌面横排、放不下自动竖排，移动端竖排；`horizontal` 强制横排；`vertical` 强制竖排 | `string` | - |
+| orientation | 步骤条方向。未指定时桌面横排、放不下自动竖排，移动端竖排；`horizontal` 强制横排；`vertical` 强制竖排 | `string` | - |
 | showActions | 是否显示上一步 / 下一步 | `boolean` | `true` |
 | prevText / nextText | 按钮文案 | `string \| ReactNode` | 上一步 / 下一步 |
 | prevIcon / nextIcon | 按钮图标 | `ReactNode` | - |
