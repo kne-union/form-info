@@ -107,11 +107,11 @@
           "description": "是否显示关闭按钮",
           "type": "boolean"
         },
-        "maskClosable": {
-          "description": "点击蒙层是否关闭模态框",
-          "type": "boolean"
+        "mask": {
+          "description": "遮罩配置，mask.closable 控制点击蒙层是否关闭",
+          "type": "boolean | object"
         },
-        "destroyOnClose": {
+        "destroyOnHidden": {
           "description": "关闭时是否销毁子元素",
           "type": "boolean"
         },
@@ -140,10 +140,6 @@
         "autoStep": {
           "description": "是否自动切换到下一步",
           "type": "boolean"
-        },
-        "direction": {
-          "description": "步骤条方向",
-          "type": "string"
         },
         "orientation": {
           "description": "步骤条朝向",

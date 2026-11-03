@@ -1,5 +1,5 @@
 const {default: FormInfo, List, TableList, MultiField, Form, Input, TextArea, SubmitButton, ResetButton} = _FormInfo;
-const {Flex, message, Divider, Switch, Space} = antd;
+const {Flex, message, Switch, Space} = antd;
 const {useState} = React;
 
 const BaseExample = () => {
@@ -50,8 +50,6 @@ const BaseExample = () => {
             ]}
         />
         
-        <Divider />
-        
         <List 
             title="工作经历" 
             name="workExperience"
@@ -80,8 +78,6 @@ const BaseExample = () => {
             ]}
         />
         
-        <Divider />
-        
         <TableList 
             title="家庭成员信息" 
             name="familyMembers"
@@ -95,8 +91,6 @@ const BaseExample = () => {
                 <Input name="workUnit" label="工作单位" placeholder="工作单位名称" />
             ]}
         />
-        
-        <Divider />
         
         <FormInfo 
             title="紧急联系人" 

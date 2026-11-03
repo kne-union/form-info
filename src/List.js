@@ -10,6 +10,7 @@ import { useIntl } from '@kne/react-intl';
 import '@kne/info-page/dist/index.css';
 import style from './style.module.scss';
 import { markNestBlock, decorateNestBlocks, NEST_DEPTH_BEYOND, isNestBlockType } from './nestBlock';
+import scrollToAdded from './scrollToAdded';
 
 const List = withLocale(p => {
   const { formatMessage } = useIntl();
@@ -160,7 +161,7 @@ const List = withLocale(p => {
             extra={
               <div className={style['extra-container']}>
                 {allowAdd && (
-                  <Button className={style['extra-btn']} icon={addIcon} onClick={onAdd}>
+                  <Button className={style['extra-btn']} icon={addIcon} onClick={e => scrollToAdded(e.currentTarget.closest('.part'), `.${style['list-item']}`, onAdd)}>
                     {addText}
                   </Button>
                 )}

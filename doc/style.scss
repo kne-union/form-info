@@ -7,3 +7,32 @@
     box-sizing: border-box;
   }
 }
+
+// TODO 临时验收：远程 components-core 内旧版 super-select 同名类会盖掉 --super-select-input-* 变量规则，清理 components-core 后删除
+.kne-super-select_d8lGc.kne-super-select_d8lGc {
+  background-color: var(--super-select-input-bg, #fff);
+  color: var(--super-select-input-color, inherit);
+  border: 1px solid var(--super-select-input-border-color, var(--font-color-grey-3));
+  padding: 0 var(--super-select-input-padding-x, var(--padding-x));
+
+  &:not(.kne-super-select_3kjwO):hover {
+    border-color: var(--super-select-input-hover-border-color, var(--primary-color));
+  }
+
+  &.kne-super-select_3kjwO {
+    background: var(--super-select-input-disabled-bg, var(--bg-color-grey-2));
+    color: var(--super-select-input-disabled-color, var(--font-color-grey-2));
+  }
+}
+
+.kne-super-select_g8QC-.kne-super-select_g8QC- {
+  color: var(--super-select-input-icon-color, var(--font-color-grey-2));
+}
+
+.kne-super-select_r3q69.kne-super-select_r3q69 {
+  color: var(--super-select-input-placeholder-color, var(--font-color-grey-2));
+}
+
+.kne-super-select_704J1.kne-super-select_HYGUN .kne-super-select_temy6.kne-super-select_temy6.is-popup {
+  padding: 12px;
+}

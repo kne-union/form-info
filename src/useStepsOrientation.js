@@ -4,14 +4,14 @@ import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 /**
  * Steps 方向：
  * - 未指定：桌面横排，放不下自动竖排；移动端竖排
- * - orientation/direction = vertical：强制竖排
- * - orientation/direction = horizontal：强制横排（含移动端，不自动切换）
+ * - orientation = vertical：强制竖排
+ * - orientation = horizontal：强制横排（含移动端，不自动切换）
+ * - mobile = false：按桌面端处理
  */
-const useStepsOrientation = ({ direction, orientation, items }) => {
-  const isMobile = useIsMobile();
-  const preferred = direction || orientation;
-  const forceHorizontal = preferred === 'horizontal';
-  const forceVertical = preferred === 'vertical';
+const useStepsOrientation = ({ orientation, items, mobile }) => {
+  const isMobile = useIsMobile() && mobile !== false;
+  const forceHorizontal = orientation === 'horizontal';
+  const forceVertical = orientation === 'vertical';
   const auto = !forceHorizontal && !forceVertical;
 
   const [overflowVertical, setOverflowVertical] = useState(false);

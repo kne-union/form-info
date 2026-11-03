@@ -20,6 +20,7 @@
 | 属性名 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
 | type | 表单类型 | `string` | `inner` |
+| mobile | 传 `false` 关闭本表单的移动端布局（如登录页）：不强制单列、不套纵向卡片样式、Steps/TableList 按桌面端处理；Select 弹层遮罩、16px 字号等字段级移动端优化不受影响 | `boolean` | - |
 | className | 自定义样式类名 | `string` | - |
 | children | 子节点 | `ReactNode` | - |
 | onSubmit | 提交回调 | `(data, ...args) => any` | - |
@@ -35,7 +36,7 @@
 | open | 是否显示 | `boolean` | `false` |
 | title | 弹窗标题 | `ReactNode` | - |
 | onCancel | 关闭回调 | `() => void` | - |
-| formProps | 透传给内部 Form 的属性（含 `data`、`onSubmit` 等） | `object` | `{}` |
+| formProps | 透传给内部 Form 的属性（含 `data`、`onSubmit`、`mobile` 等） | `object` | `{}` |
 | autoClose | 提交成功后自动关闭 | `boolean` | `true` |
 | okType | 确认按钮类型 | `string` | `primary` |
 | okText | 确认按钮文案 | `string \| ReactNode` | 提交 |
@@ -46,7 +47,7 @@
 | footer | 底部区域；可为函数 `({ defaultFooter, props }) => ReactNode` | `ReactNode \| function` | - |
 | renderModal | 自定义整窗渲染。除 antd Modal 参数外，会传入 `formProps`、`cancelText`、`saveText`、`autoClose`；默认实现会剥掉这些字段再交给 antd Modal | `(props) => ReactNode` | - |
 | modalRender | 自定义内容渲染 `({ formChildren, defaultChildren, props })` | `function` | - |
-| width / centered / closable / maskClosable / destroyOnClose / className | 透传 antd Modal | - | - |
+| width / centered / closable / mask / destroyOnHidden / className | 透传 antd Modal | - | - |
 
 ### FormSteps
 
@@ -58,11 +59,12 @@
 | current | 受控当前步骤 | `number` | - |
 | defaultCurrent | 默认步骤 | `number` | `0` |
 | autoStep | 提交成功后自动进入下一步 / 触发完成 | `boolean` | `true` |
-| direction / orientation | 步骤条方向。未指定时桌面横排、放不下自动竖排，移动端竖排；`horizontal` 强制横排；`vertical` 强制竖排 | `string` | - |
+| orientation | 步骤条方向。未指定时桌面横排、放不下自动竖排，移动端竖排；`horizontal` 强制横排；`vertical` 强制竖排 | `string` | - |
 | onChange | 步骤变化 | `(current: number) => void` | - |
 | onComplete | 最后一步完成回调，参数为各步缓存 | `(stepCache) => void` | - |
 | stepsClassName | 步骤条样式类名 | `string` | - |
 | className | 外层样式类名 | `string` | - |
+| mobile | 传 `false` 关闭移动端布局：步骤条按桌面端处理，并透传给各步 Form（`items[].formProps.mobile` 优先）；FormStepsModal 同样支持 | `boolean` | - |
 | children | 自定义包裹渲染；可为函数 | `ReactNode \| function` | - |
 
 每个 `items[]` 项：
@@ -94,7 +96,7 @@
 | current | 受控当前步骤 | `number` | - |
 | defaultCurrent | 默认步骤 | `number` | `0` |
 | onChange | 步骤变化 | `(current: number) => void` | - |
-| direction / orientation | 步骤条方向。未指定时桌面横排、放不下自动竖排，移动端竖排；`horizontal` 强制横排；`vertical` 强制竖排 | `string` | - |
+| orientation | 步骤条方向。未指定时桌面横排、放不下自动竖排，移动端竖排；`horizontal` 强制横排；`vertical` 强制竖排 | `string` | - |
 | showActions | 是否显示上一步 / 下一步 | `boolean` | `true` |
 | prevText / nextText | 按钮文案 | `string \| ReactNode` | 上一步 / 下一步 |
 | prevIcon / nextIcon | 按钮图标 | `ReactNode` | - |

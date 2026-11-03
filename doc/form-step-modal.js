@@ -1,5 +1,5 @@
 const { default: FormInfo, FormStepsModal, List, Input, TextArea, Select, DatePicker } = _FormInfo;
-const { Flex, Button, Space, message, Divider, Result } = antd;
+const { Flex, Button, Space, message, Result } = antd;
 const { useState } = React;
 
 const BaseExample = () => {
@@ -56,7 +56,7 @@ const BaseExample = () => {
   };
 
   return (
-    <Space direction="vertical" size="middle">
+    <Space orientation="vertical" size="middle">
       <Button 
         type="primary" 
         size="large"
@@ -74,7 +74,7 @@ const BaseExample = () => {
           title: '项目立项申请',
           onCancel: () => onOpenChange(false),
           width: 900,
-          destroyOnClose: false
+          destroyOnHidden: false
         }}
         items={[
           {
@@ -98,7 +98,6 @@ const BaseExample = () => {
                     <Input name="projectManager" label="项目经理" rule="REQ" placeholder="项目负责人" />
                   ]}
                 />
-                <Divider />
                 <FormInfo 
                   title="项目背景" 
                   column={1}
@@ -131,7 +130,6 @@ const BaseExample = () => {
                     <Input name="sponsorDept" label="发起人部门" rule="REQ" placeholder="所属部门" />
                   ]}
                 />
-                <Divider />
                 <List 
                   title="项目团队成员" 
                   name="teamMembers"
@@ -188,7 +186,6 @@ const BaseExample = () => {
                     />
                   ]}
                 />
-                <Divider />
                 <List 
                   title="里程碑计划" 
                   name="milestones"
