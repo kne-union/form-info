@@ -16,13 +16,26 @@ $nest-radius: var(--radius-default, 8px);
   height: 28px;
   padding: 0 10px !important;
   font-size: 13px;
-  line-height: 26px;
-  border: 1px solid var(--font-color-grey-2, #d9d9d9) !important;
+  line-height: 28px;
   border-radius: var(--radius-default, 4px) !important;
-  background: #fff !important;
   min-width: auto !important;
-  box-shadow: none !important;
 }
+
+// 布局类移动端规则：Form mobile={false}（.is-mobile-disabled）时不生效；字段级（字号等）由 react-form-antd 负责
+// 双通道：弹层挂在 body 时不在 kne-responsive 容器内，需同时按 Form 的 is-mobile 类生效
+@mixin form-mobile-layout {
+  &:global(.is-mobile:not(.is-mobile-disabled)) {
+    @content;
+  }
+
+  @include resp.mobile-container {
+    &:global(:not(.is-mobile-disabled)) {
+      @content;
+    }
+  }
+}
+
+$mobile-divider: 1px solid #eee;
 
 @mixin nest-full-width {
   width: 100% !important;
@@ -99,36 +112,6 @@ $nest-radius: var(--radius-default, 8px);
       color: var(--font-color);
     }
   }
-
-  // 移动端表单控件 ≥16px，避免 iOS 聚焦时强制放大页面
-  @include resp.mobile-container {
-    :global {
-      .ant-input,
-      .ant-input-affix-wrapper,
-      .ant-input-number,
-      .ant-input-number-input,
-      .ant-input-textarea textarea,
-      textarea.ant-input,
-      .ant-select-selector,
-      .ant-select-selection-search-input,
-      .ant-picker,
-      .ant-picker-input > input,
-      .ant-mentions,
-      .ant-mentions textarea,
-      .react-form__field input,
-      .react-form__field textarea {
-        font-size: 16px !important;
-      }
-
-      .ant-row {
-        row-gap: 12px !important;
-      }
-
-      .react-form__field-label {
-        margin-bottom: 6px;
-      }
-    }
-  }
 }
 
 .form-info {
@@ -147,34 +130,28 @@ $nest-radius: var(--radius-default, 8px);
       max-width: 100%;
     }
   }
-
-  @include resp.mobile-container {
-    &:global(.ant-card) {
-      > :global(.ant-card-head) {
-        padding-inline: 0;
-        margin-bottom: 4px;
-      }
-
-      > :global(.ant-card-body) {
-        // 只改上边距，勿用 padding 简写盖掉 info-page .part.bordered 的左内边距
-        padding-top: 12px;
-      }
-    }
-  }
 }
 
+// 区块头「添加」按钮：浅主题色底、无边框（各层级通用）
 .extra-btn {
   &:global(.ant-btn) {
     border-radius: var(--radius-default, 2px);
-    border: 1px solid var(--font-color-grey-2);
+    border: none !important;
     padding: 6px 12px;
     box-shadow: none !important;
+    background: var(--primary-color-06) !important;
+    color: var(--primary-color) !important;
 
     &:hover,
     &:focus,
     &:active,
     &:focus-visible {
       box-shadow: none !important;
+    }
+
+    &:disabled {
+      background: rgba(0, 0, 0, 0.04) !important;
+      color: var(--font-color-grey-2, rgba(0, 0, 0, 0.25)) !important;
     }
   }
 }
@@ -190,178 +167,6 @@ $nest-radius: var(--radius-default, 8px);
       padding-top: 16px;
       padding-bottom: 0;
       border-radius: 0;
-    }
-  }
-
-  // 移动端：无边框；用色条 / 浅底 / 分隔线表达层级，并统一舒适间距
-  @include resp.mobile-container {
-    &:global(.ant-card) {
-      border: none !important;
-      box-shadow: none !important;
-      background: transparent;
-
-      > :global(.ant-card-head) {
-        padding: 0 0 4px;
-        min-height: auto;
-        background: transparent;
-        border-bottom: none;
-      }
-
-      > :global(.ant-card-body) {
-        padding-top: 12px;
-        padding-bottom: 0;
-      }
-    }
-
-    .list-item {
-      margin-bottom: 0;
-
-      &:not(:last-child) {
-        margin-bottom: 16px;
-        padding-bottom: 16px;
-        border-bottom: 1px dashed var(--font-color-grey-4, #f0f0f0);
-      }
-
-      .list-item-part {
-        &:global(.ant-card) {
-          // 保留桌面同级的灰底操作条高度，避免仅「删除」时被压成 ~22px
-          :global(.ant-card-head) {
-            height: auto;
-            min-height: 36px;
-            line-height: 1.5;
-            padding: 8px 12px;
-            margin-bottom: 0;
-            background: #f8f8f8;
-            border-bottom: none;
-            display: flex;
-            align-items: center;
-          }
-
-          // 字段之间留出呼吸感
-          :global(.ant-row) {
-            row-gap: 12px !important;
-          }
-
-          :global(.ant-col) {
-            padding-bottom: 4px;
-          }
-        }
-
-        // 移动端仍按外层 Part.bordered 区分
-        &.list-item-part-in-bordered:global(.ant-card) {
-          border: none !important;
-          box-shadow: none !important;
-          background: transparent;
-
-          :global(.ant-card-head) {
-            padding: 8px 0;
-          }
-
-          :global(.ant-card-body) {
-            padding: 4px 0 0 !important;
-          }
-        }
-
-        &.list-item-part-plain:global(.ant-card) {
-          padding: 0 !important;
-          border: 1px solid var(--font-color-grey-4) !important;
-          background: #fff;
-
-          :global(.ant-card-head) {
-            padding: 8px 12px;
-            border-radius: var(--radius-default, 8px) var(--radius-default, 8px) 0 0 !important;
-          }
-
-          :global(.ant-card-body) {
-            padding: 12px !important;
-          }
-        }
-
-        &.list-item-part-wraps-nest-beyond:global(.ant-card) :global(.ant-card-body) {
-          overflow: visible !important;
-        }
-      }
-
-      &.is-important {
-        > .list-item-part:global(.ant-card > .ant-card-head) {
-          background: #f8f8f8;
-          min-height: 36px;
-          padding: 8px 12px;
-
-          :global(.part-title) {
-            display: inline-block;
-            padding: 4px 10px;
-            border-radius: 12px;
-            background: var(--primary-color-06);
-            color: var(--primary-color);
-            font-size: var(--font-size-small, 12px);
-            line-height: 16px;
-          }
-        }
-      }
-    }
-
-    // 嵌套 List：左侧色条 + 浅底；Header 贴边满宽（padding 只放 body）
-    .list-part:not(.nest-beyond) {
-      @include nest-full-width;
-      margin: 12px 0 0;
-      border: none !important;
-      box-shadow: none !important;
-      border-radius: 8px;
-      background: var(--bg-color-grey-1, #fafafa);
-      border-left: 3px solid $nest-rail-blue !important;
-      overflow: hidden;
-
-      &:global(.ant-card) {
-        > :global(.ant-card-head) {
-          width: 100%;
-          margin: 0 !important;
-          padding: 8px 12px !important;
-          min-height: auto;
-          background: $nest-head-bg !important;
-          border-bottom: none;
-
-          :global(.part-title) {
-            font-size: var(--font-size-default, 14px);
-          }
-        }
-
-        > :global(.ant-card-body) {
-          padding: 12px 12px 12px 14px !important;
-        }
-      }
-
-      .list-item {
-        &:not(:last-child) {
-          margin-bottom: 12px;
-          padding-bottom: 12px;
-        }
-      }
-
-      .list-item-part.list-item-part-in-bordered {
-        border: none !important;
-        background: transparent;
-
-        &:global(.ant-card) {
-          :global(.ant-card-head),
-          :global(.ant-card-body) {
-            padding-left: 0;
-            padding-right: 0;
-          }
-        }
-      }
-
-      // 第 3 层起：橙色色条
-      .list-part:not(.nest-beyond) {
-        margin-top: 8px;
-        padding: 0 !important;
-        background: rgba(0, 0, 0, 0.02);
-        border-left-color: $nest-rail-orange !important;
-
-        &:global(.ant-card) > :global(.ant-card-body) {
-          padding: 10px 10px 10px 12px !important;
-        }
-      }
     }
   }
 }
@@ -1028,6 +833,7 @@ $nest-radius: var(--radius-default, 8px);
     }
   }
 
+  // 删除列的空 label 占位须与字段 label 等高，按钮才与输入框对齐
   .react-form__field-label {
     color: var(--font-color-grey);
     font-size: 14px;
@@ -1091,7 +897,7 @@ $nest-radius: var(--radius-default, 8px);
     }
   }
 
-  // JS is-mobile 与容器查询双通道：预览框/窄容器也能露出字段 label
+  // 卡片渲染（移动端）时带 is-mobile，露出字段 label
   &.is-mobile {
     :global {
       .react-form__field-label {
@@ -1099,52 +905,18 @@ $nest-radius: var(--radius-default, 8px);
       }
     }
   }
-
-  @include resp.mobile-container {
-    &:global(.ant-card) {
-      border: none !important;
-      box-shadow: none !important;
-      background: transparent;
-
-      > :global(.ant-card-head) {
-        padding: 0 0 4px;
-        min-height: auto;
-        background: transparent;
-        border-bottom: none;
-      }
-
-      > :global(.ant-card-body) {
-        padding: 12px 0 0;
-      }
-    }
-
-    :global {
-      .react-form__field-label {
-        display: block;
-      }
-    }
-
-    .table-list-inner {
-      border: none;
-    }
-  }
 }
 
 .table-list-mobile-list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
 }
 
 .table-list-mobile-card {
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  gap: 12px;
-  padding: 12px;
   background: #fff;
-  border: 1px solid var(--font-color-grey-4, #f0f0f0);
-  border-radius: var(--radius-default, 8px);
   box-sizing: border-box;
 }
 
@@ -1153,7 +925,6 @@ $nest-radius: var(--radius-default, 8px);
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 12px;
 }
 
 .table-list-mobile-field {
@@ -1164,11 +935,21 @@ $nest-radius: var(--radius-default, 8px);
 .table-list-mobile-actions {
   display: flex;
   align-items: center;
-  justify-content: center;
   width: 100%;
-  padding-top: 8px;
-  margin-top: 4px;
-  border-top: 1px solid var(--font-color-grey-4, #f0f0f0);
+  padding: 12px 0;
+
+  :global(.ant-btn),
+  :global(.ant-btn:not(:disabled):hover),
+  :global(.ant-btn:not(:disabled):active) {
+    width: 100%;
+    height: 40px;
+    border-radius: 4px;
+    background: rgba(255, 49, 65, 0.06);
+  }
+
+  :global(.ant-btn:disabled) {
+    background: rgba(0, 0, 0, 0.03);
+  }
 }
 
 .table-list-inner {
@@ -1443,10 +1224,6 @@ $nest-radius: var(--radius-default, 8px);
 .steps-modal .steps {
   padding: 0 100px;
 
-  @include resp.mobile-container {
-    padding: 0;
-  }
-
   &.steps-vertical {
     padding: 0;
   }
@@ -1525,13 +1302,23 @@ $nest-radius: var(--radius-default, 8px);
   }
 }
 
+// 圆形序号徽标；margin-top 让 20px 徽标与 22px 行高的标题居中对齐
 .editable-list-item-index {
   flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   min-width: 20px;
-  line-height: 22px;
-  color: var(--font-color-grey);
-  font-size: var(--font-size-default, 14px);
+  height: 20px;
+  margin-top: 1px;
+  padding: 0 6px;
+  border-radius: 10px;
+  box-sizing: border-box;
+  background: var(--primary-color-06);
+  color: var(--primary-color);
+  font-size: var(--font-size-small, 12px);
   font-weight: 500;
+  line-height: 20px;
 }
 
 .editable-list-item-main {
@@ -1587,17 +1374,264 @@ $nest-radius: var(--radius-default, 8px);
   margin-top: 4px;
 }
 
-@include resp.mobile-container {
-  .editable-list-item {
-    flex-wrap: wrap;
-  }
-
-  .editable-list-item-actions {
-    width: 100%;
-    justify-content: flex-end;
-  }
-}
-
 .extra-container {
   min-height: 32px;
+}
+
+// 移动端布局（唯一入口）：各层 Part 平铺，不做描边和左右缩进，水平留白交给页面容器
+// 分隔线只画在同一区块内两行之间（:not(:last-child)），区块末尾和 Part 自身都不画
+.form-outer {
+  @include form-mobile-layout {
+    :global {
+      // :not(#_) 抬高优先级，压过上方桌面 / 各层级嵌套规则的 !important
+      .part:not(#_) {
+        border: none !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+      }
+
+      .part.bordered:not(#_) {
+        padding-right: 0 !important;
+
+        > .ant-card-body {
+          padding-left: 0 !important;
+        }
+      }
+
+      .part .part:not(#_) {
+        margin-inline: 0 !important;
+        padding-inline: 0 !important;
+        background: transparent !important;
+
+        > .ant-card-head,
+        > .ant-card-body {
+          margin-inline: 0 !important;
+          padding-inline: 0 !important;
+          border-left: none !important;
+          border-right: none !important;
+          border-radius: 0 !important;
+          background: transparent !important;
+        }
+      }
+
+      .part .ant-row {
+        row-gap: 0 !important;
+        margin-inline: 0 !important;
+      }
+
+      .part .ant-row > .ant-col {
+        padding-inline: 0 !important;
+      }
+
+      // 字段独占一个 Col 时都是 :last-child，分隔线按 Col 补回；MultiField 以整行添加按钮收尾，不再画线
+      .ant-row > .ant-col:not(:last-child) > .react-form__field {
+        border-bottom: $mobile-divider;
+      }
+    }
+
+    .form-info:global(.ant-card) {
+      > :global(.ant-card-head) {
+        margin-bottom: 4px;
+      }
+
+      > :global(.ant-card-body) {
+        padding-top: 12px;
+      }
+    }
+
+    // List / TableList 区块头：去底色和分隔线，只留竖向节奏
+    .list-part,
+    .table-list {
+      &:global(.ant-card) {
+        background: transparent;
+
+        > :global(.ant-card-head) {
+          padding: 0 0 4px;
+          min-height: auto;
+          background: transparent;
+          border-bottom: none;
+        }
+
+        > :global(.ant-card-body) {
+          padding-block: 12px 0;
+        }
+      }
+    }
+
+    .table-list-inner {
+      border: none;
+    }
+
+    // 保留操作条高度，避免仅「删除」时被压成 ~22px
+    .list-item-part:global(.ant-card) {
+      > :global(.ant-card-head) {
+        display: flex;
+        align-items: center;
+        height: auto !important;
+        min-height: 36px !important;
+        margin-bottom: 0;
+        padding-block: 8px !important;
+        line-height: 1.5;
+      }
+
+      > :global(.ant-card-body) {
+        padding-block: 0 !important;
+      }
+    }
+
+    .list-item-part-wraps-nest-beyond:global(.ant-card) :global(.ant-card-body) {
+      overflow: visible !important;
+    }
+
+    .list-part .list-part:not(.nest-beyond) {
+      @include nest-full-width;
+      margin: 12px 0 0;
+
+      &:global(.ant-card) {
+        > :global(.ant-card-head) {
+          padding-block: 8px !important;
+
+          :global(.part-title) {
+            font-size: var(--font-size-default, 14px);
+          }
+        }
+
+        > :global(.ant-card-body) {
+          padding-block: 0 !important;
+        }
+      }
+    }
+
+    .steps-modal .steps {
+      padding: 0;
+    }
+
+    // 每项以带背景的标题条起头，项之间不再画分隔线
+    .list-item:not(#_) {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
+
+      > .list-item-part:global(.ant-card) > :global(.ant-card-head) {
+        padding-inline: 12px !important;
+        border-radius: 4px !important;
+        background: #f5f5f5 !important;
+      }
+
+      &.is-important > .list-item-part:global(.ant-card) > :global(.ant-card-head) {
+        background: var(--primary-color-06) !important;
+      }
+    }
+
+    // 卡片内每个字段都被单独包裹（均为 :last-child），按包裹层补回；最后一个字段和卡片之间由整行删除块隔开，不画线
+    .table-list-mobile-field:not(:last-child) :global(.react-form__field):not(#_) {
+      border-bottom: $mobile-divider;
+    }
+
+    .multi-field-item {
+      align-items: flex-end;
+      gap: 12px;
+
+      // 与添加按钮同级，:last-child 不可靠；只在相邻两项之间画线
+      & + .multi-field-item {
+        border-top: $mobile-divider;
+      }
+
+      :global(.react-form__field):not(#_) {
+        border-bottom: none;
+      }
+
+      :global(.multi-field-delete-label) {
+        display: none;
+      }
+
+      > div:last-child {
+        padding-bottom: 12px;
+      }
+
+      > div:last-child > :global(.ant-btn) {
+        width: auto;
+        height: 32px;
+        padding: 0 4px;
+        border: none;
+        background: transparent;
+        box-shadow: none;
+        color: #999;
+      }
+    }
+
+    .multi-field-empty {
+      padding-top: 12px;
+
+      :global(.ant-empty) {
+        display: none;
+      }
+    }
+
+    .multi-field-add-btn:global(.ant-btn) {
+      &,
+      &:not(:disabled):hover,
+      &:not(:disabled):active {
+        width: 100%;
+        height: 40px;
+        margin: 8px 0 12px;
+        padding: 0;
+        border: none;
+        border-radius: 4px;
+        background: var(--primary-color-06);
+        box-shadow: none;
+        color: var(--primary-color, #1677ff);
+      }
+    }
+
+    // 与 List 子项标题条一致
+    .editable-list-edit-header {
+      align-items: center;
+      min-height: 36px;
+      margin-bottom: 0;
+      padding: 8px 12px;
+      border-radius: 4px;
+      background: #f5f5f5;
+      box-sizing: border-box;
+    }
+
+    // 行内编辑的保存是 SubmitButton，会吃到表单级整行大按钮样式，这里与取消并排等分
+    .editable-list-edit-actions {
+      gap: 12px;
+      margin-top: 12px;
+      padding-bottom: 12px;
+
+      > :global(.ant-btn):not(#_) {
+        flex: 1;
+        width: auto;
+        height: 40px;
+        font-size: 15px;
+        border-radius: 4px;
+      }
+    }
+
+    .editable-list-rows {
+      gap: 0;
+    }
+
+    .editable-list-rows-scroll {
+      padding-right: 0;
+    }
+
+    .editable-list-item {
+      flex-wrap: wrap;
+      padding-inline: 0;
+      border: none;
+      border-radius: 0;
+
+      &:not(:last-child) {
+        border-bottom: $mobile-divider;
+      }
+    }
+
+    .editable-list-item-actions {
+      width: 100%;
+      justify-content: flex-end;
+    }
+  }
 }

@@ -1,5 +1,5 @@
 const {default: FormInfo, List, TableList, Form, Input, TextArea} = _FormInfo;
-const {Flex, Switch, Space, Divider} = antd;
+const {Flex, Switch, Space} = antd;
 const {useState} = React;
 
 const BorderedExample = () => {
@@ -29,9 +29,6 @@ const BorderedExample = () => {
                     <Input name="position" label="职位" rule="REQ" placeholder="例如：高级前端工程师" />
                 ]}
             />
-
-            <Divider />
-
             <List
                 title="工作经历（important）"
                 name="workExperience"
@@ -58,9 +55,6 @@ const BorderedExample = () => {
                     <Input name="degree" label="学历" rule="REQ" placeholder="例如：本科" />
                 ]}
             />
-
-            <Divider />
-
             <TableList
                 title="家庭成员信息"
                 name="familyMembers"

@@ -114,7 +114,6 @@ const Steps = withLocale(p => {
   });
 
   const { stepsOrientation, isVerticalSteps, containerRef, stepsRef } = useStepsOrientation({
-    direction: stepProps.direction,
     orientation: stepProps.orientation,
     items
   });
@@ -188,9 +187,8 @@ const Steps = withLocale(p => {
           <div ref={containerRef} className={style['steps-nav']}>
             <div ref={stepsRef} className={style['steps-measure']}>
               <AntSteps
-                {...omit(stepProps, ['current', 'defaultCurrent', 'onChange', 'direction', 'orientation', 'items'])}
+                {...omit(stepProps, ['current', 'defaultCurrent', 'onChange', 'orientation', 'items'])}
                 current={currentStep}
-                direction={stepsOrientation}
                 orientation={stepsOrientation}
                 className={classnames('kne-form-steps', stepsClassName, style['steps'], {
                   [style['steps-vertical']]: isVerticalSteps

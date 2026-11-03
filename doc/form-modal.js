@@ -1,6 +1,6 @@
 const {default: FormInfo, FormModal, List, Input, TextArea, SubmitButton} = _FormInfo;
 const {useState} = React;
-const {Button, Space, message, Divider, Switch} = antd;
+const {Button, Space, message, Switch} = antd;
 
 const BaseExample = () => {
     const [open, onOpenChange] = useState(false);
@@ -69,7 +69,7 @@ const BaseExample = () => {
     );
 
     return <>
-        <Space direction="vertical" size="middle">
+        <Space orientation="vertical" size="middle">
             <div>
                 <Space>
                     <span>自动关闭:</span>
@@ -113,9 +113,6 @@ const BaseExample = () => {
                     <TextArea name="remarks" label="备注" placeholder="备注信息" block />
                 ]}
             />
-            
-            <Divider />
-            
             <List
                 title="工作经历" 
                 name="workExperience"

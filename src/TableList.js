@@ -3,7 +3,7 @@ import InfoPage from '@kne/info-page';
 import { Empty, Row, Col, Button } from 'antd';
 import { TableList as TableListBase, FieldList, SubList } from '@kne/react-form-plus';
 import TableView, { isRenderMobileActive, resolveRenderMobile } from '@kne/table-view';
-import { useIsMobile } from '@kne/responsive-utils';
+import { useFormIsMobile, useFormMobile } from '@kne/react-form-antd';
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { useIntl } from '@kne/react-intl';
 import withLocale from './withLocale';
@@ -12,6 +12,7 @@ import '@kne/info-page/dist/index.css';
 import '@kne/table-view/dist/index.css';
 import style from './style.module.scss';
 import { markNestBlock } from './nestBlock';
+import scrollToAdded from './scrollToAdded';
 
 /** 亚像素/边框舍入不算溢出，避免无意义浮动 */
 const isHorizontallyOverflowing = el => el && el.scrollWidth - el.clientWidth > 8;
@@ -63,7 +64,8 @@ const TableList = withLocale(p => {
     p
   );
 
-  const isMobile = useIsMobile();
+  const isMobile = useFormIsMobile();
+  const formMobile = useFormMobile();
   const useMobileRender = isRenderMobileActive(renderMobile, isMobile);
   const resolvedRenderMobile = useMemo(() => resolveRenderMobile(renderMobile), [renderMobile]);
   const columns = useMemo(() => buildColumns(list, { removeText }), [list, removeText]);
@@ -104,7 +106,7 @@ const TableList = withLocale(p => {
       extra={
         <div className={style['extra-container']}>
           {allowAdd && (
-            <Button className={style['extra-btn']} icon={addIcon} onClick={onAdd}>
+            <Button className={style['extra-btn']} icon={addIcon} onClick={e => scrollToAdded(e.currentTarget.closest('.part'), `.table-list-row, .${style['table-list-mobile-card']}`, onAdd)}>
               {addText}
             </Button>
           )}
@@ -144,7 +146,7 @@ const TableList = withLocale(p => {
       }}
       listRender={(children, { id, onRemove, allowRemove }) => {
         return (
-          <Row key={id} wrap={false} align="top">
+          <Row key={id} className="table-list-row" wrap={false} align="top">
             {children}
             <Col className={style['table-options']}>
               <Button type="link" onClick={onRemove} danger disabled={!allowRemove} icon={removeIcon}>
@@ -206,8 +208,9 @@ const TableList = withLocale(p => {
     </SubList>
   );
 
-  // 交给 TableView + useIsMobile（viewport/container）决定是否走移动端；勿在外层提前关掉
-  const tableViewRenderMobile = renderMobile === false ? false : typeof resolvedRenderMobile === 'function' ? resolvedRenderMobile : renderMobile === true || resolvedRenderMobile === true ? () => renderMobileList() : false;
+  // 交给 TableView + useIsMobile（viewport/container）决定是否走移动端；勿在外层提前关掉（Form mobile={false} 除外）
+  const tableViewRenderMobile =
+    renderMobile === false || formMobile === false ? false : typeof resolvedRenderMobile === 'function' ? resolvedRenderMobile : renderMobile === true || resolvedRenderMobile === true ? () => renderMobileList() : false;
 
   return <TableView columns={columns} dataSource={[]} empty={null} className={style['table-list-view']} renderMobile={tableViewRenderMobile} render={() => renderDesktop()} />;
 });

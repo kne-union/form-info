@@ -205,8 +205,6 @@ const BaseExample = () => {
                 />
             </Card>
 
-            <Divider />
-
             {/* 垂直方向步骤表单 */}
             <Card title="员工入职办理流程（垂直布局）">
                 <FormSteps 

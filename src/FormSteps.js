@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import { Steps as AntSteps, Flex } from 'antd';
 import { useIsMobile } from '@kne/responsive-utils';
+import { useFormMobile } from '@kne/react-form-antd';
 import Form from './Form';
 import EmbedSteps from './Steps';
 import useControlValue from '@kne/use-control-value';
@@ -10,7 +11,15 @@ import useStepsOrientation from './useStepsOrientation';
 import style from './style.module.scss';
 
 const FormSteps = p => {
-  const { className, stepsClassName, autoStep, onComplete, children, ...stepProps } = Object.assign(
+  const {
+    className,
+    stepsClassName,
+    autoStep,
+    onComplete,
+    children,
+    mobile: mobileProp,
+    ...stepProps
+  } = Object.assign(
     {},
     {
       autoStep: true,
@@ -20,7 +29,9 @@ const FormSteps = p => {
     },
     p
   );
-  const isMobile = useIsMobile();
+  const parentMobile = useFormMobile();
+  const mobile = mobileProp !== undefined ? mobileProp : parentMobile;
+  const isMobile = useIsMobile() && mobile !== false;
   const [currentStep, onStepChange] = useControlValue(stepProps, {
     value: 'current',
     defaultValue: 'defaultCurrent'
@@ -30,7 +41,7 @@ const FormSteps = p => {
 
   const isLastStep = currentStep === stepProps.items.length - 1;
 
-  const currentFormProps = Object.assign({}, stepProps.items[currentStep]?.formProps, {
+  const currentFormProps = Object.assign({ mobile }, stepProps.items[currentStep]?.formProps, {
     data: Object.assign({}, stepProps.items[currentStep]?.formProps?.data, stepCacheRef.current[currentStep]?.formData)
   });
 
@@ -52,9 +63,9 @@ const FormSteps = p => {
   });
 
   const { stepsOrientation, isVerticalSteps, overflowVertical, containerRef, stepsRef } = useStepsOrientation({
-    direction: stepProps.direction,
     orientation: stepProps.orientation,
-    items: stepProps.items
+    items: stepProps.items,
+    mobile
   });
 
   // 横排 / 移动端 / 溢出自动竖排：上下堆叠；宽屏强制竖排步骤条时可左右并排
@@ -65,8 +76,7 @@ const FormSteps = p => {
       <div ref={containerRef} className={style['steps-nav']}>
         <div ref={stepsRef} className={style['steps-measure']}>
           <AntSteps
-            {...omit(stepProps, ['current', 'defaultCurrent', 'onChange', 'direction', 'orientation'])}
-            direction={stepsOrientation}
+            {...omit(stepProps, ['current', 'defaultCurrent', 'onChange', 'orientation'])}
             orientation={stepsOrientation}
             className={classnames('kne-form-steps', stepsClassName, style['steps'], {
               [style['steps-vertical']]: isVerticalSteps

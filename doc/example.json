@@ -144,6 +144,24 @@
           "packageName": "@kne/current-lib_form-info/dist/index.css"
         }
       ]
+    },
+    {
+      "title": "移动端布局与登录场景",
+      "description": "移动端默认采用纵向卡片布局（label 在上、字段分隔线、按钮整宽、单列）；登录等场景在 Form 上传 mobile={false} 关闭布局适配，Select 弹层遮罩、16px 字号等字段级优化仍生效",
+      "code": "./mobile.js",
+      "scope": [
+        {
+          "name": "_FormInfo",
+          "packageName": "@kne/current-lib_form-info"
+        },
+        {
+          "name": "antd",
+          "packageName": "antd"
+        },
+        {
+          "packageName": "@kne/current-lib_form-info/dist/index.css"
+        }
+      ]
     }
   ]
 }

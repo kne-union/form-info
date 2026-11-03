@@ -10,7 +10,7 @@ import style from './style.module.scss';
 const MultiField = withLocale(p => {
   const { formatMessage } = useIntl();
 
-  const { className, addText, addIcon, removeIcon, removeText, ...others } = Object.assign(
+  const { className, addText, addIcon, removeIcon, removeText, empty, ...others } = Object.assign(
     {},
     {
       addText: formatMessage({ id: 'addText' }),
@@ -24,6 +24,12 @@ const MultiField = withLocale(p => {
   return (
     <MultiFieldBase
       {...others}
+      empty={
+        <div className={style['multi-field-empty']}>
+          {others.label && <div className="react-form__field-label">{others.label}</div>}
+          {empty}
+        </div>
+      }
       itemRender={(children, { id, allowRemove, onRemove }) => {
         return (
           <div key={id} className={classnames('multi-field-item', style['multi-field-item'])}>

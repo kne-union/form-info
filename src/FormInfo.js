@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import InfoPage from '@kne/info-page';
 import { useFlexBox } from '@kne/flex-box';
 import { FormInfo as FormInfoBase } from '@kne/react-form-plus';
-import { useIsMobile } from '@kne/responsive-utils';
+import { useFormIsMobile } from '@kne/react-form-antd';
 import { Row, Col } from 'antd';
 import classnames from 'classnames';
 import { isNestBlockType, markNestBlock, NEST_DEPTH_BEYOND } from './nestBlock';
@@ -20,7 +20,7 @@ const ensureNestBlocksFullWidth = list =>
 
 const FormInfo = props => {
   const { className, column, list, gap, bordered, nestDepth, ...others } = Object.assign({}, { column: 2, list: [] }, props);
-  const isMobile = useIsMobile();
+  const isMobile = useFormIsMobile();
   // 第二级起嵌套块不走 info-page bordered；样式由 SCSS 色条/子项 plain 负责
   const partBordered = typeof nestDepth === 'number' && nestDepth >= 1 ? false : bordered;
   const normalizedList = useMemo(() => ensureNestBlocksFullWidth(list), [list]);

@@ -17,6 +17,8 @@ export interface FormModalProps {
   formProps?: {
     onSubmit?: (data: any, context: any, ...args: any[]) => Promise<any> | any;
     data?: any;
+    /** 同 Form mobile */
+    mobile?: boolean;
     [key: string]: any;
   };
   autoClose?: boolean;
@@ -32,8 +34,8 @@ export interface FormModalProps {
   width?: string | number;
   centered?: boolean;
   closable?: boolean;
-  maskClosable?: boolean;
-  destroyOnClose?: boolean;
+  mask?: boolean | { closable?: boolean; blur?: boolean };
+  destroyOnHidden?: boolean;
   className?: string;
 }
 
@@ -53,13 +55,13 @@ export interface FormStepsProps {
   defaultCurrent?: number;
   autoStep?: boolean;
   /** 未指定：桌面横排、溢出自动竖排，移动端竖排；`horizontal` 强制横排；`vertical` 强制竖排 */
-  direction?: 'horizontal' | 'vertical' | string;
-  /** 同 direction */
   orientation?: 'horizontal' | 'vertical' | string;
   onChange?: (current: number) => void;
   onComplete?: (data: any[]) => void;
   stepsClassName?: string;
   className?: string;
+  /** 传 false 关闭移动端布局（步骤条按桌面端处理，并透传给各步 Form；items[].formProps.mobile 优先） */
+  mobile?: boolean;
   children?: ReactNode | ((props: any) => ReactNode);
 }
 
@@ -86,8 +88,6 @@ export interface StepsProps {
   defaultCurrent?: number;
   onChange?: (current: number) => void;
   /** 未指定：桌面横排、溢出自动竖排，移动端竖排；`horizontal` 强制横排；`vertical` 强制竖排 */
-  direction?: 'horizontal' | 'vertical' | string;
-  /** 同 direction */
   orientation?: 'horizontal' | 'vertical' | string;
   showActions?: boolean;
   prevText?: string | ReactNode;
@@ -110,6 +110,8 @@ export interface FormStepsModalProps {
   autoStep?: boolean;
   onComplete?: (data: any[]) => void;
   className?: string;
+  /** 同 FormSteps mobile */
+  mobile?: boolean;
 }
 
 export interface ListProps {
@@ -195,6 +197,8 @@ export interface MultiFieldProps {
 export interface FormProps {
   className?: string;
   type?: string;
+  /** 传 false 关闭本表单的移动端布局（如登录页）；Select 弹层遮罩、16px 字号等字段级优化不受影响 */
+  mobile?: boolean;
   children?: ReactNode;
   onSubmit?: (data: any, ...args: any[]) => Promise<any> | any;
   [key: string]: any;
