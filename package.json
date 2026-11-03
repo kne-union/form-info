@@ -1,6 +1,6 @@
 {
   "name": "@kne/form-info",
-  "version": "0.1.29",
+  "version": "0.1.30",
   "description": "构建一个更加美观的form表单组件",
   "syntax": {
     "esmodules": true
@@ -82,6 +82,9 @@
   "devDependencies": {
     "@kne/microbundle": "^0.15.5",
     "@kne/modules-dev": "^2.1.2",
+    "@kne/react-form-helper": "^3.0.4",
+    "@kne/super-select": "^0.1.51",
+    "@kne/super-select-plus": "^0.1.4",
     "cross-env": "^7.0.3",
     "husky": "^9.0.11",
     "npm-run-all": "^4.1.5",

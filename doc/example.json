@@ -162,6 +162,42 @@
           "packageName": "@kne/current-lib_form-info/dist/index.css"
         }
       ]
+    },
+    {
+      "title": "SuperSelect / SuperSelectPlus 字段",
+      "description": "将 @kne/super-select（列表、表格、树、级联）与 @kne/super-select-plus（城市、职能、行业）选择器通过 @kne/react-form-helper 的 hooks.useOnChange 封装成 Field，放入 FormInfo 展示 label、必填校验、编码回显，以及下拉/弹窗两种展示模式在 PC 与移动端的表现",
+      "code": "./super-select-field.js",
+      "scope": [
+        {
+          "name": "_FormInfo",
+          "packageName": "@kne/current-lib_form-info"
+        },
+        {
+          "name": "_SuperSelect",
+          "packageName": "@kne/super-select"
+        },
+        {
+          "name": "_SuperSelectPlus",
+          "packageName": "@kne/super-select-plus"
+        },
+        {
+          "name": "_ReactFormHelper",
+          "packageName": "@kne/react-form-helper"
+        },
+        {
+          "name": "antd",
+          "packageName": "antd"
+        },
+        {
+          "packageName": "@kne/current-lib_form-info/dist/index.css"
+        },
+        {
+          "packageName": "@kne/super-select/dist/index.css"
+        },
+        {
+          "packageName": "@kne/super-select-plus/dist/index.css"
+        }
+      ]
     }
   ]
 }
