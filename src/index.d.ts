@@ -180,6 +180,34 @@ export interface EditableListProps {
   [key: string]: any;
 }
 
+export interface MatrixScaleOption {
+  label: ReactNode;
+  value: string | number;
+}
+
+export interface MatrixScaleRow {
+  label: ReactNode;
+  name: string;
+}
+
+export interface MatrixScaleProps {
+  name: string;
+  title?: string | ReactNode;
+  /** 表头首列标题 */
+  rowTitle?: ReactNode;
+  rows: MatrixScaleRow[];
+  /** 选项组类字段（RadioGroup / CheckboxGroup）的选项，作为列；值为 { [row.name]: optionValue } */
+  options?: MatrixScaleOption[];
+  /** 传入后每格一个字段；值为 { [row.name]: { [column.name]: value } } */
+  columns?: MatrixScaleRow[];
+  /** 每行 / 每格使用的字段组件，默认 RadioGroup；可传 Input、InputNumber、Rate 等 */
+  field?: ComponentType<any>;
+  rule?: string | ((value: any, context: any) => any);
+  bordered?: boolean;
+  className?: string;
+  [key: string]: any;
+}
+
 export interface MultiFieldProps {
   className?: string;
   addText?: string | ((label: string) => string);
@@ -215,6 +243,7 @@ export declare const List: FC<ListProps>;
 export declare const SubList: FC<ListProps>;
 export declare const TableList: FC<TableListProps>;
 export declare const EditableList: FC<EditableListProps>;
+export declare const MatrixScale: FC<MatrixScaleProps>;
 export declare const MultiField: FC<MultiFieldProps>;
 export declare const Form: FC<FormProps>;
 

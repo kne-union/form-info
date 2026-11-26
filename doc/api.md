@@ -196,6 +196,29 @@
 | empty | 空状态 | `ReactNode` | `Empty` |
 | className | 样式类名 | `string` | - |
 
+### MatrixScale
+
+矩阵量表。每一行都是同一个字段，`field` 与 `MultiField` 一样可传任意字段组件（`RadioGroup`、`CheckboxGroup`、`Input`、`InputNumber`、`Rate` 等），其余属性（`rule`、`placeholder` 等）透传给每个字段。按传参分三种形态：
+
+- 传 `options`：选项组类字段，选项作为列，值为 `{ [row.name]: optionValue }`（单选 / 多选矩阵）
+- 传 `columns`：每个单元格一个字段，值为 `{ [row.name]: { [column.name]: value } }`（填空 / 数值矩阵）
+- 都不传：每行一个字段，值为 `{ [row.name]: value }`（如评分矩阵 `field={Rate}`）
+
+桌面端表头与各行列宽对齐，列过多时横向滚动、行标题列 sticky；移动端每行退回普通字段纵向排列。
+
+| 属性名 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| name | 字段名 | `string` | - |
+| title | 量表标题 | `string \| ReactNode` | - |
+| rowTitle | 表头首列标题 | `ReactNode` | - |
+| rows | 行配置 | `{ label: ReactNode; name: string }[]` | `[]` |
+| options | 选项组类字段的选项（作为列），每行共用 | `{ label: ReactNode; value: string \| number }[]` | - |
+| columns | 单元格列配置，传入后每格一个字段 | `{ label: ReactNode; name: string }[]` | - |
+| field | 每行 / 每格使用的字段组件 | `ComponentType` | `RadioGroup` |
+| rule | 字段校验规则，如 `REQ` 表示每行（每格）必填 | `string \| function` | - |
+| bordered | 外层 Part 是否边框 | `boolean` | - |
+| className | 样式类名 | `string` | - |
+
 ### MultiField
 
 同一字段可动态增减多条（同类型控件）。

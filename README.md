@@ -18,7 +18,7 @@ npm i --save @kne/form-info
 
 **美观优雅的界面设计** - 采用现代化的视觉风格，配合精心设计的间距、色彩和排版，让表单界面更加专业美观。
 
-**多样化的表单组件** - 提供 FormInfo、FormModal、FormSteps、FormStepsModal、List、TableList、EditableList、MultiField 等丰富的表单组件，满足各种复杂的业务场景需求。
+**多样化的表单组件** - 提供 FormInfo、FormModal、FormSteps、FormStepsModal、List、TableList、EditableList、MatrixScale、MultiField 等丰富的表单组件，满足各种复杂的业务场景需求。
 
 **灵活的布局系统** - 支持响应式网格布局和 Flexbox 布局，可以轻松实现单列、多列以及自定义复杂布局。
 
@@ -624,6 +624,161 @@ const EditableListExample = () => {
 };
 
 render(<EditableListExample />);
+
+```
+
+- 矩阵量表（MatrixScale）
+- 每一行都是同一个字段，field 与 MultiField 一样可自行传入：options 作列的单选 / 多选矩阵（RadioGroup、CheckboxGroup），field={Rate} 每行一个字段的评分矩阵，columns 每格一个字段的数值 / 填空矩阵（InputNumber、Input）；演示必填、选填、bordered，列多时横向滚动且行标题列 sticky，移动端纵向排列
+- _FormInfo(@kne/current-lib_form-info),antd(antd),(@kne/current-lib_form-info/dist/index.css)
+
+```jsx
+const { default: FormInfo, MatrixScale, Form, Input, InputNumber, Rate, CheckboxGroup, SubmitButton, ResetButton } = _FormInfo;
+const { Flex, message } = antd;
+
+const timeShareOptions = [
+  { label: '几乎没有（0%）', value: 'none' },
+  { label: '少量（1%-20%）', value: 'little' },
+  { label: '较少（21%-40%）', value: 'less' },
+  { label: '约一半（41%-60%）', value: 'half' },
+  { label: '较多（61%-80%）', value: 'more' },
+  { label: '大部分（81%-100%）', value: 'most' }
+];
+
+const activityRows = [
+  { label: '工作/学习', name: 'work' },
+  { label: '通勤', name: 'commute' },
+  { label: '家务/生活事务', name: 'housework' },
+  { label: '休闲娱乐', name: 'leisure' },
+  { label: '社交沟通', name: 'social' },
+  { label: '运动锻炼', name: 'exercise' },
+  { label: '睡眠休息', name: 'sleep' }
+];
+
+const satisfactionOptions = [
+  { label: '非常不满意', value: 1 },
+  { label: '不满意', value: 2 },
+  { label: '一般', value: 3 },
+  { label: '满意', value: 4 },
+  { label: '非常满意', value: 5 }
+];
+
+const channelOptions = [
+  { label: '手机', value: 'mobile' },
+  { label: '电脑', value: 'pc' },
+  { label: '平板', value: 'pad' },
+  { label: '电视', value: 'tv' }
+];
+
+const BaseExample = () => {
+  return (
+    <Form
+      data={{ timeShare: { work: 'most', sleep: 'half' } }}
+      onSubmit={data => {
+        console.log(data);
+        message.success('提交成功，数据见控制台');
+      }}
+    >
+      <FormInfo title="基本信息" list={[<Input name="nickname" label="昵称" rule="REQ" />]} />
+      <MatrixScale title="一天中各项活动的时间占比" name="timeShare" rowTitle="活动" rule="REQ" rows={activityRows} options={timeShareOptions} />
+      <MatrixScale
+        title="对以下服务的满意度（选填）"
+        name="satisfaction"
+        rowTitle="服务"
+        bordered
+        rows={[
+          { label: '物流配送', name: 'delivery' },
+          { label: '售后服务', name: 'afterSale' },
+          { label: '商品质量', name: 'quality' }
+        ]}
+        options={satisfactionOptions}
+      />
+      <MatrixScale
+        title="以下场景常用的设备（多选）"
+        name="devices"
+        rowTitle="场景"
+        field={CheckboxGroup}
+        rule="REQ"
+        rows={[
+          { label: '办公', name: 'office' },
+          { label: '看视频', name: 'video' },
+          { label: '阅读', name: 'reading' }
+        ]}
+        options={channelOptions}
+      />
+      <MatrixScale
+        title="从各维度为课程打分（评分矩阵）"
+        name="courseRate"
+        rowTitle="课程"
+        field={Rate}
+        rule="REQ"
+        rows={[
+          { label: '前端工程化', name: 'frontend' },
+          { label: '数据结构', name: 'algorithm' },
+          { label: '产品思维', name: 'product' }
+        ]}
+        columns={[
+          { label: '内容质量', name: 'content' },
+          { label: '讲师表达', name: 'teacher' },
+          { label: '实用性', name: 'practical' },
+          { label: '推荐意愿', name: 'recommend' }
+        ]}
+      />
+      <MatrixScale
+        title="整体满意度（每行一个字段）"
+        name="overallRate"
+        rowTitle="课程"
+        field={Rate}
+        rows={[
+          { label: '前端工程化', name: 'frontend' },
+          { label: '数据结构', name: 'algorithm' }
+        ]}
+      />
+      <MatrixScale
+        title="近一周每天的时长（小时）"
+        name="weekHours"
+        rowTitle="项目"
+        field={InputNumber}
+        rule="REQ"
+        min={0}
+        max={24}
+        placeholder="小时"
+        rows={[
+          { label: '工作', name: 'work' },
+          { label: '运动', name: 'exercise' }
+        ]}
+        columns={[
+          { label: '周一', name: 'mon' },
+          { label: '周二', name: 'tue' },
+          { label: '周三', name: 'wed' },
+          { label: '周四', name: 'thu' },
+          { label: '周五', name: 'fri' }
+        ]}
+      />
+      <MatrixScale
+        title="家庭成员信息（填空矩阵）"
+        name="family"
+        rowTitle="成员"
+        field={Input}
+        placeholder="请输入"
+        rows={[
+          { label: '父亲', name: 'father' },
+          { label: '母亲', name: 'mother' }
+        ]}
+        columns={[
+          { label: '姓名', name: 'name' },
+          { label: '职业', name: 'job' },
+          { label: '联系电话', name: 'phone' }
+        ]}
+      />
+      <Flex justify="center" gap={8}>
+        <ResetButton>重置</ResetButton>
+        <SubmitButton>提交</SubmitButton>
+      </Flex>
+    </Form>
+  );
+};
+
+render(<BaseExample />);
 
 ```
 
@@ -1792,6 +1947,29 @@ render(<BaseExample />);
 | saveText / cancelText | 编辑态保存 / 取消文案 | `string \| ReactNode` | 保存 / 取消 |
 | addIcon / editIcon / removeIcon | 图标 | `ReactNode` | `PlusOutlined` / `EditOutlined` / `DeleteOutlined` |
 | empty | 空状态 | `ReactNode` | `Empty` |
+| className | 样式类名 | `string` | - |
+
+### MatrixScale
+
+矩阵量表。每一行都是同一个字段，`field` 与 `MultiField` 一样可传任意字段组件（`RadioGroup`、`CheckboxGroup`、`Input`、`InputNumber`、`Rate` 等），其余属性（`rule`、`placeholder` 等）透传给每个字段。按传参分三种形态：
+
+- 传 `options`：选项组类字段，选项作为列，值为 `{ [row.name]: optionValue }`（单选 / 多选矩阵）
+- 传 `columns`：每个单元格一个字段，值为 `{ [row.name]: { [column.name]: value } }`（填空 / 数值矩阵）
+- 都不传：每行一个字段，值为 `{ [row.name]: value }`（如评分矩阵 `field={Rate}`）
+
+桌面端表头与各行列宽对齐，列过多时横向滚动、行标题列 sticky；移动端每行退回普通字段纵向排列。
+
+| 属性名 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| name | 字段名 | `string` | - |
+| title | 量表标题 | `string \| ReactNode` | - |
+| rowTitle | 表头首列标题 | `ReactNode` | - |
+| rows | 行配置 | `{ label: ReactNode; name: string }[]` | `[]` |
+| options | 选项组类字段的选项（作为列），每行共用 | `{ label: ReactNode; value: string \| number }[]` | - |
+| columns | 单元格列配置，传入后每格一个字段 | `{ label: ReactNode; name: string }[]` | - |
+| field | 每行 / 每格使用的字段组件 | `ComponentType` | `RadioGroup` |
+| rule | 字段校验规则，如 `REQ` 表示每行（每格）必填 | `string \| function` | - |
+| bordered | 外层 Part 是否边框 | `boolean` | - |
 | className | 样式类名 | `string` | - |
 
 ### MultiField

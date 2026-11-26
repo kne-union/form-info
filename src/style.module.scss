@@ -1233,6 +1233,280 @@ $mobile-divider: 1px solid #eee;
   padding: 16px;
 }
 
+// 矩阵量表：表头与每行 field 用同一套列宽，行标题列横向滚动时 sticky
+.matrix-scale {
+  --matrix-scale-title-width: 160px;
+  --matrix-scale-option-min-width: 120px;
+}
+
+// 派生变量须与 --matrix-scale-option-count（内联在本元素）同级定义，否则在祖先处就按回退值 1 算死
+.matrix-scale-inner {
+  --matrix-scale-columns: var(--matrix-scale-title-width) repeat(var(--matrix-scale-option-count, 1), minmax(var(--matrix-scale-option-min-width), 1fr));
+  --matrix-scale-min-width: calc(var(--matrix-scale-title-width) + var(--matrix-scale-option-count, 1) * var(--matrix-scale-option-min-width));
+  border: solid 1px var(--bg-color-grey-3);
+  border-radius: var(--radius-default, 8px);
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  box-sizing: border-box;
+}
+
+.matrix-scale-header {
+  display: grid;
+  grid-template-columns: var(--matrix-scale-columns);
+  min-width: var(--matrix-scale-min-width);
+  background: var(--bg-color-grey-1, #fafafa);
+  border-bottom: solid 1px var(--bg-color-grey-3);
+  color: var(--font-color-grey);
+  font-size: 14px;
+  line-height: 20px;
+
+  .matrix-scale-row-title,
+  .matrix-scale-option-title {
+    padding: 8px 16px;
+  }
+
+  .matrix-scale-row-title {
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    background: inherit;
+  }
+}
+
+.matrix-scale.is-choice .matrix-scale-header .matrix-scale-option-title {
+  text-align: center;
+}
+
+.matrix-scale-row {
+  min-width: var(--matrix-scale-min-width);
+  background: #fff;
+
+  &:not(:last-child) {
+    border-bottom: solid 1px var(--bg-color-grey-3);
+  }
+
+  &:hover {
+    background: var(--bg-color-grey-1, #fafafa);
+  }
+
+  :global(.react-form__field):not(#_) {
+    margin-bottom: 0 !important;
+  }
+}
+
+// 每格一个 field：行标题 + 各列单元格
+.matrix-scale-row.is-cells {
+  display: grid;
+  grid-template-columns: var(--matrix-scale-columns);
+  align-items: start;
+
+  .matrix-scale-row-label {
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    align-self: stretch;
+    padding: 12px 16px;
+    background: inherit;
+    color: var(--font-color);
+    font-size: 14px;
+    line-height: 32px;
+
+    &.is-req:before {
+      content: '*';
+      margin-right: 6px;
+      color: var(--color-warning);
+      font-weight: bold;
+    }
+  }
+
+  .matrix-scale-cell {
+    min-width: 0;
+    padding: 12px 16px 12px 0;
+
+    :global(.react-form__field-component) {
+      max-width: 100%;
+    }
+
+    // react-form-antd 默认把报错 absolute 到输入框下方，会压到行分隔线和下一行
+    :global(.react-form__field-error):not(#_) {
+      position: static !important;
+      margin-top: 4px !important;
+      font-size: 12px !important;
+      line-height: 16px !important;
+    }
+  }
+}
+
+// 每行一个 field：用 field 自带的 label 作行标题
+.matrix-scale-row:not(.is-cells) {
+  :global {
+    .react-form__field,
+    .react-form__field-main {
+      background: inherit;
+    }
+
+    .react-form__field-main {
+      display: grid;
+      grid-template-columns: var(--matrix-scale-columns);
+      align-items: center;
+    }
+
+    .react-form__field-label {
+      position: sticky;
+      left: 0;
+      z-index: 1;
+      align-self: stretch;
+      display: flex;
+      align-items: center;
+      min-width: 0 !important;
+      margin: 0 !important;
+      padding: 12px 16px;
+      background: inherit;
+      text-align: left;
+      color: var(--font-color);
+
+      &.is-req:before {
+        position: static;
+        transform: translateX(0);
+        margin-right: 6px;
+      }
+    }
+
+    .react-form__field-main:has(.react-form__field-error) .react-form__field-label {
+      padding-bottom: 0;
+    }
+
+    // 拆掉 input 包裹，让选项组与报错直接参与行网格：报错落在行标题下方
+    .react-form__field-input {
+      display: contents;
+    }
+
+    .react-form__field-error:not(#_) {
+      grid-column: 1;
+      grid-row: 2;
+      position: sticky !important;
+      left: 0 !important;
+      z-index: 1;
+      margin-top: 2px !important;
+      padding: 0 16px 12px;
+      background: inherit;
+      box-sizing: border-box;
+    }
+
+    .react-form__field-input > :not(.react-form__field-error) {
+      grid-column: 2 / -1;
+      grid-row: 1 / span 2;
+      align-self: center;
+      justify-self: start;
+      max-width: calc(100% - 16px);
+      margin: 12px 16px 12px 0;
+    }
+
+    .react-form__field-input > .ant-radio-group,
+    .react-form__field-input > .ant-checkbox-group {
+      justify-self: stretch;
+      max-width: none;
+      margin: 0;
+      padding-block: 12px;
+      display: grid;
+      grid-template-columns: repeat(var(--matrix-scale-option-count, 1), minmax(0, 1fr));
+      width: 100%;
+    }
+
+    .ant-radio-wrapper,
+    .ant-checkbox-wrapper {
+      justify-self: center;
+      margin: 0;
+    }
+
+    .ant-radio-label,
+    .ant-checkbox-label {
+      display: none;
+    }
+  }
+}
+
+// 移动端每行退回普通字段：标题在上、选项竖排并露出文案
+.matrix-scale.is-mobile {
+  .matrix-scale-inner {
+    border: none;
+    overflow: visible;
+  }
+
+  .matrix-scale-row {
+    min-width: 0;
+
+    &:hover {
+      background: #fff;
+    }
+  }
+
+  .matrix-scale-row.is-cells {
+    display: flex;
+    flex-direction: column;
+    padding: 12px 0;
+
+    .matrix-scale-row-label {
+      position: static;
+      padding: 0 0 8px;
+      line-height: 20px;
+      font-weight: 500;
+    }
+
+    .matrix-scale-cell {
+      padding: 4px 0;
+    }
+  }
+
+  .matrix-scale-row:not(.is-cells) {
+    :global {
+      .react-form__field:not(#_) {
+        padding: 12px 0;
+      }
+
+      .react-form__field-main {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .react-form__field-label {
+        position: static;
+        padding: 0;
+        margin-bottom: 8px !important;
+      }
+
+      .react-form__field-error:not(#_) {
+        position: static !important;
+        margin-top: 4px !important;
+        padding: 0;
+      }
+
+      .react-form__field-input > :not(.react-form__field-error) {
+        max-width: 100%;
+        margin: 0;
+      }
+
+      .ant-radio-group,
+      .ant-checkbox-group {
+        display: flex;
+        flex-direction: column;
+        padding-block: 0;
+      }
+
+      .ant-radio-wrapper,
+      .ant-checkbox-wrapper {
+        justify-self: auto;
+      }
+
+      .ant-radio-label,
+      .ant-checkbox-label {
+        display: inline;
+      }
+    }
+  }
+}
+
 .editable-list-part {
   :global {
     .react-form__field-component {
