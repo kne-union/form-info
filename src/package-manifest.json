@@ -474,6 +474,53 @@
         }
       }
     },
+    "MatrixScale": {
+      "description": "矩阵量表：每行是同一个字段（field 可传任意字段组件），传 options 时选项作列、传 columns 时每格一个字段、都不传时每行一个字段",
+      "type": "ReactNode",
+      "props": {
+        "name": {
+          "description": "表单字段名称",
+          "type": "string"
+        },
+        "title": {
+          "description": "量表标题",
+          "type": "string|ReactNode"
+        },
+        "rowTitle": {
+          "description": "表头首列标题",
+          "type": "ReactNode"
+        },
+        "rows": {
+          "description": "行配置 [{ label, name }]",
+          "type": "array"
+        },
+        "options": {
+          "description": "选项组类字段的选项（作为列）[{ label, value }]，值为 { [row.name]: optionValue }",
+          "type": "array"
+        },
+        "columns": {
+          "description": "单元格列配置 [{ label, name }]，传入后每格一个字段，值为 { [row.name]: { [column.name]: value } }",
+          "type": "array"
+        },
+        "field": {
+          "description": "每行 / 每格使用的字段组件，如 RadioGroup、CheckboxGroup、Input、InputNumber、Rate",
+          "type": "ComponentType",
+          "default": "RadioGroup"
+        },
+        "rule": {
+          "description": "每行字段的校验规则，如 REQ",
+          "type": "string|function"
+        },
+        "bordered": {
+          "description": "外层 Part 是否显示边框",
+          "type": "boolean"
+        },
+        "className": {
+          "description": "组件的CSS类名",
+          "type": "string"
+        }
+      }
+    },
     "MultiField": {
       "description": "多字段组件，支持动态添加和删除相同类型的字段组",
       "type": "ReactNode",

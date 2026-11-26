@@ -8,6 +8,7 @@ export { default as SubList } from './List';
 export { default as MultiField } from './MultiField';
 export { default as TableList } from './TableList';
 export { default as EditableList } from './EditableList';
+export { default as MatrixScale } from './MatrixScale';
 export { default as Form } from './Form';
 export { default as FormModal } from './FormModal';
 export { default as FormSteps } from './FormSteps';

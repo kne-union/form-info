@@ -74,6 +74,24 @@
       ]
     },
     {
+      "title": "矩阵量表（MatrixScale）",
+      "description": "每一行都是同一个字段，field 与 MultiField 一样可自行传入：options 作列的单选 / 多选矩阵（RadioGroup、CheckboxGroup），field={Rate} 每行一个字段的评分矩阵，columns 每格一个字段的数值 / 填空矩阵（InputNumber、Input）；演示必填、选填、bordered，列多时横向滚动且行标题列 sticky，移动端纵向排列",
+      "code": "./matrix-scale.js",
+      "scope": [
+        {
+          "name": "_FormInfo",
+          "packageName": "@kne/current-lib_form-info"
+        },
+        {
+          "name": "antd",
+          "packageName": "antd"
+        },
+        {
+          "packageName": "@kne/current-lib_form-info/dist/index.css"
+        }
+      ]
+    },
+    {
       "title": "模态框表单示例",
       "description": "演示FormModal组件的使用，展示如何在弹窗中展示表单，支持表单数据初始化和提交后的自动关闭功能",
       "code": "./form-modal.js",
