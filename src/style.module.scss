@@ -132,6 +132,200 @@ $mobile-divider: 1px solid #eee;
   }
 }
 
+// ===== 区块标题与有边框卡片（仅 Form 内生效，不改 info-page 全局） =====
+// 层级沿用 info-page：嵌在 .part 内为二级，part-level-root 重新从一级起算。
+// 标题规则逐条只比 info-page 对应规则高 1 级优先级：业务方（如 form-creator 编辑弹窗的序号标题）的自定义样式仍能覆盖。
+// 列表子项头与 nest-beyond 有自己的样式，排除。
+$part: ':global(.part.ant-card):not(.list-item-part):not(.nest-beyond)';
+$own-part: ':global(.part):not(:global(.part-level-root), .list-item-part, .nest-beyond)';
+$head: '> :global(.ant-card-head)';
+$head-title: '> :global(.ant-card-head) :global(.ant-card-head-title) >';
+$title: ':global(.part-title)';
+$sub: ':global(.part-title-sub)';
+$title-marker-gap: 8px;
+$title-l1-bar-width: 4px;
+$title-l2-dot-size: 6px;
+$card-border-color: #e8eaee;
+$card-divider-color: #eef0f3;
+$card-head-bg: var(--bg-color-grey-1, #fafbfc);
+$card-radius: var(--radius-default, 8px);
+
+@mixin part-title-base {
+  display: block;
+  flex: none;
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--font-color);
+  font-weight: 600;
+  white-space: pre-wrap;
+
+  &::before {
+    content: '';
+    display: inline-block;
+    vertical-align: middle;
+    background: var(--primary-color);
+    transform: translateY(-2px);
+  }
+}
+
+@mixin part-title-l1 {
+  @include part-title-base;
+  font-size: var(--font-size-large, 16px);
+  line-height: 24px;
+
+  &::before {
+    width: $title-l1-bar-width;
+    height: 16px;
+    margin-right: $title-marker-gap;
+    border-radius: 2px;
+  }
+}
+
+@mixin part-title-l2 {
+  @include part-title-base;
+  font-size: var(--font-size-default, 14px);
+  line-height: 22px;
+
+  &::before {
+    width: $title-l2-dot-size;
+    height: $title-l2-dot-size;
+    margin-right: $title-marker-gap;
+    border-radius: 50%;
+  }
+}
+
+@mixin part-sub($indent) {
+  margin-top: 4px;
+  padding-left: $indent;
+  font-size: 12px;
+  line-height: 20px;
+  color: var(--font-color-grey-1);
+}
+
+.form-outer {
+  // 注释中的数字为选择器类数量（优先级），顺序敏感，勿随意调换或加类
+
+  // 一级（2）：仅压过 info-page `.part-title`（1）
+  :where(#{$part} #{$head} :global(.ant-card-head-title)) > #{$title} {
+    @include part-title-l1;
+  }
+
+  :where(#{$part} #{$head} :global(.ant-card-head-title)) > #{$sub} {
+    @include part-sub($title-l1-bar-width + $title-marker-gap);
+  }
+
+  // 有边框一级（6）：压过 info-page bordered 色条贴边 / 副标题 24px 缩进（4～5）
+  :global(.part.bordered) #{$head-title} #{$title}::before {
+    margin-right: $title-marker-gap;
+    border-radius: 2px;
+  }
+
+  :global(.part.bordered) #{$head-title} #{$sub} {
+    padding-left: $title-l1-bar-width + $title-marker-gap;
+  }
+
+  // 自身为 part-level-root 的一级（6）：压过 info-page（5）
+  :global(.part.part-level-root) #{$head-title} #{$title} {
+    @include part-title-l1;
+  }
+
+  :global(.part.part-level-root) #{$head-title} #{$sub} {
+    @include part-sub($title-l1-bar-width + $title-marker-gap);
+  }
+
+  // 二级（6）：压过 info-page 胶囊（5）；业务方 7 级的自定义（如 form-creator 隐藏嵌套序号）仍生效
+  :global(.part) #{$own-part} #{$head} #{$title} {
+    @include part-title-l2;
+  }
+
+  :global(.part) #{$own-part} #{$head} #{$sub} {
+    @include part-sub($title-l2-dot-size + $title-marker-gap);
+  }
+
+  // 自身为 part-level-root 的 Part 内二级（7）：压过 info-page（6）
+  :global(.part.part-level-root) #{$own-part} #{$head} #{$title} {
+    @include part-title-l2;
+  }
+
+  :global(.part.part-level-root) #{$own-part} #{$head} #{$sub} {
+    @include part-sub($title-l2-dot-size + $title-marker-gap);
+  }
+
+  // 卡中卡的二级（7）：压过 info-page 嵌套 bordered 的方角色条 / 副标题清零（6）
+  :global(.part.bordered) :global(.part.bordered) #{$head} #{$title}::before {
+    border-radius: 50%;
+  }
+
+  :global(.part.bordered) :global(.part.bordered) #{$head} #{$sub} {
+    padding-left: $title-l2-dot-size + $title-marker-gap;
+  }
+
+  // Part 内非 Part 的 part-level-root 容器（如 Steps 根）重新起算一级（8），其内再嵌套为二级（9）
+  :global(.part) :global(.part-level-root):not(:global(.part)) #{$own-part} #{$head} #{$title} {
+    @include part-title-l1;
+  }
+
+  :global(.part) :global(.part-level-root):not(:global(.part)) #{$own-part} #{$head} #{$sub} {
+    @include part-sub($title-l1-bar-width + $title-marker-gap);
+  }
+
+  :global(.part) :global(.part-level-root):not(:global(.part)) :global(.part) #{$own-part} #{$head} #{$title} {
+    @include part-title-l2;
+  }
+
+  :global(.part) :global(.part-level-root):not(:global(.part)) :global(.part) #{$own-part} #{$head} #{$sub} {
+    @include part-sub($title-l2-dot-size + $title-marker-gap);
+  }
+
+  // 有边框：白底圆角卡片 + 浅灰表头
+  #{$part}:global(.bordered) {
+    padding: 0;
+    border: 1px solid $card-border-color;
+    border-radius: $card-radius;
+    background: #fff;
+
+    > :global(.ant-card-head) {
+      padding: 14px 20px;
+      border-bottom: 1px solid $card-divider-color;
+      border-radius: $card-radius $card-radius 0 0;
+      background: $card-head-bg;
+    }
+
+    > :global(.ant-card-body) {
+      padding: 20px 20px 0;
+    }
+
+    @include resp.mobile-container {
+      > :global(.ant-card-head) {
+        padding: 12px 14px;
+      }
+
+      > :global(.ant-card-body) {
+        padding: 12px 14px 0;
+      }
+    }
+  }
+
+  // 卡片套卡片时内层拍平，只保留标题层级
+  #{$part}:global(.bordered) #{$part}:global(.bordered) {
+    border: none;
+    border-radius: 0;
+    background: transparent;
+
+    > :global(.ant-card-head) {
+      padding: 0;
+      border-bottom: none;
+      border-radius: 0;
+      background: transparent;
+    }
+
+    > :global(.ant-card-body) {
+      padding: 12px 0 0;
+    }
+  }
+}
+
 // 区块头「添加」按钮：浅主题色底、无边框（各层级通用）
 .extra-btn {
   &:global(.ant-btn) {
@@ -1200,8 +1394,16 @@ $mobile-divider: 1px solid #eee;
   width: 100%;
 }
 
+// 自定义 children（多个 FormInfo 等并列）时块间留距；隐藏面板靠内联 display:none 覆盖
 .steps-embed-panel {
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  @include resp.mobile-container {
+    gap: 12px;
+  }
 }
 
 .steps-actions {
